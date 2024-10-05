@@ -10,3 +10,5 @@ export const load: LayoutLoad = async () => {
     }
     await waitLocale()
 }
+
+export const prerender = true;
