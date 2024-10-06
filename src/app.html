@@ -299,6 +299,7 @@
 			}
 		}
 	</style>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-7HNMRW4Y3Q"></script>
 </head>
 
 <body data-sveltekit-preload-data="hover">
@@ -318,6 +319,12 @@
 			const nav = document.querySelector('nav');
 			nav.classList.toggle('open');
 		});
+
+		window.dataLayer = window.dataLayer || [];
+		function gtag() { dataLayer.push(arguments); }
+		gtag('js', new Date());
+
+		gtag('config', 'G-7HNMRW4Y3Q');
 	</script>
 </body>
 
