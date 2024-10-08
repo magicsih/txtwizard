@@ -71,7 +71,10 @@
 <!-- Ethereum Key Generation Tool UI -->
 <div class="container">
 	<h2>Ethereum Key Generation Tool</h2>
-	<p><strong style="color: #e74c3c">Note:</strong> All keys are generated locally in your browser. They are never sent to any remote server.</p>
+	<p>
+		<strong style="color: #e74c3c">Note:</strong> All keys are generated locally in your browser. They
+		are never sent to any remote server.
+	</p>
 
 	<!-- Generate Key Button -->
 	<div class="form-group">
@@ -81,19 +84,24 @@
 	<!-- Address Output -->
 	<div class="form-group">
 		<label for="address">Ethereum Address</label>
-		<input type="text" id="address" bind:value={address} readonly/>
+		<input type="text" id="address" bind:value={address} readonly />
+		{#if address}
+			<a href="https://etherscan.io/address/{address}" target="_blank" rel="noopener noreferrer">
+				View address on Etherscan
+			</a>
+		{/if}
 	</div>
 
 	<!-- Private Key Output -->
 	<div class="form-group">
 		<label for="privateKey">Private Key</label>
-		<input type="text" id="privateKey" bind:value={privateKey} readonly/>
+		<input type="text" id="privateKey" bind:value={privateKey} readonly />
 	</div>
 
 	<!-- Public Key Output -->
 	<div class="form-group">
 		<label for="publicKey">Public Key</label>
-		<input type="text" id="publicKey" bind:value={publicKey} readonly/>
+		<input type="text" id="publicKey" bind:value={publicKey} readonly />
 	</div>
 </div>
 
@@ -114,7 +122,6 @@
 			<strong>Public Key:</strong> The public key is derived from the private key using the secp256k1
 			elliptic curve algorithm. The public key is 65 bytes (130 hex characters).
 		</li>
-		
 	</ol>
 </div>
 
