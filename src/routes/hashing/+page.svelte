@@ -98,10 +98,10 @@
 </script>
 
 <head>
-	<title>Online Hash Converter - MD5, SHA1, SHA256, SHA512</title>
+	<title>TxtWizard | Free Online Hash Converter - SHA-1, SHA-256, SHA-516, SHA3, KEKCAK 256/512, BLAKE2b</title>
 	<meta
 		name="keywords"
-		content="online,md5,sha1,sha256,sha-384,sha-512,sha3-224,sha3-256,sha3-384,sha3-512,keccak,ripemd160,blake3,blake2b,hash,converter"
+		content="online,sha1,sha256,sha-384,sha-512,sha3-224,sha3-256,sha3-384,sha3-512,keccak,ripemd160,blake3,blake2b,hash,converter"
 	/>
 	<meta
 		name="description"
