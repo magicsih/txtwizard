@@ -1,5 +1,12 @@
 {
-    "page_title": "Page title",
-    "sign_in": "Sign in",
-    "sign_up": "Sign up"
+  "page_title": "Page title",
+  "sign_in": "Sign in",
+  "sign_up": "Sign up",
+  "encryption": "Encryption",
+  "decryption": "Decryption",
+  "encoding": "Encoding",
+  "hashing": "Hashing",
+  "compression": "Compression",
+  "keygen": "KeyGen",
+  "home": "Home"
 }

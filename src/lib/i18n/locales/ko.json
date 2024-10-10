@@ -1,5 +1,12 @@
 {
-    "page_title": "페이지 제목",
-    "sign_in": "사인인",
-    "sign_up": "사인업"
+  "page_title": "페이지 제목",
+  "sign_in": "사인인",
+  "sign_up": "사인업",
+  "encryption": "암호화",
+  "decryption": "복호화",
+  "encoding": "인코딩",
+  "hashing": "해싱",
+  "compression": "압축",
+  "keygen": "키생성",
+  "home": "홈"
 }
