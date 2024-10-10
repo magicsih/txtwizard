@@ -8,5 +8,7 @@
   "hashing": "Hashing",
   "compression": "Compression",
   "keygen": "KeyGen",
-  "home": "Home"
+  "home": "Home",
+  "page.title.home": "TxtWizard | Free Online Tools - Encryption, Hashing, Compression, Ethereum Key Generation",
+  "page.description.home": "TxtWizard offers free online tools for text encryption, decryption, hashing, compression, Ethereum key generation, and more."
 }

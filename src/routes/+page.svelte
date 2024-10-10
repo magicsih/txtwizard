@@ -1,8 +1,12 @@
+<script lang="ts">
+	import { t } from 'svelte-i18n'
+</script>
+
 <head>
-    <title>TxtWizard | Free Online Tools - Encryption, Hashing, Compression, Ethereum Key Generation</title>
+    <title>{ $t('page.title.home') }</title>
     <meta
       name="description"
-      content="TxtWizard offers free online tools for text encryption, decryption, hashing, compression, Ethereum key generation, and more. All tools run securely in your browser."
+      content="{ $t('page.description.home') }"
     />
   </head>
   
@@ -14,12 +18,6 @@
         TxtWizard is your go-to platform for free, powerful, and secure online tools. Everything runs
         entirely within your browser, ensuring your data remains private and secure. Explore our
         features below:
-      </p>
-
-      <h2 style="color: #e74c3c">Important Notice:</h2>
-      <p>
-        All the tools on TxtWizard are executed entirely in your browser. No data is transmitted to
-        any server, ensuring your privacy and security at all times.
       </p>
   
       <h2>Our Tools</h2>
