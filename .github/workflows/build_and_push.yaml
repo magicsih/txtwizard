@@ -20,6 +20,8 @@ env:
   K8S_CA_CERT: ${{ secrets.K8S_CA_CERT }}
   K8S_NAMESPACE: ${{ secrets.K8S_NAMESPACE }}
   K8S_CONTAINER_NAME: txtwizard
+  INDEXNOW_HOST: txtwizard.net
+  INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
 jobs:
   Docker_Build_And_Push:
     runs-on: ubuntu-latest
