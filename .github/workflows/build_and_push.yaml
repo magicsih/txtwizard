@@ -2,11 +2,11 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
     paths-ignore:
       - "README.md"
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
     paths-ignore:
       - "README.md"
 
@@ -26,50 +26,73 @@ jobs:
     outputs:
       image_digest: ${{ steps.docker_build.outputs.digest }}
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Login to Docker Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ env.REGISTRY_USERNAME }}
-        password: ${{ env.REGISTRY_PASSWORD }}
+      - name: Login to Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
 
-    - name: Build and push Docker image
-      id: docker_build
-      uses: docker/build-push-action@v6
-      with:
-        platforms: linux/arm64
-        push: true        
-        tags: ${{ env.REGISTRY }}/${{ env.APP_NAME }}:latest
+      - name: Build and push Docker image
+        id: docker_build
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/arm64
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.APP_NAME }}:latest
 
   K8S_Deploy:
     runs-on: ubuntu-latest
     needs: Docker_Build_And_Push
     steps:
-    - name: Set up kubectl
-      run: |
-        curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-        chmod +x ./kubectl
-        sudo mv ./kubectl /usr/local/bin/kubectl
+      - name: Set up kubectl
+        run: |
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          sudo mv ./kubectl /usr/local/bin/kubectl
 
-    - name: Configure Kubernetes
-      run: |
-        echo ${{ env.K8S_CA_CERT }} | base64 -d > ca.crt
-        kubectl config set-cluster k8s-cluster --server=${{ env.K8S_SERVER }} --certificate-authority=./ca.crt
-        kubectl config set-credentials user --token=${{ env.K8S_TOKEN }}
-        kubectl config set-context default --cluster=k8s-cluster --user=user --namespace ${{ env.K8S_NAMESPACE }}
-        kubectl config use-context default
+      - name: Configure Kubernetes
+        run: |
+          echo ${{ env.K8S_CA_CERT }} | base64 -d > ca.crt
+          kubectl config set-cluster k8s-cluster --server=${{ env.K8S_SERVER }} --certificate-authority=./ca.crt
+          kubectl config set-credentials user --token=${{ env.K8S_TOKEN }}
+          kubectl config set-context default --cluster=k8s-cluster --user=user --namespace ${{ env.K8S_NAMESPACE }}
+          kubectl config use-context default
 
-    - name: Deploy to Kubernetes
-      run: |
-        kubectl set image deployment/${{ env.APP_NAME }} ${{ env.K8S_CONTAINER_NAME }}=${{ env.REGISTRY }}/${{ env.APP_NAME }}@${{ needs.Docker_Build_And_Push.outputs.image_digest }}
-        kubectl rollout status deployment/${{ env.APP_NAME }}
-        kubectl get pod -l app=${{ env.APP_NAME }} -n ${{ env.K8S_NAMESPACE }}
+      - name: Deploy to Kubernetes
+        run: |
+          kubectl set image deployment/${{ env.APP_NAME }} ${{ env.K8S_CONTAINER_NAME }}=${{ env.REGISTRY }}/${{ env.APP_NAME }}@${{ needs.Docker_Build_And_Push.outputs.image_digest }}
+          kubectl rollout status deployment/${{ env.APP_NAME }}
+          kubectl get pod -l app=${{ env.APP_NAME }} -n ${{ env.K8S_NAMESPACE }}
+
+  Update_Index:
+    runs-on: ubuntu-latest
+    needs: K8S_Deploy
+    steps:
+      - name: Send IndexNow request
+        run: |
+          curl -X POST "https://api.indexnow.org/indexnow" \
+          -H "Content-Type: application/json; charset=utf-8" \
+          -d '{
+            "host": "${{ env.INDEXNOW_HOST }}",
+            "key": "${{ env.INDEXNOW_KEY }}",
+            "keyLocation": "https://${{ env.INDEXNOW_HOST }}/${{ env.INDEXNOW_KEY }}.txt",
+            "urlList": [
+                "https://${{ env.INDEXNOW_HOST }}/compression",
+                "https://${{ env.INDEXNOW_HOST }}/decryption",
+                "https://${{ env.INDEXNOW_HOST }}/encoding-decoding",
+                "https://${{ env.INDEXNOW_HOST }}/encryption",
+                "https://${{ env.INDEXNOW_HOST }}/ethereum-key-generation",
+                "https://${{ env.INDEXNOW_HOST }}/hashing",
+                "https://${{ env.INDEXNOW_HOST }}/"
+            ]
+          }'
