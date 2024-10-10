@@ -13,7 +13,7 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"postbuild": "npx svelte-sitemap --domain https://www.txtwizard.net --change-freq yearly --reset-time"
+		"postbuild": "npx svelte-sitemap --domain https://www.txtwizard.net --change-freq yearly --reset-time -i /naver*"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
