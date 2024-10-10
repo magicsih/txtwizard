@@ -93,7 +93,7 @@ jobs:
                 "https://${{ env.INDEXNOW_HOST }}/decryption",
                 "https://${{ env.INDEXNOW_HOST }}/encoding-decoding",
                 "https://${{ env.INDEXNOW_HOST }}/encryption",
-                "https://${{ env.INDEXNOW_HOST }}/ethereum-key-generation",
+                "https://${{ env.INDEXNOW_HOST }}/key-generation",
                 "https://${{ env.INDEXNOW_HOST }}/hashing",
                 "https://${{ env.INDEXNOW_HOST }}/"
             ]
