@@ -42,7 +42,7 @@
           Measure compression ratio and easily obtain compressed results.
         </li>
         <li>
-          <a href="/ethereum-key-generation">Ethereum Key Generation Tool</a> - Generate Ethereum
+          <a href="/key-generation">Ethereum Key Generation Tool</a> - Generate Ethereum
           public and private key pairs with a secure local process, right in your browser.
         </li>
         <li>
