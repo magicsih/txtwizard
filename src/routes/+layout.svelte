@@ -12,6 +12,7 @@
 		<a href="/hashing">{ $t('hashing') }</a>
 		<a href="/compression">{ $t('compression') }</a>
         <a href="/key-generation">{ $t('keygen') }</a>
+		<a href="/qrcode">{ $t('qr-code-gen') }</a>
 	</div>
 </nav>
 <slot />

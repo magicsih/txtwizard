@@ -22,6 +22,7 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "^9.6.0",
 		"@types/node": "^22.7.4",
+		"@types/qrcode": "^1.5.5",
 		"eslint": "^9.0.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.36.0",
@@ -45,6 +46,7 @@
 		"elapsed-time": "^0.0.1",
 		"ethereum-cryptography": "^3.0.0",
 		"fflate": "^0.8.2",
+		"qrcode": "^1.5.4",
 		"svelte-i18n": "^4.0.0",
 		"txtwizard": "file:"
 	}
