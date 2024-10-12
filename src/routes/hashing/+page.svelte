@@ -111,7 +111,7 @@
 </head>
 
 
-<h2>Hashing Tool</h2>
+<h2>{ $t('hashing') } { $t('tool') }</h2>
 
 <!-- Hashing Tool UI -->
 <div class="container">
