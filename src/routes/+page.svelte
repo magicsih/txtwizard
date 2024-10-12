@@ -42,6 +42,8 @@
         <li>
           <a href="/qrcode">{ $t('qr-code-gen') } { $t('tool') }</a> - { $t('qr-code-intro') }
         </li>
+        <li>
+          <a href="/currency">{ $t('currency') } { $t('tool') }</a> - { $t('currency-intro') }
       </ul>
   
      

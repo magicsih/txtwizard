@@ -30,5 +30,7 @@
   "hash-button": "해시 하기",
   "compress-button": "압축하기",
   "qr-code-intro": "QR 코드(빠른 응답 코드)는 텍스트, URL 또는 기타 데이터와 같은 정보를 인코딩할 수 있는 매트릭스 바코드 유형입니다. \n비접촉 결제 시스템, 웹사이트 링크 등에 널리 사용됩니다.",
-  "qr-code-gen": "QR 코드 생성"
+  "qr-code-gen": "QR 코드 생성",
+  "currency": "환율 계산",
+  "currency-intro": "실시간 최신 환율 정보를 사용하여 화폐 간의 환율을 계산합니다."
 }

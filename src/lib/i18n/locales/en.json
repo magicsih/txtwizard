@@ -30,5 +30,7 @@
   "hash-button": "Hash",
   "compress-button": "Compress",
   "qr-code-gen": "QR code generation",
-  "qr-code-intro": "A QR code (Quick Response code) is a type of matrix barcode that can encode information such as text, URLs, or other data. It's widely used for contactless payment systems, website links, and more."
+  "qr-code-intro": "A QR code (Quick Response code) is a type of matrix barcode that can encode information such as text, URLs, or other data. It's widely used for contactless payment systems, website links, and more.",
+  "currency": "Currency Conversion",
+  "currency-intro": "Currency to currency conversions using real-time, up-to-date exchange rate information."
 }
