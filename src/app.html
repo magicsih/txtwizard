@@ -28,8 +28,7 @@
 			color: var(--fg-1);
 			font-family: var(--font);
 			line-height: 1.5;
-			margin: 1rem;
-			height: calc(100vh - 2rem);
+			margin: 1rem;			
 		}
 
 		h1,
@@ -150,19 +149,6 @@
 			flex-direction: row;
 			gap: 0.5rem;
 			margin: 0.5rem 0;
-		}
-
-		footer a {
-			color: var(--link);
-			text-decoration: none;
-		}
-
-		footer a:hover {
-			color: var(--link-hover);
-		}
-
-		footer p {
-			margin: 0;
 		}
 
 		ul:has(form) {
@@ -304,10 +290,6 @@
 
 <body data-sveltekit-preload-data="hover">
 	<div style="display: contents">%sveltekit.body%</div>
-
-	<div class="footer-content">
-		<p>&copy; <span id="year"></span> txtwizard. All rights reserved.</p>
-	</div>
 	<script>
 		const theme = new URL(window.location).searchParams.get('theme');
 

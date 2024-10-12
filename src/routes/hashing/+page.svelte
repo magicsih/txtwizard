@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n'
 	import { Buffer } from 'buffer';
 	import { sha256, sha384, sha512, sha224, sha512_256 } from '@noble/hashes/sha2';
 	// prettier-ignore
@@ -109,30 +110,12 @@
 	/>
 </head>
 
-<div class="description">
-	<h2>What is Hashing?</h2>
-	<p>
-		Hashing is a one-way function that converts a string of arbitrary length into a fixed-length
-		value. It is commonly used for verifying data integrity, generating unique fingerprints for
-		files, and in applications such as digital signatures, certificates, and blockchain.
-	</p>
-	<h3>Common Hashing Algorithms</h3>
-	<ul>
-		<li><strong>SHA-1:</strong> Commonly used in legacy applications, but less secure today.</li>
-		<li>
-			<strong>SHA-256:</strong> A standard used in blockchain technology and security applications.
-		</li>
-		<li><strong>SHA-512:</strong> Provides longer hash outputs for greater security.</li>
-		<li><strong>SHA-3:</strong> The latest member of the Secure Hash Algorithm family.</li>
-		<li><strong>Keccak:</strong> The algorithm used in Ethereum addresses and transactions.</li>
-		<li><strong>RIPEMD-160:</strong> Used in Bitcoin addresses.</li>
-		<li><strong>BLAKE3:</strong> A modern, high-performance hash function.</li>
-	</ul>
-</div>
+
+<h2>Hashing Tool</h2>
 
 <!-- Hashing Tool UI -->
 <div class="container">
-	<h2>Hashing Tool</h2>
+	
 
 	<!-- Algorithm Selection -->
 	<div class="form-group">
@@ -154,7 +137,7 @@
 
 	<!-- Hash Button -->
 	<div class="form-group">
-		<button on:click={doHash}>Hash</button>
+		<button on:click={doHash}>{ $t('hash-button') }</button>
 	</div>
 
 	<!-- Base64 Output -->
@@ -170,6 +153,26 @@
 		<textarea id="hashHex" bind:value={outHexText} rows="4" readonly></textarea>
 		<small>{hexBytes} bytes</small>
 	</div>
+</div>
+<div class="description">
+	<h2>What is Hashing?</h2>
+	<p>
+		Hashing is a one-way function that converts a string of arbitrary length into a fixed-length
+		value. It is commonly used for verifying data integrity, generating unique fingerprints for
+		files, and in applications such as digital signatures, certificates, and blockchain.
+	</p>
+	<h3>Common Hashing Algorithms</h3>
+	<ul>
+		<li><strong>SHA-1:</strong> Commonly used in legacy applications, but less secure today.</li>
+		<li>
+			<strong>SHA-256:</strong> A standard used in blockchain technology and security applications.
+		</li>
+		<li><strong>SHA-512:</strong> Provides longer hash outputs for greater security.</li>
+		<li><strong>SHA-3:</strong> The latest member of the Secure Hash Algorithm family.</li>
+		<li><strong>Keccak:</strong> The algorithm used in Ethereum addresses and transactions.</li>
+		<li><strong>RIPEMD-160:</strong> Used in Bitcoin addresses.</li>
+		<li><strong>BLAKE3:</strong> A modern, high-performance hash function.</li>
+	</ul>
 </div>
 
 <style>

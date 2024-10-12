@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n'
 	import { Buffer } from 'buffer';
 
 	let values = {
@@ -107,41 +108,7 @@
 	<title>TxtWizard | Free Online Text Decrypting Tool - AES/GCM, AES/CBC</title>
 </head>
 
-<h2>Decrypt Text - AES/GCM, AES/CBC</h2>
-
-<div class="description">
-	<h3>What is Decryption?</h3>
-	<p>
-		Decryption is the process of converting encrypted or encoded data back into its original form so
-		it can be understood. Using cryptographic keys, decryption tools ensure that only authorized
-		users can access the original message. This decryption tool allows you to decrypt AES-encrypted
-		data back into plain text using AES-GCM or AES-CBC algorithms.
-	</p>
-
-	<h3>How to Use the Decryption Tool</h3>
-	<ol>
-		<li>
-			Select the appropriate decryption algorithm (AES-GCM or AES-CBC) that matches the encryption
-			method used.
-		</li>
-		<li>
-			Enter the key and initialization vector (IV) that were used during encryption in the
-			respective fields.
-		</li>
-		<li>Paste the encrypted text into the "Encrypted Text" box.</li>
-		<li>
-			Click the "DECRYPT" button to reveal the original plain text in the "Decrypted Text" field.
-		</li>
-	</ol>
-
-	<h3>Why Use AES Decryption?</h3>
-	<p>
-		Decryption ensures that encrypted data is accessible only to authorized individuals who possess
-		the correct key and IV. AES decryption is widely trusted in industries like finance, healthcare,
-		and government to securely decode sensitive information. This tool allows you to quickly decrypt
-		AES-encrypted messages back to their original form.
-	</p>
-</div>
+<h2>{ $t('decryption') } { $t('tool') } - AES/GCM, AES/CBC</h2>
 
 <!-- UI Structure -->
 <div class="container">
@@ -195,7 +162,7 @@
 
 	<!-- Decrypt Button -->
 	<div class="form-group">
-		<button on:click={decrypt}>DECRYPT</button>
+		<button on:click={decrypt}>{ $t('decrypt-button') }</button>
 	</div>
 
 	<!-- Decrypted Text Output -->
@@ -208,6 +175,40 @@
 				: '0 bytes'}</small
 		>
 	</div>
+</div>
+
+<div class="description">
+	<h3>What is Decryption?</h3>
+	<p>
+		Decryption is the process of converting encrypted or encoded data back into its original form so
+		it can be understood. Using cryptographic keys, decryption tools ensure that only authorized
+		users can access the original message. This decryption tool allows you to decrypt AES-encrypted
+		data back into plain text using AES-GCM or AES-CBC algorithms.
+	</p>
+
+	<h3>How to Use the Decryption Tool</h3>
+	<ol>
+		<li>
+			Select the appropriate decryption algorithm (AES-GCM or AES-CBC) that matches the encryption
+			method used.
+		</li>
+		<li>
+			Enter the key and initialization vector (IV) that were used during encryption in the
+			respective fields.
+		</li>
+		<li>Paste the encrypted text into the "Encrypted Text" box.</li>
+		<li>
+			Click the "DECRYPT" button to reveal the original plain text in the "Decrypted Text" field.
+		</li>
+	</ol>
+
+	<h3>Why Use AES Decryption?</h3>
+	<p>
+		Decryption ensures that encrypted data is accessible only to authorized individuals who possess
+		the correct key and IV. AES decryption is widely trusted in industries like finance, healthcare,
+		and government to securely decode sensitive information. This tool allows you to quickly decrypt
+		AES-encrypted messages back to their original form.
+	</p>
 </div>
 
 <style>

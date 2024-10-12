@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { Buffer } from 'buffer'; // Buffer for handling base64 and hex output
 	import * as fflate from 'fflate';
+	import { t } from 'svelte-i18n'
 
 	let targetPlainText = '';
 	let outHashText = '';
 	let outHexText = '';
 	let selectedAlgorithm = 'gzip'; // Default to gzip
-	let metrics = {		
+	let metrics = {
 		compressionRatio: 0,
 		originalSize: 0,
 		outputSize: 0
@@ -26,7 +27,6 @@
 		// Convert plain text to Uint8Array
 		const buf = fflate.strToU8(targetPlainText);
 
-
 		let compressed;
 
 		// Compress using the selected algorithm
@@ -44,14 +44,13 @@
 			compressed = fflate.zipSync(zip, { level: 9, mem: 12 });
 		}
 
-
 		// Calculate sizes and compression ratio
 		const originalSize = buf.byteLength;
 		const outputSize = compressed.byteLength;
 		const compressionRatio = (((originalSize - outputSize) / originalSize) * 100).toFixed(2);
 
 		// Update metrics
-		metrics = {			
+		metrics = {
 			compressionRatio,
 			originalSize,
 			outputSize
@@ -73,26 +72,7 @@
 		content="An online tool that compresses plain text using GZIP, Deflate, and ZIP with BZIP2 or LZMA, and provides base64 and hex-encoded results, along with compression ratio details."
 	/>
 </head>
-
-<div class="description">
-	<h2>Online Compression Tool - GZIP, BZIP2, Deflate, LZMA</h2>
-	<p>
-		Welcome to our free online compression tool, designed to compress your plain text into multiple
-		formats such as GZIP, BZIP2, Deflate, and LZMA. Compression is a crucial technique used to
-		reduce file sizes, making data transfer more efficient and storage less costly. This tool
-		provides instant compression results along with detailed metrics, including compression ratio,
-		original size, and compressed size.
-	</p>
-
-	<h3>What is Compression?</h3>
-	<p>
-		Compression is the process of reducing the size of data by encoding it in a more efficient way.
-		This allows you to save storage space and speed up data transfer. Compressed data is essential
-		in web development, file storage, and online transfers where bandwidth and storage limitations
-		exist. Our tool provides a simple and efficient way to compress your text data and see the
-		results in both Base64 and Hex formats.
-	</p>
-</div>
+<h2>{ $t('compression') } { $t('tool') } - GZIP, BZIP2, Deflate, LZMA</h2>
 
 <!-- Compression Tool UI -->
 <div class="container">
@@ -116,10 +96,9 @@
 			placeholder="Enter your text here"
 		></textarea>
 		<span class="metrics">
-			Size: {metrics.originalSize} bytes &gt; {metrics.outputSize} bytes,
-			Compression Ratio: {metrics.compressionRatio}%
+			Size: {metrics.originalSize} bytes &gt; {metrics.outputSize} bytes, Compression Ratio: {metrics.compressionRatio}%
 		</span>
-		<button on:click={doCompress}>Compress</button>
+		<button on:click={doCompress}>{ $t('compress-button') }</button>
 	</div>
 
 	<!-- Base64 Output -->
@@ -133,6 +112,26 @@
 		<label for="hashHex">Compressed Result (Hex)</label>
 		<textarea id="hashHex" bind:value={outHexText} rows="4" readonly></textarea>
 	</div>
+</div>
+
+<div class="description">
+	<h3>About the Compression Tool</h3>
+	<p>
+		Welcome to our free online compression tool, designed to compress your plain text into multiple
+		formats such as GZIP, BZIP2, Deflate, and LZMA. Compression is a crucial technique used to
+		reduce file sizes, making data transfer more efficient and storage less costly. This tool
+		provides instant compression results along with detailed metrics, including compression ratio,
+		original size, and compressed size.
+	</p>
+
+	<h3>What is Compression?</h3>
+	<p>
+		Compression is the process of reducing the size of data by encoding it in a more efficient way.
+		This allows you to save storage space and speed up data transfer. Compressed data is essential
+		in web development, file storage, and online transfers where bandwidth and storage limitations
+		exist. Our tool provides a simple and efficient way to compress your text data and see the
+		results in both Base64 and Hex formats.
+	</p>
 </div>
 
 <div class="description">
@@ -220,11 +219,10 @@
 			to save storage space on both local machines and cloud systems.
 		</li>
 	</ul>
-	
 </div>
 
 <style>
-	.container {		
+	.container {
 		margin: 20px auto;
 		padding: 20px;
 		border: 1px solid #ccc;

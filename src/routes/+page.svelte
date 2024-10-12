@@ -12,41 +12,33 @@
   
   <body>
     <div class="container">
-      <h1>Welcome to TxtWizard!</h1>
+      <h1>{ $t('welcome-to-txtwizard') }</h1>
   
       <p>
-        TxtWizard is your go-to platform for free, powerful, and secure online tools. Everything runs
-        entirely within your browser, ensuring your data remains private and secure. Explore our
-        features below:
+        { $t('txtwizard-intro') }
       </p>
   
-      <h2>Our Tools</h2>
+      <h2>{ $t('our-tools') }</h2>
   
       <ul>
         <li>
-          <a href="/encryption">Encryption Tool</a> - Easily encrypt sensitive data using AES-GCM or
-          AES-CBC. Your text is encrypted securely and never leaves your browser.
+          <a href="/encryption">{ $t('encryption') } { $t('tool') }</a> - { $t('encryption-intro') }
         </li>
         <li>
-          <a href="/decryption">Decryption Tool</a> - Decrypt AES-encrypted data back to its original
-          form. Supports AES-GCM and AES-CBC.
+          <a href="/decryption">{ $t('decryption') } { $t('tool') }</a> - { $t('decryption-intro') }
         </li>
         <li>
-          <a href="/hashing">Hashing Tool</a> - Create cryptographic hashes like MD5, SHA1, SHA256,
-          and more. Generate secure hashes for data integrity verification.
+          <a href="/encoding-decoding">{ $t('encoding') } & { $t('decoding') } { $t('tool') }</a> - { $t('encoding-intro') }
         </li>
         <li>
-          <a href="/compression">Compression Tool</a> - Compress text using Gzip, Bzip2, and Deflate.
-          Measure compression ratio and easily obtain compressed results.
+          <a href="/hashing">{ $t('hashing') } { $t('tool') }</a> - { $t('hashing-intro') }
         </li>
         <li>
-          <a href="/key-generation">Ethereum Key Generation Tool</a> - Generate Ethereum
-          public and private key pairs with a secure local process, right in your browser.
+          <a href="/compression">{ $t('compression') } { $t('tool') }</a> - { $t('compression-intro') }
         </li>
         <li>
-          <a href="/encoding-decoding">Encoding & Decoding Tool</a> - Convert plain text between
-          Base64, Hex, URL, and HTML encoding formats.
-        </li>
+          <a href="/key-generation">{ $t("keygen")} { $t('tool') }</a> - { $t('keygen-intro') }
+        </li>        
       </ul>
   
      

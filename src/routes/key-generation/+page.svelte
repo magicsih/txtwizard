@@ -6,8 +6,10 @@
 	import { ripemd160 } from 'ethereum-cryptography/ripemd160';
 	import { sha256 } from 'ethereum-cryptography/sha256';
 	import base58 from 'bs58';
+	import { t } from 'svelte-i18n'
 
 	let privateKey = '';
+	let privateKeyNumeric = ''; // 새로 추가된 numeric 형식의 private key
 	let publicKey = '';
 	let address = '';
 
@@ -20,6 +22,15 @@
 		// Generate random private key (32 bytes)
 		const privKey = getRandomBytesSync(32);
 
+		// Store numeric private key as decimal
+		privateKeyNumeric = BigInt('0x' + Buffer.from(privKey).toString('hex')).toString();
+
+		// Update keys and addresses
+		updateKeysFromPrivateKey(privKey);
+	}
+
+	// Function to update Ethereum and Bitcoin keys based on private key
+	function updateKeysFromPrivateKey(privKey: Uint8Array) {
 		// Generate Ethereum public key from the private key
 		const pubKey = secp256k1.getPublicKey(privKey);
 
@@ -68,7 +79,8 @@
 
 		let checksumAddress = '0x';
 		for (let i = 0; i < addressLower.length; i++) {
-			checksumAddress += parseInt(hash[i], 16) >= 8 ? addressLower[i].toUpperCase() : addressLower[i];
+			checksumAddress +=
+				parseInt(hash[i], 16) >= 8 ? addressLower[i].toUpperCase() : addressLower[i];
 		}
 		return checksumAddress;
 	}
@@ -88,35 +100,49 @@
 		const fullPayload = Buffer.concat([compressedPrivKey, checksum]);
 		return base58.encode(fullPayload);
 	}
+
+	// Function to handle privateKeyNumeric changes and update keys accordingly
+	function updateKeysFromNumericInput() {
+		try {
+			const privKeyHex = BigInt(privateKeyNumeric).toString(16).padStart(64, '0');
+			const privKey = Uint8Array.from(Buffer.from(privKeyHex, 'hex'));
+
+			// Update keys and addresses based on the new private key
+			updateKeysFromPrivateKey(privKey);
+		} catch (error) {
+			console.error('Invalid numeric private key input:', error);
+		}
+	}
 </script>
 
 <head>
 	<title>Free Online BTC and ETH Key Generation Tool</title>
-	<meta name="keywords" content="secp256k1,ethereum,bitcoin,key,generation,public,private,address" />
-	<meta name="description" content="Free online tool to generate Ethereum and Bitcoin public-private key pairs and addresses" />
+	<meta
+		name="keywords"
+		content="secp256k1,ethereum,bitcoin,key,generation,public,private,address"
+	/>
+	<meta
+		name="description"
+		content="Free online tool to generate Ethereum and Bitcoin public-private key pairs and addresses"
+	/>
 </head>
+
+<h2>{ $t("keygen")} { $t('tool') } - { $t('bitcoin') } & { $t('ethereum') }</h2>
 
 <!-- Key Generation Tool UI -->
 <div class="container">
-	<h2>Ethereum and Bitcoin Key Generation Tool</h2>
-	<p>
-		<strong style="color: #e74c3c">Note:</strong> All keys are generated locally in your browser. They are never sent to any remote server.
-	</p>
+	
 
 	<!-- Generate Keys Button -->
 	<div class="form-group">
-		<button on:click={generateKeys}>Generate Keys (BTC, ETH)</button>
+		<button on:click={generateKeys}>{ $t('generate') } ({ $t('bitcoin') }, { $t('ethereum') })</button>
 	</div>
 
 	<!-- Private Keys (HEX & WIF) Output -->
 	<div class="form-group">
-		<label>Private Keys</label>
 		<div>
-			<strong>Ethereum Private Key (HEX):</strong>
-			<input type="text" bind:value={privateKey} readonly />
-
-			<strong>Bitcoin Private Key (WIF):</strong>
-			<input type="text" bind:value={btcPrivateKey} readonly />
+			<strong>Private Key (Numeric):</strong>
+			<input type="text" bind:value={privateKeyNumeric} on:change={updateKeysFromNumericInput} />
 		</div>
 	</div>
 
@@ -125,10 +151,16 @@
 		<label for="btcAddress">Bitcoin Address</label>
 		<input type="text" id="btcAddress" bind:value={btcAddress} readonly />
 		{#if btcAddress}
-			<a href="https://www.blockchain.com/btc/address/{btcAddress}" target="_blank" rel="noopener noreferrer">
+			<a
+				href="https://www.blockchain.com/btc/address/{btcAddress}"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
 				View Bitcoin address on Blockchain Explorer
 			</a>
 		{/if}
+		<strong>Bitcoin Private Key (WIF):</strong>
+		<input type="text" bind:value={btcPrivateKey} readonly />
 	</div>
 
 	<!-- Ethereum Address Output -->
@@ -140,20 +172,36 @@
 				View Ethereum address on Etherscan
 			</a>
 		{/if}
+		<strong>Ethereum Private Key (HEX):</strong>
+		<input type="text" bind:value={privateKey} readonly />
 	</div>
+</div>
+
+<div class="form-group">
+	<h3>About this tool</h3>
+	<p>
+		This tool allows you to generate public-private key pairs and addresses for both Bitcoin and
+		Ethereum. It operates entirely within your browser, ensuring that no sensitive information is
+		sent to any remote servers. You can generate a new set of keys or input your own private key in
+		numeric format to see the corresponding public key and address. Please make sure to securely
+		store your private key, as it is critical for accessing your cryptocurrency assets.
+	</p>
 </div>
 
 <div class="description">
 	<h3>Outputs:</h3>
 	<ol>
 		<li>
-			<strong>Private Keys (HEX & WIF):</strong> Ethereum Private Key in HEX format, Bitcoin Private Key in WIF format.
+			<strong>Private Keys (HEX & WIF):</strong> Ethereum Private Key in HEX format, Bitcoin Private
+			Key in WIF format.
 		</li>
 		<li>
-			<strong>Bitcoin Address:</strong> Derived by first taking the SHA-256 hash of the public key, followed by the RIPEMD-160 hash, and then Base58Check encoded.
+			<strong>Bitcoin Address:</strong> Derived by first taking the SHA-256 hash of the public key, followed
+			by the RIPEMD-160 hash, and then Base58Check encoded.
 		</li>
 		<li>
-			<strong>Ethereum Address:</strong> Derived by taking the Keccak-256 hash of the public key and using the last 20 bytes.
+			<strong>Ethereum Address:</strong> Derived by taking the Keccak-256 hash of the public key and
+			using the last 20 bytes.
 		</li>
 	</ol>
 </div>

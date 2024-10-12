@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from 'svelte-i18n'
 	import { onMount } from 'svelte';
 	import { Buffer } from 'buffer'; // Import Buffer for encoding/decoding
 
@@ -160,16 +161,7 @@
 	<title>TxtWizard | Free Online Text Encoding and Decoding Tool</title>
 </head>
 
-<h2>Text Encoding and Decoding Tool</h2>
-
-<p>
-	Welcome to our comprehensive online tool for encoding and decoding text into various formats,
-	including Base64, Hexadecimal, URL Encoding, and HTML Encoding. Whether you're a developer, a
-	cybersecurity enthusiast, or just someone looking to convert text formats, our tool provides an
-	easy-to-use interface for all your encoding and decoding needs. You can input your plain text and
-	convert it into different formats, or reverse encoded text back into its original form—all in one
-	convenient place.
-</p>
+<h2>{ $t('encoding') } & { $t('decoding') } { $t('tool') }</h2>
 
 <!-- UI Structure -->
 <div class="container">
@@ -227,6 +219,16 @@
 </div>
 
 <div class="description">
+	<h3>About the Text Encoding and Decoding Tool</h3>
+	<p>
+		Welcome to our comprehensive online tool for encoding and decoding text into various formats,
+		including Base64, Hexadecimal, URL Encoding, and HTML Encoding. Whether you're a developer, a
+		cybersecurity enthusiast, or just someone looking to convert text formats, our tool provides an
+		easy-to-use interface for all your encoding and decoding needs. You can input your plain text
+		and convert it into different formats, or reverse encoded text back into its original form—all
+		in one convenient place.
+	</p>
+
 	<h3>What is Text Encoding?</h3>
 	<p>
 		Text encoding is the process of converting characters from their readable form into a
