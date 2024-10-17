@@ -286,6 +286,7 @@
 		}
 	</style>
 	<script async src="https://www.googletagmanager.com/gtag/js?id=G-7HNMRW4Y3Q"></script>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9932778305312246" crossorigin="anonymous"></script>
 </head>
 
 <body data-sveltekit-preload-data="hover">
@@ -300,7 +301,8 @@
 		gtag('js', new Date());
 
 		gtag('config', 'G-7HNMRW4Y3Q', {
-			cookie_flags: 'SameSite=None;Secure'
+			cookie_flags: 'SameSite=Lax;Secure',
+			allow_google_signals: false
 		});
 
 		document.querySelector('.menu-toggle').addEventListener('click', function () {
