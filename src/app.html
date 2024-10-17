@@ -299,7 +299,9 @@
 		function gtag() { dataLayer.push(arguments); }
 		gtag('js', new Date());
 
-		gtag('config', 'G-7HNMRW4Y3Q');
+		gtag('config', 'G-7HNMRW4Y3Q', {
+			cookie_flags: 'SameSite=None;Secure'
+		});
 
 		document.querySelector('.menu-toggle').addEventListener('click', function () {
 			const nav = document.querySelector('nav');
