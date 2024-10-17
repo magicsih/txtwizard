@@ -28,7 +28,7 @@
 			color: var(--fg-1);
 			font-family: var(--font);
 			line-height: 1.5;
-			margin: 1rem;			
+			margin: 1rem;
 		}
 
 		h1,
@@ -292,21 +292,19 @@
 	<div style="display: contents">%sveltekit.body%</div>
 	<script>
 		const theme = new URL(window.location).searchParams.get('theme');
-
 		document.body.classList.remove('light', 'dark');
 		document.body.classList.add(theme || 'light');
-		document.getElementById('year').textContent = new Date().getFullYear();
-
-		document.querySelector('.menu-toggle').addEventListener('click', function () {
-			const nav = document.querySelector('nav');
-			nav.classList.toggle('open');
-		});
 
 		window.dataLayer = window.dataLayer || [];
 		function gtag() { dataLayer.push(arguments); }
 		gtag('js', new Date());
 
 		gtag('config', 'G-7HNMRW4Y3Q');
+
+		document.querySelector('.menu-toggle').addEventListener('click', function () {
+			const nav = document.querySelector('nav');
+			nav.classList.toggle('open');
+		});
 	</script>
 </body>
 
