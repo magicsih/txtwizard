@@ -6,7 +6,7 @@
 	import { ripemd160 } from 'ethereum-cryptography/ripemd160';
 	import { sha256 } from 'ethereum-cryptography/sha256';
 	import base58 from 'bs58';
-	import { t } from 'svelte-i18n'
+	import { t } from 'svelte-i18n';
 
 	let privateKey = '';
 	let privateKeyNumeric = ''; // 새로 추가된 numeric 형식의 private key
@@ -127,15 +127,13 @@
 	/>
 </head>
 
-<h2>{ $t("keygen")} { $t('tool') } - { $t('bitcoin') } & { $t('ethereum') }</h2>
+<h2>{$t('keygen')} {$t('tool')} - {$t('bitcoin')} & {$t('ethereum')}</h2>
 
 <!-- Key Generation Tool UI -->
 <div class="container">
-	
-
 	<!-- Generate Keys Button -->
 	<div class="form-group">
-		<button on:click={generateKeys}>{ $t('generate') } ({ $t('bitcoin') }, { $t('ethereum') })</button>
+		<button on:click={generateKeys}>{$t('generate')} ({$t('bitcoin')}, {$t('ethereum')})</button>
 	</div>
 
 	<!-- Private Keys (HEX & WIF) Output -->
@@ -143,6 +141,7 @@
 		<div>
 			<strong>Private Key (Numeric):</strong>
 			<input type="text" bind:value={privateKeyNumeric} on:change={updateKeysFromNumericInput} />
+			<small>Range: 1 ≤ n ＜ 115792089237316195423570985008687907852837564279074904382605163141518161494336</small>
 		</div>
 	</div>
 
