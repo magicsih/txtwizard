@@ -36,56 +36,18 @@
         <li>
           <a href="/compression">{ $t('compression') } { $t('tool') }</a> - { $t('compression-intro') }
         </li>
-        <li>
-          <a href="/key-generation">{ $t("keygen")} { $t('tool') }</a> - { $t('keygen-intro') }
+		<li>
+          <a href="/key-generation">{ $t('keygen') } { $t('tool') }</a> - { $t('keygen-intro') }
         </li>
         <li>
-          <a href="/qrcode">{ $t('qr-code-gen') } { $t('tool') }</a> - { $t('qr-code-intro') }
+          <a href="/qrcode">{ $t('qr-code-gen') } { $t('tool') }</a> - { $t('qr-code-gen-intro') }
         </li>
         <li>
           <a href="/currency">{ $t('currency') } { $t('tool') }</a> - { $t('currency-intro') }
+        </li>
+		<li>
+          <a href="/text-case-converter">Text Case Converter</a> - Convert text case.
+        </li>
       </ul>
-  
-     
     </div>
-  
-    <style>
-      .container {                
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        background-color: #f9f9f9;
-        font-family: Arial, sans-serif;
-      }
-  
-      h1,
-      h2 {        
-        margin-bottom: 20px;
-      }
-  
-      p {
-        font-size: 1.1em;
-        line-height: 1.6;        
-      }
-  
-      ul {
-        list-style-type: none;
-        padding-left: 0;        
-      }
-  
-      ul li {
-        margin-bottom: 15px;
-        font-size: 1.1em;
-      }
-  
-      a {
-        color: #3498db;
-        text-decoration: none;
-      }
-  
-      a:hover {
-        text-decoration: underline;
-      }
-    </style>
   </body>
-  
