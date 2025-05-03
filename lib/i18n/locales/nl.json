@@ -1,0 +1,31 @@
+{
+  "page_title": "Paginatitel",
+  "sign_in": "Inloggen",
+  "sign_up": "Aanmelden",
+  "encryption": "Versleuteling",
+  "decryption": "Ontsleuteling",
+  "encoding": "Codering",
+  "hashing": "Hashing",
+  "compression": "Compressie",
+  "keygen": "Sleutelaanmaak",
+  "home": "Startpagina",
+  "page.title.home": "TxtWizard - Gratis online tools - Versleuteling, Hashing, Compressie, Ethereum Sleutelaanmaak",
+  "page.description.home": "TxtWizard biedt gratis online tools voor tekstversleuteling, ontsleuteling, hashing, compressie, Ethereum sleutelaanmaak en meer.",
+  "welcome-to-txtwizard": "Welkom bij TxtWizard!",
+  "txtwizard-intro": "TxtWizard is een platform voor krachtige en veilige online tools, die volledig in uw browser werken. Ontdek onze functies:",
+  "our-tools": "Onze tools",
+  "tool": "Tool",
+  "decoding": "Decodering",
+  "encryption-intro": "Versleutel eenvoudig gevoelige gegevens met AES-GCM of AES-CBC.",
+  "decryption-int",
+  "pig_latin": {
+    "link": "Varkenslatijn",
+    "page_title": "Varkenslatijn vertaler",
+    "page_description": "Vertaal tekst naar Varkenslatijn.",
+    "title": "Varkenslatijn vertaler",
+    "input_label": "Voer tekst in:",
+    "input_placeholder": "Voer tekst in om te vertalen...",
+    "translate_button": "Vertaal",
+    "output_label": "Varkenslatijn:"
+  }
+}

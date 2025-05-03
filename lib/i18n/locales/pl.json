@@ -1,0 +1,30 @@
+{
+  "page_title": "Tytuł strony",
+  "sign_in": "Zaloguj się",
+  "sign_up": "Zarejestruj się",
+  "encryption": "Szyfrowanie",
+  "decryption": "Deszyfrowanie",
+  "encoding": "Kodowanie",
+  "hashing": "Haszowanie",
+  "compression": "Kompresja",
+  "keygen": "Generowanie kluczy",
+  "home": "Strona główna",
+  "page.title.home": "TxtWizard - Darmowe narzędzia online - Szyfrowanie, Haszowanie, Kompresja, Generowanie kluczy Ethereum",
+  "page.description.home": "TxtWizard oferuje darmowe narzędzia online do szyfrowania, deszyfrowania, haszowania, kompresji, generowania kluczy Ethereum i więcej.",
+  "welcome-to-txtwizard": "Witamy w TxtWizard!",
+  "txtwizard-intro": "TxtWizard to platforma dla potężnych i bezpiecznych narzędzi online, działających bezpośrednio w przeglądarce. Odkryj nasze funkcje:",
+  "our-tools": "Nasze narzędzia",
+  "tool": "Narzędzie",
+  "decoding": "Dekodowanie",
+  "encryption-intro": "Łatwo zaszyfruj wrażliwe dane za pom",
+  "pig_latin": {
+    "link": "Pig Latin",
+    "page_title": "Tłumacz Pig Latin",
+    "page_description": "Przetłumacz tekst na Pig Latin.",
+    "title": "Tłumacz Pig Latin",
+    "input_label": "Wprowadź tekst:",
+    "input_placeholder": "Wprowadź tekst do przetłumaczenia...",
+    "translate_button": "Przetłumacz",
+    "output_label": "Pig Latin:"
+  }
+}

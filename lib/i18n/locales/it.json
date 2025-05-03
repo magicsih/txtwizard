@@ -1,0 +1,30 @@
+{
+  "page_title": "Titolo della pagina",
+  "sign_in": "Accedi",
+  "sign_up": "Registrati",
+  "encryption": "Crittografia",
+  "decryption": "Decrittografia",
+  "encoding": "Codifica",
+  "hashing": "Hashing",
+  "compression": "Compressione",
+  "keygen": "Generazione Chiavi",
+  "home": "Home",
+  "page.title.home": "TxtWizard - Strumenti online gratuiti - Crittografia, Hashing, Compressione, Generazione chiavi Ethereum",
+  "page.description.home": "TxtWizard offre strumenti online gratuiti per crittografia, decrittografia, hashing, compressione, generazione chiavi Ethereum e altro ancora.",
+  "welcome-to-txtwizard": "Benvenuto su TxtWizard!",
+  "txtwizard-intro": "TxtWizard è la tua piattaforma per potenti strumenti online sicuri, eseguiti completamente nel tuo browser. Esplora le nostre funzionalità:",
+  "our-tools": "I nostri strumenti",
+  "tool": "Strumento",
+  "decoding": "Decodifica",
+  "encryption-intro": "Cripta facilmente i dati",
+  "pig_latin": {
+    "link": "Latino Pig",
+    "page_title": "Traduttore di Latino Pig",
+    "page_description": "Traduci il testo in Latino Pig.",
+    "title": "Traduttore di Latino Pig",
+    "input_label": "Inserisci il testo:",
+    "input_placeholder": "Inserisci il testo da tradurre...",
+    "translate_button": "Traduci",
+    "output_label": "Latino Pig:"
+  }
+}

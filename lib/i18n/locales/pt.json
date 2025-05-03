@@ -1,0 +1,30 @@
+{
+  "page_title": "Título da página",
+  "sign_in": "Entrar",
+  "sign_up": "Registrar",
+  "encryption": "Criptografia",
+  "decryption": "Descriptografia",
+  "encoding": "Codificação",
+  "hashing": "Hashing",
+  "compression": "Compressão",
+  "keygen": "Geração de chave",
+  "home": "Início",
+  "page.title.home": "TxtWizard - Ferramentas online gratuitas - Criptografia, Hashing, Compressão, Geração de chave Ethereum",
+  "page.description.home": "TxtWizard oferece ferramentas online gratuitas para criptografia, descriptografia, hashing, compressão, geração de chave Ethereum e mais.",
+  "welcome-to-txtwizard": "Bem-vindo ao TxtWizard!",
+  "txtwizard-intro": "TxtWizard é uma plataforma para ferramentas online poderosas e seguras, executadas totalmente no seu navegador. Explore nossas funcionalidades:",
+  "our-tools": "Nossas ferramentas",
+  "tool": "Ferramenta",
+  "decoding": "Decodificação",
+  "encryption-intro": "Criptografe dados confid",
+  "pig_latin": {
+    "link": "Porco Latino",
+    "page_title": "Tradutor de Porco Latino",
+    "page_description": "Traduzir texto para Porco Latino.",
+    "title": "Tradutor de Porco Latino",
+    "input_label": "Inserir texto:",
+    "input_placeholder": "Insira o texto para traduzir...",
+    "translate_button": "Traduzir",
+    "output_label": "Porco Latino:"
+  }
+}

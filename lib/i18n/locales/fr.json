@@ -1,0 +1,30 @@
+{
+  "page_title": "Titre de la page",
+  "sign_in": "Se connecter",
+  "sign_up": "S'inscrire",
+  "encryption": "Chiffrement",
+  "decryption": "Déchiffrement",
+  "encoding": "Encodage",
+  "hashing": "Hachage",
+  "compression": "Compression",
+  "keygen": "Génération de clé",
+  "home": "Accueil",
+  "page.title.home": "TxtWizard - Outils en ligne gratuits - Chiffrement, Hachage, Compression, Génération de clé Ethereum",
+  "page.description.home": "TxtWizard propose des outils en ligne gratuits pour le chiffrement, le déchiffrement, le hachage, la compression, la génération de clé Ethereum et plus.",
+  "welcome-to-txtwizard": "Bienvenue sur TxtWizard !",
+  "txtwizard-intro": "TxtWizard est une plateforme d'outils en ligne puissants et sécurisés, exécutés entièrement dans votre navigateur. Découvrez nos fonctionnalités ci-dessous :",
+  "our-tools": "Nos outils",
+  "tool": "Outil",
+  "decoding": "Décodage",
+  "encryption-intro": "Chiffrez f",
+  "pig_latin": {
+    "link": "Latin cochon",
+    "page_title": "Traducteur de latin cochon",
+    "page_description": "Traduire le texte en latin cochon.",
+    "title": "Traducteur de latin cochon",
+    "input_label": "Entrez le texte :",
+    "input_placeholder": "Entrez le texte à traduire...",
+    "translate_button": "Traduire",
+    "output_label": "Latin cochon:"
+  }
+}

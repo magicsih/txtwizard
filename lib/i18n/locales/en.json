@@ -1,0 +1,31 @@
+{
+  "page_title": "Page title",
+  "sign_in": "Sign in",
+  "sign_up": "Sign up",
+  "encryption": "Encryption",
+  "decryption": "Decryption",
+  "encoding": "Encoding",
+  "hashing": "Hashing",
+  "compression": "Compression",
+  "keygen": "KeyGen",
+  "home": "Home",
+  "page.title.home": "TxtWizard | Free Online Tools - Encryption, Hashing, Compression, Ethereum Key Generation",
+  "page.description.home": "TxtWizard offers free online tools for text encryption, decryption, hashing, compression, Ethereum key generation, and more.",
+  "welcome-to-txtwizard": "Welcome to TxtWizard!",
+  "txtwizard-intro": "TxtWizard is your go-to platform for free, powerful, and secure online tools. Everything runs entirely within your browser. Explore our features below:",
+  "our-tools": "Our Tools",
+  "tool": "Tool",
+  "decoding": "Decoding",
+  "encryption-intro": "Easily encrypt sensitive data using AES-GCM or AES-CBC.",
+  "decryption-intro": "Decrypt AES-encrypted data back to its original",
+  "pig_latin": {
+    "link": "Pig Latin",
+    "page_title": "Pig Latin Translator",
+    "page_description": "Translate text to Pig Latin.",
+    "title": "Pig Latin Translator",
+    "input_label": "Enter Text:",
+    "input_placeholder": "Enter text to translate...",
+    "translate_button": "Translate",
+    "output_label": "Pig Latin:"
+  }
+}

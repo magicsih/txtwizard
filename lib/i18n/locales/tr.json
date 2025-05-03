@@ -1,0 +1,30 @@
+{
+  "page_title": "Sayfa Başlığı",
+  "sign_in": "Giriş Yap",
+  "sign_up": "Kayıt Ol",
+  "encryption": "Şifreleme",
+  "decryption": "Şifre Çözme",
+  "encoding": "Kodlama",
+  "hashing": "Hashleme",
+  "compression": "Sıkıştırma",
+  "keygen": "Anahtar Üretimi",
+  "home": "Ana Sayfa",
+  "page.title.home": "TxtWizard - Ücretsiz Çevrimiçi Araçlar - Şifreleme, Hashleme, Sıkıştırma, Ethereum Anahtar Üretimi",
+  "page.description.home": "TxtWizard, metin şifreleme, şifre çözme, hashleme, sıkıştırma, Ethereum anahtar üretimi ve daha fazlası için ücretsiz çevrimiçi araçlar sunar.",
+  "welcome-to-txtwizard": "TxtWizard'a Hoşgeldiniz!",
+  "txtwizard-intro": "TxtWizard, tamamen tarayıcınızda çalışan güçlü ve güvenli çevrimiçi araçlar için bir platformdur. Özelliklerimizi keşfedin:",
+  "our-tools": "Araçlarımız",
+  "tool": "Araç",
+  "decoding": "Dekodlama",
+  "encryption-intro": "AES-GCM veya AES-CBC kullanarak hassas verileri kolayca şifreleyin.",
+  "pig_latin": {
+    "link": "Domuz Latince",
+    "page_title": "Domuz Latince Çevirmeni",
+    "page_description": "Metni Domuz Latince'ye çevirin.",
+    "title": "Domuz Latince Çevirmeni",
+    "input_label": "Metin girin:",
+    "input_placeholder": "Çevrilecek metni girin...",
+    "translate_button": "Çevir",
+    "output_label": "Domuz Latince:"
+  }
+}
