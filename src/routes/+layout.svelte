@@ -14,6 +14,9 @@
         <a href="/key-generation">{ $t('keygen') }</a>
 		<a href="/qrcode">{ $t('qr-code-gen') }</a>
 		<a href="/currency">{ $t('currency') }</a>
+		<a href="/pig-latin">{ $t('pig_latin.link_text') }</a>
+		<a href="/markdown-preview">{ $t('markdown_preview.link_text') }</a>
+		<a href="/text-statistics">{ $t('text_statistics.link_text') }</a>
 	</div>
 </nav>
 <slot />
