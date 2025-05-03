@@ -14,6 +14,7 @@
         <a href="/key-generation">{ $t('keygen') }</a>
 		<a href="/qrcode">{ $t('qr-code-gen') }</a>
 		<a href="/currency">{ $t('currency') }</a>
+		<a href="/text-case-converter">Text Case Converter</a>
 	</div>
 </nav>
 <slot />
