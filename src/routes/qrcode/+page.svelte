@@ -5,6 +5,10 @@
 	let qrInputText = ''; // 입력 텍스트
 	let qrCodeDataUrl = ''; // QR 코드 데이터 URL (이미지)
 
+	// Added for base64 encoding feature
+	let base64Input = '';
+	let base64Output = '';
+
 	async function generateQRCode() {
 		try {
 			// 입력 텍스트를 QR 코드로 변환
@@ -13,6 +17,26 @@
 			console.error('Error generating QR code:', error);
 		}
 	}
+
+	// Added for base64 encoding feature
+	function encodeBase64() {
+		try {
+			base64Output = btoa(base64Input);
+		} catch (error) {
+			console.error('Error encoding to Base64:', error);
+			base64Output = 'Invalid input for Base64 encoding';
+		}
+	}
+
+	function decodeBase64() {
+		try {
+			base64Output = atob(base64Input);
+		} catch (error) {
+			console.error('Error decoding from Base64:', error);
+			base64Output = 'Invalid input for Base64 decoding';
+		}
+	}
+
 </script>
 
 <head>
@@ -39,41 +63,50 @@
 			id="qrInput"
 			bind:value={qrInputText}
 			rows="4"
-			placeholder="Enter text or URL here"
-		></textarea>
-		<small>{qrInputText.length} characters</small>
-	</div>
-
-	<!-- Generate QR Code Button -->
-	<div class="form-group">
-		<button on:click={generateQRCode}>{ $t('generate') }</button>
+			placeholder="Enter text here"
+		/>
+		<button class="button" on:click={generateQRCode}>Generate QR Code</button>
 	</div>
 
 	<!-- QR Code Output -->
-	<div class="form-group" style="text-align: center;">
-		{#if qrCodeDataUrl}
-			<img src={qrCodeDataUrl} alt="Generated QR Code" />
-			<a href={qrCodeDataUrl} download="qrcode.png">Download QR Code</a>
-		{/if}
+	{#if qrCodeDataUrl}
+		<div class="form-group">
+			<img src={qrCodeDataUrl} alt="QR Code" />
+		</div>
+	{/if}
+
+	<!-- Base64 Encode/Decode Section -->
+	<h2>Base64 Encode/Decode</h2>
+	<div class="form-group">
+		<label for="base64Input">Enter Text for Base64 Encoding/Decoding</label>
+		<textarea
+			id="base64Input"
+			bind:value={base64Input}
+			rows="4"
+			placeholder="Enter text here"
+		/>
+	</div>
+
+	<div class="form-group">
+		<button class="button" on:click={encodeBase64}>Encode to Base64</button>
+		<button class="button" on:click={decodeBase64}>Decode from Base64</button>
+	</div>
+
+	<div class="form-group">
+		<label for="base64Output">Output</label>
+		<textarea
+			id="base64Output"
+			bind:value={base64Output}
+			rows="4"
+			readonly
+		/>
 	</div>
 </div>
 
-<div class="description">
-	<h2>What is a QR Code?</h2>
-	<p>
-		A QR code (Quick Response code) is a type of matrix barcode that can encode information such as text, URLs, or other data. It's widely used for contactless payment systems, website links, and more.
-	</p>
-	<h3>How to Use This Tool</h3>
-	<ul>
-		<li>Enter any text or URL into the text box above.</li>
-		<li>Click the "Generate QR Code" button.</li>
-		<li>Your QR code will be generated and displayed as an image.</li>
-		<li>You can download the QR code as a PNG file.</li>
-	</ul>
-</div>
-
 <style>
+	/* General container for the tool */
 	.container {
+		max-width: 800px;
 		margin: 20px auto;
 		padding: 20px;
 		border: 1px solid #ccc;
@@ -81,59 +114,46 @@
 		background-color: #f9f9f9;
 	}
 
+	/* Style for form groups (input fields, labels, and buttons) */
 	.form-group {
-		margin-bottom: 20px;
-	}
-
-	label {
-		font-weight: bold;
-		display: block;
-		margin-bottom: 8px;
-	}
-
-	textarea,
-	button {
-		width: 100%;
-		padding: 10px;
-		font-size: 1em;
-		margin-top: 5px;
-		border: 1px solid #ccc;
-		border-radius: 4px;
-	}
-
-	button {
-		cursor: pointer;
-	}
-
-	img {
-		margin: 20px auto;
-		max-width: 200px;
-		height: auto;
-	}
-
-	a {
-		display: block;
-		color: #007bff;
-		text-decoration: none;
-		margin-top: 10px;
-	}
-
-	small {
-		display: block;
-		color: #666;
-		margin-top: 5px;
-	}
-
-	h2,
-	h3 {
 		margin-bottom: 15px;
 	}
 
-	p {
-		margin-bottom: 10px;
+	label {
+		display: block;
+		font-weight: bold;
+		margin-bottom: 5px;
 	}
 
-	ul {
-		padding-left: 20px;
+	textarea {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		font-size: 16px;
+		margin-bottom: 10px;
+		box-sizing: border-box; /* Ensures padding and border are included in the width */
+	}
+
+	/* Style for the button */
+	.button {
+		background-color: #4CAF50;
+		color: white;
+		padding: 10px 15px;
+		border: none;
+		border-radius: 4px;
+		cursor: pointer;
+		font-size: 16px;
+		margin-right: 10px;
+	}
+
+	.button:hover {
+		background-color: #3e8e41;
+	}
+
+	img {
+		max-width: 100%;
+		border-radius: 4px;
+		margin-top: 10px;
 	}
 </style>
