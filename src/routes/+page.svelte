@@ -37,14 +37,4 @@
 				<a href="/compression">{$t('compression')} {$t('tool')}</a> - {$t('compression-intro')}
 			</li>
 			<li>
-				<a href="/key-generation">{$t('keygen')} {$t('tool')}</a> - {$t('keygen-intro')}
-			</li>
-			<li>
-				<a href="/qrcode">{$t('qr-code-gen')} {$t('tool')}</a> - {$t('qr-code-intro')}
-			</li>
-			<li>
-				<a href="/currency">{$t('currency')} {$t('tool')}</a> - {$t('currency-intro')}
-			</li>
-		</ul>
-	</div>
-</body>
+				<a href="/key-generation">{$t('keygen')}
