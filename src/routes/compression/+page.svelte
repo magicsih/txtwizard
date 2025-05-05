@@ -18,8 +18,8 @@
 
 	// Compression options
 	const deflateOptions = {
-		level: 6, // Compression level (default: 6)
-		mem: 8 // Memory level
+		level: 6 as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9, // Compression level (default: 6)
+		mem: 8 as 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 // Memory level
 	};
 
 	// Compress the input text based on the selected algorithm
@@ -27,7 +27,7 @@
 		// Convert plain text to Uint8Array
 		const buf = fflate.strToU8(targetPlainText);
 
-		let compressed;
+		let compressed: Uint8Array | undefined;
 
 		// Compress using the selected algorithm
 		if (selectedAlgorithm === 'gzip') {
@@ -44,10 +44,16 @@
 			compressed = fflate.zipSync(zip, { level: 9, mem: 12 });
 		}
 
+		if (!compressed) {
+			throw new Error('Compression failed. Invalid algorithm selected.');
+		}
+
 		// Calculate sizes and compression ratio
 		const originalSize = buf.byteLength;
 		const outputSize = compressed.byteLength;
-		const compressionRatio = (((originalSize - outputSize) / originalSize) * 100).toFixed(2);
+		const compressionRatio = parseFloat(
+			(((originalSize - outputSize) / originalSize) * 100).toFixed(2)
+		);
 
 		// Update metrics
 		metrics = {
@@ -57,7 +63,7 @@
 		};
 
 		// Convert compressed result to Base64 and Hex
-		const outBuffer = Buffer.from(compressed);
+		const outBuffer = Buffer.from(compressed as Uint8Array);
 		outHashText = outBuffer.toString('base64');
 		outHexText = outBuffer.toString('hex');
 	}
