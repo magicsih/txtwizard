@@ -57,7 +57,9 @@
 	}
 
 	async function handleOnChangeKey(event: Event) {
-		values.key = event.target.value;
+		const target = event.target as HTMLInputElement | null;
+		if (!target) return; // Handle null case
+		values.key = target.value;
 
 		const rawKey = Buffer.from(values.key, encodingFormat);
 		cryptoKey = await window.crypto.subtle.importKey(
@@ -70,11 +72,15 @@
 	}
 
 	function handleOnChangeIV(event: Event) {
-		values.iv = event.target.value;
+		const target = event.target as HTMLInputElement | null;
+		if (!target) return; // Handle null case
+		values.iv = target.value;
 	}
 
 	function handleOnChangeTargetEncryptedText(event: Event) {
-		values.targetEncryptedText = event.target.value;
+		const target = event.target as HTMLTextAreaElement | null;
+		if (!target) return; // Handle null case
+		values.targetEncryptedText = target.value;
 	}
 
 	async function decrypt() {

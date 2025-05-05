@@ -33,13 +33,15 @@
 		'BLAKE2s',
 		'BLAKE2b',
 		'BLAKE3'
-	];
+	] as const;
 
+	type Algorithm = typeof algorithms[number]; // Create a union type from the array
+	
 	let targetPlainText = '';
 	let outHashText = '';
 	let outHexText = '';
-	let algorithm = 'SHA-256';
-
+	let algorithm: Algorithm = 'SHA-256'; // Restrict `algorithm` to valid keys
+	
 	// Variables to store length and size of hash outputs and plain text
 	let plainTextLength = 0;
 	let plainTextBytes = 0;

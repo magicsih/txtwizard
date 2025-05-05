@@ -28,8 +28,10 @@
 	}
 
 	async function handleOnChangeKey(event: Event) {
-		values.key = event.target.value;
-		values.keyFieldSize = Buffer.from(event.target.value, encodingFormat).length * 8;
+		const target = event.target as HTMLInputElement | null;
+		if (!target) return; // Handle null case
+		values.key = target.value;
+		values.keyFieldSize = Buffer.from(target.value, encodingFormat).length * 8;
 
 		const rawKey = Buffer.from(values.key, encodingFormat);
 		cryptoKey = await window.crypto.subtle.importKey(
@@ -42,12 +44,16 @@
 	}
 
 	function handleOnChangeIV(event: Event) {
-		values.iv = event.target.value;
-		values.ivFieldSize = Buffer.from(event.target.value, encodingFormat).length * 8;
+		const target = event.target as HTMLInputElement | null;
+		if (!target) return; // Handle null case
+		values.iv = target.value;
+		values.ivFieldSize = Buffer.from(target.value, encodingFormat).length * 8;
 	}
 
 	function handleOnChangeTargetPlainText(event: Event) {
-		values.targetPlainText = event.target.value;
+		const target = event.target as HTMLTextAreaElement | null;
+		if (!target) return; // Handle null case
+		values.targetPlainText = target.value;
 	}
 
 	async function generateRandomBytes(size: number) {
