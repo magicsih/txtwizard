@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n'
+	import { t } from 'svelte-i18n';
 	import { Buffer } from 'buffer';
 
 	let values = {
@@ -135,6 +135,7 @@
 		} catch (error) {
 			// In case of an error during conversion, we reset to previous format
 			encodingFormat = previousEncodingFormat;
+			console.error('Error during encoding conversion:', error);
 			return;
 		}
 	}
@@ -149,7 +150,7 @@
 	<title>TxtWizard | Free Online Text Encrypting Tool - AES/GCM, AES/CBC</title>
 </head>
 
-<h2>{ $t('encryption') } { $t('tool') } - AES/GCM, AES/CBC</h2>
+<h2>{$t('encryption')} {$t('tool')} - AES/GCM, AES/CBC</h2>
 <!-- UI Structure -->
 <div class="container">
 	<!-- Encoding Format Selection -->
@@ -174,8 +175,8 @@
 	<div class="form-group">
 		<label for="key">Key ({encodingFormat})</label>
 		<input type="text" id="key" bind:value={values.key} on:input={handleOnChangeKey} />
-		<button on:click={() => handleOnClickRandomKey(128)}>{ $t('generate') } (128-bit Key)</button>
-		<button on:click={() => handleOnClickRandomKey(256)}>{ $t('generate') } (256-bit Key)</button>
+		<button on:click={() => handleOnClickRandomKey(128)}>{$t('generate')} (128-bit Key)</button>
+		<button on:click={() => handleOnClickRandomKey(256)}>{$t('generate')} (256-bit Key)</button>
 		<small
 			>{values.keyFieldSize} bit, {values.key
 				? `${getByteLength(values.key, encodingFormat)} bytes`
@@ -187,7 +188,7 @@
 	<div class="form-group">
 		<label for="iv">IV ({encodingFormat})</label>
 		<input type="text" id="iv" bind:value={values.iv} on:input={handleOnChangeIV} />
-		<button on:click={handleOnClickRandomIV}>{ $t('generate') } (IV)</button>
+		<button on:click={handleOnClickRandomIV}>{$t('generate')} (IV)</button>
 		<small
 			>{values.ivFieldSize} bit, {values.iv
 				? `${getByteLength(values.iv, encodingFormat)} bytes`
@@ -213,7 +214,7 @@
 
 	<!-- Encrypt Button -->
 	<div class="form-group">
-		<button on:click={encrypt}>{ $t('encrypt-button') }</button>
+		<button on:click={encrypt}>{$t('encrypt-button')}</button>
 	</div>
 
 	<!-- Encrypted Text Output -->

@@ -141,7 +141,10 @@
 		<div>
 			<strong>Private Key (Numeric):</strong>
 			<input type="text" bind:value={privateKeyNumeric} on:change={updateKeysFromNumericInput} />
-			<small>Range: 1 ≤ n ＜ 115792089237316195423570985008687907852837564279074904382605163141518161494336</small>
+			<small
+				>Range: 1 ≤ n ＜
+				115792089237316195423570985008687907852837564279074904382605163141518161494336</small
+			>
 		</div>
 	</div>
 
@@ -173,6 +176,13 @@
 		{/if}
 		<strong>Ethereum Private Key (HEX):</strong>
 		<input type="text" bind:value={privateKey} readonly />
+	</div>
+
+	<div class="form-group" style="display:none;">
+		<label for="ethPublicKey">Ethereum Public Key</label>
+		<input type="text" id="ethPublicKey" bind:value={publicKey} readonly />
+		<strong>Bitcoin Public Key:</strong>
+		<input type="text" bind:value={btcPublicKey} readonly />
 	</div>
 </div>
 

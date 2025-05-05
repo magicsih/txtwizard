@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n'
+	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import { Buffer } from 'buffer'; // Import Buffer for encoding/decoding
 
@@ -119,6 +119,7 @@
 			const decoded = Buffer.from(str, 'base64').toString('base64');
 			return decoded === str;
 		} catch (e) {
+			console.error('Error decoding Base64:', e);
 			return false;
 		}
 	}
@@ -133,13 +134,14 @@
 		try {
 			return str !== decodeURIComponent(str);
 		} catch (e) {
+			console.error('Error decoding URL:', e);
 			return false;
 		}
 	}
 
 	// HTML encoding
 	function encodeHtmlEntities(str: string) {
-		return str.replace(/[\u00A0-\u9999<>\&]/gim, function (i) {
+		return str.replace(/[\u00A0-\u9999<>]/gim, function (i) {
 			return '&#' + i.charCodeAt(0) + ';';
 		});
 	}
@@ -161,7 +163,7 @@
 	<title>TxtWizard | Free Online Text Encoding and Decoding Tool</title>
 </head>
 
-<h2>{ $t('encoding') } & { $t('decoding') } { $t('tool') }</h2>
+<h2>{$t('encoding')} & {$t('decoding')} {$t('tool')}</h2>
 
 <!-- UI Structure -->
 <div class="container">

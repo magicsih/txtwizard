@@ -9,18 +9,47 @@
 	let inputAmount = 1;
 	let outputAmount = '';
 	let exchangeRate = 1;
-	let lastUpdated = ''; // 환율의 기준 날짜 및 시간
 	let updateTime = ''; // 마지막 업데이트된 시간 (유닉스 타임스탬프)
 	let timeAgo = ''; // 업데이트된 시간에 대한 상대적 표현
 
-	const currencies = ['USD', 'EUR', 'KRW', 'GBP', 'JPY', 'CAD', 'AUD', 'INR', 'CNY', 'AED', 'AFN', 'ALL', 'AMD', 'AOA', 'ARS', 'AZN', 'BAM', 'BDT', 'BGN', 'BHD', 'BIF', 'BND', 'BOB', 'BRL', 'BSD', 'BTC', 'CHF', 'CLP', 'COP', 'CZK'];
+	const currencies = [
+		'USD',
+		'EUR',
+		'KRW',
+		'GBP',
+		'JPY',
+		'CAD',
+		'AUD',
+		'INR',
+		'CNY',
+		'AED',
+		'AFN',
+		'ALL',
+		'AMD',
+		'AOA',
+		'ARS',
+		'AZN',
+		'BAM',
+		'BDT',
+		'BGN',
+		'BHD',
+		'BIF',
+		'BND',
+		'BOB',
+		'BRL',
+		'BSD',
+		'BTC',
+		'CHF',
+		'CLP',
+		'COP',
+		'CZK'
+	];
 
 	async function getExchangeRate() {
 		try {
 			const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${inputCurrency}`);
 			const data = await response.json();
 			exchangeRate = data.rates[outputCurrency];
-			lastUpdated = data.date;
 			updateTime = dayjs.unix(data.time_last_updated).format('YYYY-MM-DD HH:mm:ss'); // 유닉스 타임스탬프를 읽기 쉬운 시간으로 변환
 			timeAgo = dayjs().to(dayjs.unix(data.time_last_updated)); // 상대적 시간 업데이트
 			convertCurrency();
@@ -44,12 +73,12 @@
 </script>
 
 <head>
-	<title>{$t('currency')} { $t("tool")}</title>
-	<meta name="description" content="{$t('currency-intro')}" />
+	<title>{$t('currency')} {$t('tool')}</title>
+	<meta name="description" content={$t('currency-intro')} />
 </head>
 
 <div class="container">
-	<h2>{$t('currency')} { $t('tool') }</h2>
+	<h2>{$t('currency')} {$t('tool')}</h2>
 
 	<!-- Input Currency Selection -->
 	<div class="form-group">
@@ -74,7 +103,13 @@
 	<!-- Input Amount -->
 	<div class="form-group">
 		<label for="inputAmount">Amount</label>
-		<input type="number" id="inputAmount" bind:value={inputAmount} on:input={convertCurrency} placeholder="Enter amount" />
+		<input
+			type="number"
+			id="inputAmount"
+			bind:value={inputAmount}
+			on:input={convertCurrency}
+			placeholder="Enter amount"
+		/>
 	</div>
 
 	<!-- Output Amount with Unit Conversion -->
@@ -109,7 +144,8 @@
 		margin-bottom: 8px;
 	}
 
-	input, select {
+	input,
+	select {
 		width: 100%;
 		padding: 10px;
 		margin-top: 5px;

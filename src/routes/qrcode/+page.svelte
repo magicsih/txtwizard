@@ -17,36 +17,28 @@
 
 <head>
 	<title>TxtWizard | Free Online QR Code Generator</title>
-	<meta
-		name="keywords"
-		content="online,qr code,generator,create,free"
-	/>
+	<meta name="keywords" content="online,qr code,generator,create,free" />
 	<meta
 		name="description"
 		content="QR Code Generator, free online tool to create QR codes from text or URLs"
 	/>
 </head>
 
-<h2>{ $t('qr-code-gen') } { $t('tool') }</h2>
+<h2>{$t('qr-code-gen')} {$t('tool')}</h2>
 
 <!-- QR Code Generator UI -->
 <div class="container">
-
 	<!-- Input Text for QR Code -->
 	<div class="form-group">
 		<label for="qrInput">Enter Text or URL for QR Code</label>
-		<textarea
-			id="qrInput"
-			bind:value={qrInputText}
-			rows="4"
-			placeholder="Enter text or URL here"
+		<textarea id="qrInput" bind:value={qrInputText} rows="4" placeholder="Enter text or URL here"
 		></textarea>
 		<small>{qrInputText.length} characters</small>
 	</div>
 
 	<!-- Generate QR Code Button -->
 	<div class="form-group">
-		<button on:click={generateQRCode}>{ $t('generate') }</button>
+		<button on:click={generateQRCode}>{$t('generate')}</button>
 	</div>
 
 	<!-- QR Code Output -->
@@ -61,7 +53,9 @@
 <div class="description">
 	<h2>What is a QR Code?</h2>
 	<p>
-		A QR code (Quick Response code) is a type of matrix barcode that can encode information such as text, URLs, or other data. It's widely used for contactless payment systems, website links, and more.
+		A QR code (Quick Response code) is a type of matrix barcode that can encode information such as
+		text, URLs, or other data. It's widely used for contactless payment systems, website links, and
+		more.
 	</p>
 	<h3>How to Use This Tool</h3>
 	<ul>

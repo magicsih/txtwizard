@@ -2,7 +2,7 @@ name: Lint and Format Check
 
 on:
   pull_request:
-    branches: [main]  # 또는 PR 대상 브랜치
+    branches: [main] # 또는 PR 대상 브랜치
 
 jobs:
   lint:

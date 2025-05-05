@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n'
+	import { t } from 'svelte-i18n';
 	import { Buffer } from 'buffer';
 	import { sha256, sha384, sha512, sha224, sha512_256 } from '@noble/hashes/sha2';
 	// prettier-ignore
@@ -99,7 +99,9 @@
 </script>
 
 <head>
-	<title>TxtWizard | Free Online Hash Converter - SHA-1, SHA-256, SHA-516, SHA3, KEKCAK 256/512, BLAKE2b</title>
+	<title
+		>TxtWizard | Free Online Hash Converter - SHA-1, SHA-256, SHA-516, SHA3, KEKCAK 256/512, BLAKE2b</title
+	>
 	<meta
 		name="keywords"
 		content="online,sha1,sha256,sha-384,sha-512,sha3-224,sha3-256,sha3-384,sha3-512,keccak,ripemd160,blake3,blake2b,hash,converter"
@@ -110,13 +112,10 @@
 	/>
 </head>
 
-
-<h2>{ $t('hashing') } { $t('tool') }</h2>
+<h2>{$t('hashing')} {$t('tool')}</h2>
 
 <!-- Hashing Tool UI -->
 <div class="container">
-	
-
 	<!-- Algorithm Selection -->
 	<div class="form-group">
 		<label for="algorithm">Select Hashing Algorithm</label>
@@ -137,7 +136,7 @@
 
 	<!-- Hash Button -->
 	<div class="form-group">
-		<button on:click={doHash}>{ $t('hash-button') }</button>
+		<button on:click={doHash}>{$t('hash-button')}</button>
 	</div>
 
 	<!-- Base64 Output -->

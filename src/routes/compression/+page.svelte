@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Buffer } from 'buffer'; // Buffer for handling base64 and hex output
 	import * as fflate from 'fflate';
-	import { t } from 'svelte-i18n'
+	import { t } from 'svelte-i18n';
 
 	let targetPlainText = '';
 	let outHashText = '';
@@ -72,7 +72,7 @@
 		content="An online tool that compresses plain text using GZIP, Deflate, and ZIP with BZIP2 or LZMA, and provides base64 and hex-encoded results, along with compression ratio details."
 	/>
 </head>
-<h2>{ $t('compression') } { $t('tool') } - GZIP, BZIP2, Deflate, LZMA</h2>
+<h2>{$t('compression')} {$t('tool')} - GZIP, BZIP2, Deflate, LZMA</h2>
 
 <!-- Compression Tool UI -->
 <div class="container">
@@ -98,7 +98,7 @@
 		<span class="metrics">
 			Size: {metrics.originalSize} bytes &gt; {metrics.outputSize} bytes, Compression Ratio: {metrics.compressionRatio}%
 		</span>
-		<button on:click={doCompress}>{ $t('compress-button') }</button>
+		<button on:click={doCompress}>{$t('compress-button')}</button>
 	</div>
 
 	<!-- Base64 Output -->

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from 'svelte-i18n'
+	import { t } from 'svelte-i18n';
 	import { Buffer } from 'buffer';
 
 	let values = {
@@ -46,6 +46,7 @@
 		} catch (error) {
 			// In case of an error during conversion, we reset to previous format
 			encodingFormat = previousEncodingFormat;
+			console.error('Error during encoding conversion:', error);
 			return;
 		}
 	}
@@ -108,7 +109,7 @@
 	<title>TxtWizard | Free Online Text Decrypting Tool - AES/GCM, AES/CBC</title>
 </head>
 
-<h2>{ $t('decryption') } { $t('tool') } - AES/GCM, AES/CBC</h2>
+<h2>{$t('decryption')} {$t('tool')} - AES/GCM, AES/CBC</h2>
 
 <!-- UI Structure -->
 <div class="container">
@@ -162,7 +163,7 @@
 
 	<!-- Decrypt Button -->
 	<div class="form-group">
-		<button on:click={decrypt}>{ $t('decrypt-button') }</button>
+		<button on:click={decrypt}>{$t('decrypt-button')}</button>
 	</div>
 
 	<!-- Decrypted Text Output -->
