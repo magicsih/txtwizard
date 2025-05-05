@@ -1,4 +1,5 @@
-<script lang="ts">
+<!-- +layout.svelte -->
+<script>
 	import { t } from 'svelte-i18n'
 </script>
 
@@ -14,6 +15,7 @@
         <a href="/key-generation">{ $t('keygen') }</a>
 		<a href="/qrcode">{ $t('qr-code-gen') }</a>
 		<a href="/currency">{ $t('currency') }</a>
+		<a href="/reverse">{$t('text-reverse')}</a>
 	</div>
 </nav>
 <slot />
