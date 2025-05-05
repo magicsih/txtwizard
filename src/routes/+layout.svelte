@@ -15,6 +15,7 @@
 		<a href="/qrcode">{$t('qr-code-gen')}</a>
 		<a href="/currency">{$t('currency')}</a>
 		<a href="/reverse-text">Reverse Text</a>
+		<a href="/letter-case">Letter Case</a>
 	</div>
 </nav>
 <slot />
