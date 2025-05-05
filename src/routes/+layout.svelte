@@ -1,11 +1,4 @@
-<script lang="ts">
-	import { t } from 'svelte-i18n';
-</script>
-
-<nav>
-	<button class="menu-toggle" aria-label="Toggle navigation">☰</button>
-	<div class="nav-links">
-		<a href="/">{$t('home')}</a>
+{$t('home')}
 		<a href="/encryption">{$t('encryption')}</a>
 		<a href="/decryption">{$t('decryption')}</a>
 		<a href="/encoding-decoding">{$t('encoding')}</a>
@@ -14,6 +7,4 @@
 		<a href="/key-generation">{$t('keygen')}</a>
 		<a href="/qrcode">{$t('qr-code-gen')}</a>
 		<a href="/currency">{$t('currency')}</a>
-	</div>
-</nav>
-<slot />
+		<a href="/reverse-text">{$t('reverse-text')}</a>
