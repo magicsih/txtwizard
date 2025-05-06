@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	let inputText = '';
 	let outputText = '';
 	let textCase = 'none'; // none, upper, lower, title, sentence
@@ -13,10 +13,18 @@
 				result = inputText.toLowerCase();
 				break;
 			case 'title':
-				result = inputText.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+				result = inputText
+					.toLowerCase()
+					.split(' ')
+					.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+					.join(' ');
 				break;
 			case 'sentence':
-				result = inputText.toLowerCase().split('. ').map(sentence => sentence.charAt(0).toUpperCase() + sentence.slice(1)).join('. ');
+				result = inputText
+					.toLowerCase()
+					.split('. ')
+					.map((sentence) => sentence.charAt(0).toUpperCase() + sentence.slice(1))
+					.join('. ');
 				break;
 			default:
 				result = inputText;
@@ -24,15 +32,21 @@
 		outputText = result;
 	};
 
-	const handleKeyDown = (event) => {
+	const handleKeyDown = (_event: KeyboardEvent) => {
 		applyCase();
 	};
 </script>
 
 <head>
 	<title>TxtWizard | Letter Case Converter</title>
-	<meta name="keywords" content="letter case, upper case, lower case, title case, sentence case, text converter" />
-	<meta name="description" content="Convert text to upper case, lower case, title case, or sentence case." />
+	<meta
+		name="keywords"
+		content="letter case, upper case, lower case, title case, sentence case, text converter"
+	/>
+	<meta
+		name="description"
+		content="Convert text to upper case, lower case, title case, or sentence case."
+	/>
 </head>
 
 <h2>Letter Case Converter</h2>
@@ -40,7 +54,13 @@
 <div class="container">
 	<div class="form-group">
 		<label for="inputText">Enter Text:</label>
-		<textarea id="inputText" bind:value={inputText} on:keydown={handleKeyDown} rows="4" placeholder="Enter your text here"></textarea>
+		<textarea
+			id="inputText"
+			bind:value={inputText}
+			on:keydown={handleKeyDown}
+			rows="4"
+			placeholder="Enter your text here"
+		></textarea>
 	</div>
 
 	<div class="form-group">
@@ -49,8 +69,8 @@
 	</div>
 
 	<div class="form-group">
-		<label>Select Case:</label>
-		<select bind:value={textCase} on:change={applyCase}>
+		<label for="selectCase">Select Case:</label>
+		<select id="selectCase" bind:value={textCase} on:change={applyCase}>
 			<option value="none">None</option>
 			<option value="upper">Upper Case</option>
 			<option value="lower">Lower Case</option>

@@ -12,11 +12,14 @@
 		charCount = inputText.length;
 		charCountNoSpace = inputText.replace(/\s/g, '').length;
 		lineCount = inputText.split(/\r\n|\r|\n/).length;
-		wordCount = inputText.split(/\s+/).filter(word => word.length > 0).length;
-		sentenceCount = inputText.split(/[.!\?]+/).filter(sentence => sentence.length > 0).length;
+		wordCount = inputText.split(/\s+/).filter((word) => word.length > 0).length;
+		sentenceCount = inputText.split(/[.!\?]+/).filter((sentence) => sentence.length > 0).length;
 
 		// Case-insensitive unique strings
-		const words = inputText.toLowerCase().split(/\s+/).filter(word => word.length > 0);
+		const words = inputText
+			.toLowerCase()
+			.split(/\s+/)
+			.filter((word) => word.length > 0);
 		uniqueStringCount = new Set(words).size;
 
 		byteSize = new TextEncoder().encode(inputText).length;
@@ -25,7 +28,10 @@
 
 <head>
 	<title>TxtWizard | Text Analyzer</title>
-	<meta name="keywords" content="text analyzer, character count, word count, line count, sentence count, byte size" />
+	<meta
+		name="keywords"
+		content="text analyzer, character count, word count, line count, sentence count, byte size"
+	/>
 	<meta name="description" content="Analyze your text with our text analyzer tool." />
 </head>
 
@@ -34,7 +40,13 @@
 <div class="container">
 	<div class="form-group">
 		<label for="inputText">Enter Text:</label>
-		<textarea id="inputText" bind:value={inputText} rows="8" placeholder="Enter your text here" on:input={analyzeText}></textarea>
+		<textarea
+			id="inputText"
+			bind:value={inputText}
+			rows="8"
+			placeholder="Enter your text here"
+			on:input={analyzeText}
+		></textarea>
 	</div>
 
 	<div class="result-section">

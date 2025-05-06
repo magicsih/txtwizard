@@ -18,7 +18,8 @@
 <div class="container">
 	<div class="form-group">
 		<label for="inputText">Enter Text:</label>
-		<textarea id="inputText" bind:value={inputText} rows="4" placeholder="Enter your text here"></textarea>
+		<textarea id="inputText" bind:value={inputText} rows="4" placeholder="Enter your text here"
+		></textarea>
 	</div>
 
 	<button class="primary" on:click={reverseString}>Reverse</button>
