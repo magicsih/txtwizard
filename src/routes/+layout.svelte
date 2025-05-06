@@ -16,6 +16,7 @@
 		<a href="/currency">{$t('currency')}</a>
 		<a href="/reverse-text">Reverse Text</a>
 		<a href="/letter-case">Letter Case</a>
+		<a href="/text-analyzer">Text Analyzer</a>
 	</div>
 </nav>
 <slot />
