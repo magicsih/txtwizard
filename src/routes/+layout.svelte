@@ -17,6 +17,7 @@
 		<a href="/reverse-text">Reverse Text</a>
 		<a href="/letter-case">Letter Case</a>
 		<a href="/text-analyzer">Text Analyzer</a>
+		<a href="/merge-text">Merge Text</a>
 	</div>
 </nav>
 <slot />
