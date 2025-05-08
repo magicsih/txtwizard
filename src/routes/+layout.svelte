@@ -11,6 +11,7 @@
 		<a href="/hashing">{$t('hashing')}</a>
 		<a href="/compression">{$t('compression')}</a>
 		<a href="/key-generation">{$t('keygen')}</a>
+		<a href="/merge-text">{$t('merge-text')}</a>
 		<a href="/qrcode">{$t('qr-code-gen')}</a>
 		<a href="/currency">{$t('currency')}</a>
 		<a href="/reverse-text">Reverse Text</a>
