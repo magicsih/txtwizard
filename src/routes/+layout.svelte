@@ -19,3 +19,4 @@
 	</div>
 </nav>
 <slot />
+		<a href="/merge-text">Merge Text</a>
