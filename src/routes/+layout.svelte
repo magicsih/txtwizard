@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 </script>
-
 <nav>
 	<button class="menu-toggle" aria-label="Toggle navigation">☰</button>
 	<div class="nav-links">
