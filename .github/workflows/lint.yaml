@@ -2,7 +2,7 @@ name: Lint and Format Check
 
 on:
   pull_request:
-    branches: [main] # 또는 PR 대상 브랜치
+    branches: [ develop ] # 또는 PR 대상 브랜치
 
 jobs:
   lint:
@@ -19,9 +19,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run ESLint Fix
-        run: npm run format
 
       - name: Run ESLint
         run: npm run lint
