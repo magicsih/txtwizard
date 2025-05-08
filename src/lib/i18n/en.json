@@ -1,0 +1,11 @@
+  "text-analyzer": "Text Analyzer",
+  "tool": "Tool",
+  "input-text": "Input Text",
+  "enter-text-here": "Enter text here",
+  "characters-with-spaces": "Characters (with spaces)",
+  "characters-without-spaces": "Characters (without spaces)",
+  "lines": "Lines",
+  "words": "Words",
+  "sentences": "Sentences",
+  "unique-strings": "Unique Strings",
+  "byte-size": "Byte Size"

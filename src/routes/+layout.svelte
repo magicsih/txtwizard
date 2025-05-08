@@ -7,6 +7,7 @@
 		<a href="/">{$t('home')}</a>
 		<a href="/encryption">{$t('encryption')}</a>
 		<a href="/decryption">{$t('decryption')}</a>
+<a href="/text-analyzer">{$t('text-analyzer')}</a>
 		<a href="/encoding-decoding">{$t('encoding')}</a>
 		<a href="/hashing">{$t('hashing')}</a>
 		<a href="/compression">{$t('compression')}</a>
