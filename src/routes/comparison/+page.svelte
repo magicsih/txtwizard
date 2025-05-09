@@ -130,7 +130,7 @@
 	<h3>{$t('duplicate-removal')}</h3>
 	<div class="text-input">
 		<label for="textToDeduplicate">{$t('text-deduplicate')}:</label>
-		<textarea id="textToDeduplicate" bind:value={text1} rows="6" placeholder="{$t('enter-text-deduplicate')}"></textarea>
+		<textarea id="textToDeduplicate" bind:value={textToDeduplicate} rows="6" placeholder="{$t('enter-text-deduplicate')}"></textarea>
 	</div>
 	<div class="deduplication-options">
 		<label for="deduplicationType">{$t('deduplication-type')}:</label>
