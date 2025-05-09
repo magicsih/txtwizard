@@ -3,9 +3,19 @@
 
 	let text1 = '';
 	let text2 = '';
+	let textToDeduplicate = '';
 	let diff = '';
 	let deduplicatedText = '';
 	let deduplicationType = 'line';
+
+	function escapeHtml(str: string): string {
+		return str
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#039;');
+	}
 
 	function compareTexts() {
 		const lines1 = text1.split('\n');
@@ -16,49 +26,40 @@
 		let j = 0;
 
 		while (i < lines1.length || j < lines2.length) {
-			const line1 = lines1[i] || '';
-			const line2 = lines2[j] || '';
+			const line1 = escapeHtml(lines1[i] || ''); // Escape HTML
+			const line2 = escapeHtml(lines2[j] || ''); // Escape HTML
 
-			 if (line1 === line2) {
-					// Lines are identical
-					// differences.push(`<span class='identical'>${line1}</span>`); // Consider adding identical lines as well, if needed
-					 i++;
-					 j++;
+			if (line1 === line2) {
+				// Lines are identical
+				i++;
+				j++;
+			} else {
+				if (lines1[i] != lines2[j + 1] && lines2[j] != lines1[i + 1]) {
+					if (lines1[i]) differences.push(`<span class='removed'>- ${line1}</span>`);
+					if (lines2[j]) differences.push(`<span class='added'>+ ${line2}</span>`);
+					i++;
+					j++;
+				} else if (lines1[i] == lines2[j + 1]) {
+					if (lines1[i]) differences.push(`<span class='removed'>- ${line1}</span>`);
+					i++;
+					j++; // Ensure j is incremented
+				} else if (lines2[j] == lines1[i + 1]) {
+					if (lines2[j]) differences.push(`<span class='added'>+ ${line2}</span>`);
+					i++; // Ensure i is incremented
+					j++;
 				} else {
-					 if (lines1[i] != lines2[j])
-						 if ((j+1 < lines2.length && lines1[i] != lines2[j+1]) && (i+1 < lines1.length && lines2[j] != lines1[i+1]))
-						 {
-							 if (lines1[i])
-								 differences.push(`<span class='removed'>- ${line1}</span>`);
-							 if (lines2[j])
-								 differences.push(`<span class='added'>+ ${line2}</span>`);
-							 i++;
-							 j++;
-						 }
-						 else if (lines1[i] == lines2[j+1])
-						 {
-							 if (lines1[i])
-								 differences.push(`<span class='removed'>- ${line1}</span>`);
-							 i++;
-							 //j++;
-						 }
-						 else if (lines2[j] == lines1[i+1])
-						 {
-							 if (lines2[j])
-								 differences.push(`<span class='added'>+ ${line2}</span>`);
-							 //i++;
-							 j++;
-						 }
+					// Fallback to prevent infinite loop
+					i++;
+					j++;
 				}
+			}
 		}
 
-		
-
-		 diff = differences.join('<br>');
+		diff = differences.join('<br>');
 	}
 
 	function deduplicateText() {
-		const text = text1;
+		const text = textToDeduplicate;
 		const lines = text.split('\n');
 		const sentences = text.split(/[.!?]+/);
 
@@ -75,30 +76,12 @@
 			}
 		}
 
-		
-		
-		
 		let result = uniqueEntries.join(deduplicationType === 'line' ? '\n' : '. ');
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		 if (deduplicationType != 'line')
-			 result = result + '.';
 
-		
-		
-		
+		if (deduplicationType != 'line') result = result + '.';
 
 		deduplicatedText = result;
 	}
-
-	
 </script>
 
 <head>
@@ -113,11 +96,11 @@
 	<h3>{$t('text-comparison')}</h3>
 	<div class="text-input">
 		<label for="text1">{$t('text1')}:</label>
-		<textarea id="text1" bind:value={text1} rows="6" placeholder="{$t('enter-text1')}"></textarea>
+		<textarea id="text1" bind:value={text1} rows="6" placeholder={$t('enter-text1')}></textarea>
 	</div>
 	<div class="text-input">
 		<label for="text2">{$t('text2')}:</label>
-		<textarea id="text2" bind:value={text2} rows="6" placeholder="{$t('enter-text2')}"></textarea>
+		<textarea id="text2" bind:value={text2} rows="6" placeholder={$t('enter-text2')}></textarea>
 	</div>
 	<button on:click={compareTexts}>{$t('compare')}</button>
 	<div class="diff-output">
@@ -130,7 +113,12 @@
 	<h3>{$t('duplicate-removal')}</h3>
 	<div class="text-input">
 		<label for="textToDeduplicate">{$t('text-deduplicate')}:</label>
-		<textarea id="textToDeduplicate" bind:value={textToDeduplicate} rows="6" placeholder="{$t('enter-text-deduplicate')}"></textarea>
+		<textarea
+			id="textToDeduplicate"
+			bind:value={textToDeduplicate}
+			rows="6"
+			placeholder={$t('enter-text-deduplicate')}
+		></textarea>
 	</div>
 	<div class="deduplication-options">
 		<label for="deduplicationType">{$t('deduplication-type')}:</label>
@@ -174,7 +162,7 @@
 	}
 
 	button {
-		background-color: #4CAF50;
+		background-color: #4caf50;
 		color: white;
 		padding: 10px 15px;
 		border: none;
@@ -199,7 +187,6 @@
 	.removed {
 		color: red;
 		background-color: #ffe6e6;
-		
 	}
 
 	.added {
@@ -210,7 +197,7 @@
 	.identical {
 		color: grey;
 	}
-	
+
 	.deduplication-options {
 		margin-bottom: 15px;
 	}
@@ -223,4 +210,3 @@
 		font-size: 1em;
 	}
 </style>
-
