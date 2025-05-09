@@ -26,7 +26,7 @@
 					 j++;
 				} else {
 					 if (lines1[i] != lines2[j])
-						 if (lines1[i] != lines2[j+1] && lines2[j]!=lines1[i+1])
+						 if ((j+1 < lines2.length && lines1[i] != lines2[j+1]) && (i+1 < lines1.length && lines2[j] != lines1[i+1]))
 						 {
 							 if (lines1[i])
 								 differences.push(`<span class='removed'>- ${line1}</span>`);
