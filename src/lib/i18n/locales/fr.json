@@ -42,5 +42,21 @@
     "word-count": "Nombre de mots",
     "sentence-count": "Nombre de phrases",
     "unique-word-count": "Nombre de mots uniques",
-    "byte-size": "Taille en octets"
+    "byte-size": "Taille en octets",
+    "comparison": "Comparaison",
+    "text-comparison": "Comparaison de texte",
+    "text1": "Texte 1",
+    "text2": "Texte 2",
+    "enter-text1": "Entrez le texte 1",
+    "enter-text2": "Entrez le texte 2",
+    "compare": "Comparer",
+    "differences": "Différences",
+    "duplicate-removal": "Suppression des doublons",
+    "text-deduplicate": "Texte à dédupliquer",
+    "enter-text-deduplicate": "Entrez le texte à dédupliquer",
+    "deduplication-type": "Type de déduplication",
+    "line-based": "Basé sur les lignes",
+    "sentence-based": "Basé sur les phrases",
+    "remove-duplicates": "Supprimer les doublons",
+    "deduplicated-text": "Texte dédupliqué"
 }

@@ -42,5 +42,21 @@
     "word-count": "Word count",
     "sentence-count": "Sentence count",
     "unique-word-count": "Unique word count",
-    "byte-size": "Byte size"
+    "byte-size": "Byte size",
+    "comparison": "Comparison",
+    "text-comparison": "Text Comparison",
+    "text1": "Text 1",
+    "text2": "Text 2",
+    "enter-text1": "Enter text 1",
+    "enter-text2": "Enter text 2",
+    "compare": "Compare",
+    "differences": "Differences",
+    "duplicate-removal": "Duplicate Removal",
+    "text-deduplicate": "Text to Deduplicate",
+    "enter-text-deduplicate": "Enter text to deduplicate",
+    "deduplication-type": "Deduplication Type",
+    "line-based": "Line-based",
+    "sentence-based": "Sentence-based",
+    "remove-duplicates": "Remove Duplicates",
+    "deduplicated-text": "Deduplicated Text"
 }
