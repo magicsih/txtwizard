@@ -42,5 +42,21 @@
     "word-count": "Contagem de palavras",
     "sentence-count": "Contagem de frases",
     "unique-word-count": "Contagem de palavras únicas",
-    "byte-size": "Tamanho em bytes"
+    "byte-size": "Tamanho em bytes",
+    "comparison": "Comparação",
+    "text-comparison": "Comparação de texto",
+    "text1": "Texto 1",
+    "text2": "Texto 2",
+    "enter-text1": "Digite o texto 1",
+    "enter-text2": "Digite o texto 2",
+    "compare": "Comparar",
+    "differences": "Diferenças",
+    "duplicate-removal": "Remoção de duplicatas",
+    "text-deduplicate": "Texto para remover duplicatas",
+    "enter-text-deduplicate": "Digite o texto para remover duplicatas",
+    "deduplication-type": "Tipo de remoção de duplicatas",
+    "line-based": "Baseado em linha",
+    "sentence-based": "Baseado em frase",
+    "remove-duplicates": "Remover duplicatas",
+    "deduplicated-text": "Texto sem duplicatas"
 }

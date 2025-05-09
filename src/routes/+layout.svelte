@@ -15,5 +15,6 @@
 		<a href="/qrcode">{$t('qr-code-gen')}</a>
 		<a href="/currency">{$t('currency')}</a>
 	</div>
+		<a href="/comparison">{$t('comparison')}</a>
 </nav>
 <slot />

@@ -42,5 +42,21 @@
     "word-count": "Количество слов",
     "sentence-count": "Количество предложений",
     "unique-word-count": "Количество уникальных слов",
-    "byte-size": "Размер в байтах"
+    "byte-size": "Размер в байтах",
+    "comparison": "Сравнение",
+    "text-comparison": "Сравнение текста",
+    "text1": "Текст 1",
+    "text2": "Текст 2",
+    "enter-text1": "Введите текст 1",
+    "enter-text2": "Введите текст 2",
+    "compare": "Сравнить",
+    "differences": "Различия",
+    "duplicate-removal": "Удаление дубликатов",
+    "text-deduplicate": "Текст для удаления дубликатов",
+    "enter-text-deduplicate": "Введите текст для удаления дубликатов",
+    "deduplication-type": "Тип удаления дубликатов",
+    "line-based": "На основе строк",
+    "sentence-based": "На основе предложений",
+    "remove-duplicates": "Удалить дубликаты",
+    "deduplicated-text": "Текст без дубликатов"
 }
