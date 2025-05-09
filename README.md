@@ -1,3 +1,5 @@
+[![Build and Deploy](https://github.com/magicsih/txtwizard/actions/workflows/build_and_push.yaml/badge.svg)](https://github.com/magicsih/txtwizard/actions/workflows/build_and_push.yaml)
+
 # TXTWIZARD
 
 TxtWizard is a collection of online tools for text manipulation, encryption, decryption, encoding, decoding, and more. The service is live at [txtwizard.net](https://txtwizard.net).
