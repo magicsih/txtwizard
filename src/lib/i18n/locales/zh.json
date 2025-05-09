@@ -42,5 +42,21 @@
     "word-count": "字数",
     "sentence-count": "句子数",
     "unique-word-count": "唯一字数",
-    "byte-size": "字节大小"
+    "byte-size": "字节大小",
+    "comparison": "比较",
+    "text-comparison": "文本比较",
+    "text1": "文本 1",
+    "text2": "文本 2",
+    "enter-text1": "输入文本 1",
+    "enter-text2": "输入文本 2",
+    "compare": "比较",
+    "differences": "差异",
+    "duplicate-removal": "删除重复",
+    "text-deduplicate": "要删除重复的文本",
+    "enter-text-deduplicate": "输入要删除重复的文本",
+    "deduplication-type": "删除重复类型",
+    "line-based": "基于行",
+    "sentence-based": "基于句子",
+    "remove-duplicates": "删除重复",
+    "deduplicated-text": "删除重复的文本"
 }
