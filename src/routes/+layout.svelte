@@ -12,6 +12,7 @@
 		<a href="/hashing">{$t('hashing')}</a>
 		<a href="/compression">{$t('compression')}</a>
 		<a href="/key-generation">{$t('keygen')}</a>
+		<a href="/epoch">{$t('epoch')}</a>
 		<a href="/qrcode">{$t('qr-code-gen')}</a>
 		<a href="/currency">{$t('currency')}</a>
 		<a href="/comparison">{$t('comparison')}</a>
