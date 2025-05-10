@@ -58,5 +58,8 @@
     "line-based": "라인 기반",
     "sentence-based": "문장 기반",
     "remove-duplicates": "중복 제거",
-    "deduplicated-text": "중복 제거된 텍스트"
+    "deduplicated-text": "중복 제거된 텍스트",
+    "epoch": "에포크",
+    "date-time": "날짜 시간",
+    "result": "결과"
 }
