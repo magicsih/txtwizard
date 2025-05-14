@@ -58,5 +58,8 @@
     "line-based": "Basé sur les lignes",
     "sentence-based": "Basé sur les phrases",
     "remove-duplicates": "Supprimer les doublons",
-    "deduplicated-text": "Texte dédupliqué"
+    "deduplicated-text": "Texte dédupliqué",
+    "epoch": "Époque",
+    "date-time": "Date et heure",
+    "result": "Résultat"
 }

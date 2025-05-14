@@ -58,5 +58,8 @@
     "line-based": "На основе строк",
     "sentence-based": "На основе предложений",
     "remove-duplicates": "Удалить дубликаты",
-    "deduplicated-text": "Текст без дубликатов"
+    "deduplicated-text": "Текст без дубликатов",
+    "epoch": "Эпоха",
+    "date-time": "Дата и время",
+    "result": "Результат"
 }
