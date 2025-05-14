@@ -58,5 +58,14 @@
     "line-based": "Line-based",
     "sentence-based": "Sentence-based",
     "remove-duplicates": "Remove Duplicates",
-    "deduplicated-text": "Deduplicated Text"
+    "deduplicated-text": "Deduplicated Text",
+    "password-generator": "Password Generator",
+    "password-length": "Password Length",
+    "include-uppercase": "Include Uppercase",
+    "include-lowercase": "Include Lowercase",
+    "include-numbers": "Include Numbers",
+    "include-symbols": "Include Symbols",
+    "generate-password": "Generate Password",
+    "copy-to-clipboard": "Copy to Clipboard",
+    "strength": "Strength"
 }
