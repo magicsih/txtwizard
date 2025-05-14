@@ -9,79 +9,22 @@
 	function updateEpoch() {
 		errorMessage = '';
 		let timestamp: number;
-		// Handle null targetDate
-		//	const date = new Date(targetDate);
-		//	console.log('date', date);
-
-		//	const date = targetDate ? new Date(targetDate) : new Date();
-		//	console.log('date', date);
-		//	console.log('targetDate', targetDate);
-
 		console.log('targetDate', targetDate);
 		console.log('targetDate type', typeof targetDate);
 
-		//	console.log('isValid', isValid(date))
-
-		//		  timestamp = date.getTime();
-
-		//		  console.log('timestamp', timestamp)
-
-		//		  epochValue = Math.floor(timestamp / 1000);
-
-		//		  console.log('epochValue', epochValue);
-
-		//	} else {
-		//		  epochValue = null;
-		//		  errorMessage = 'Invalid Date';
-		//	}
-
-		//	const date = targetDate instanceof Date && !isNaN(targetDate)
-		//				   ? new Date(targetDate)
-		//				   : new Date();
-
-		//		  timestamp = date.getTime();
-		//		  epochValue = Math.floor(timestamp / 1000);
-
 		if (targetDate) {
-			//if (targetDate instanceof Date && !isNaN(targetDate.getTime())) {
-			//	  const date = new Date(targetDate);
 			const date = new Date(targetDate);
-
 			console.log('date', date);
 
 			timestamp = date.getTime();
 			console.log('timestamp', timestamp);
 
-			// Convert to seconds
-			// epochValue = Math.floor(timestamp / 1000);
-			// Convert to milliseconds
-			// epochValue = timestamp
-
 			const epochValueTemp = Math.floor(timestamp / 1000);
 			console.log('epochValueTemp', epochValueTemp);
-
-			//if (epochValueTemp != NaN) {
-			//	  epochValue = epochValueTemp
-			//} else {
-			//	  epochValue = 0;
-			//}
-
-			//epochValue = epochValueTemp ?? 0;
-			//epochValue = epochValueTemp || 0;
-			//epochValue = epochValueTemp ? epochValueTemp : 0;
-
-			// Check if the result is a valid number
-			//if (Number.isNaN(epochValueTemp)) {
-			//	  epochValue = 0;
-			//} else {
-			//	  epochValue = epochValueTemp;
-			//}
 
 			// Check if the result is a valid number
 			if (Number.isNaN(epochValueTemp)) {
 				console.error('epochValueTemp is NaN');
-				//epochValue = 0;  // Or handle the error as appropriate
-				//epochValue = null;
 				errorMessage = 'Invalid Date';
 				epochValue = null;
 			} else {
