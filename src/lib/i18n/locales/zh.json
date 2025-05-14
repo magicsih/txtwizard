@@ -58,5 +58,14 @@
     "line-based": "基于行",
     "sentence-based": "基于句子",
     "remove-duplicates": "删除重复",
-    "deduplicated-text": "删除重复的文本"
+    "deduplicated-text": "删除重复的文本",
+    "password-generator": "密码生成器",
+    "password-length": "密码长度",
+    "include-uppercase": "包括大写字母",
+    "include-lowercase": "包括小写字母",
+    "include-numbers": "包括数字",
+    "include-symbols": "包括符号",
+    "generate-password": "生成密码",
+    "copy-to-clipboard": "复制到剪贴板",
+    "strength": "强度"
 }

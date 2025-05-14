@@ -58,5 +58,14 @@
     "line-based": "Basé sur les lignes",
     "sentence-based": "Basé sur les phrases",
     "remove-duplicates": "Supprimer les doublons",
-    "deduplicated-text": "Texte dédupliqué"
+    "deduplicated-text": "Texte dédupliqué",
+    "password-generator": "Générateur de mot de passe",
+    "password-length": "Longueur du mot de passe",
+    "include-uppercase": "Inclure majuscules",
+    "include-lowercase": "Inclure minuscules",
+    "include-numbers": "Inclure chiffres",
+    "include-symbols": "Inclure symboles",
+    "generate-password": "Générer mot de passe",
+    "copy-to-clipboard": "Copier dans le presse-papier",
+    "strength": "Force"
 }
