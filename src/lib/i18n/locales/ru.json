@@ -58,5 +58,14 @@
     "line-based": "На основе строк",
     "sentence-based": "На основе предложений",
     "remove-duplicates": "Удалить дубликаты",
-    "deduplicated-text": "Текст без дубликатов"
+    "deduplicated-text": "Текст без дубликатов",
+    "password-generator": "Генератор паролей",
+    "password-length": "Длина пароля",
+    "include-uppercase": "Включить заглавные буквы",
+    "include-lowercase": "Включить строчные буквы",
+    "include-numbers": "Включить цифры",
+    "include-symbols": "Включить символы",
+    "generate-password": "Сгенерировать пароль",
+    "copy-to-clipboard": "Скопировать в буфер обмена",
+    "strength": "Надежность"
 }
