@@ -67,5 +67,10 @@
     "include-symbols": "包括符号",
     "generate-password": "生成密码",
     "copy-to-clipboard": "复制到剪贴板",
-    "strength": "强度"
+    "strength": "强度",
+    "code_minifier": "代码压缩器",
+    "minified": "已压缩",
+    "copy": "复制",
+    "original_size": "原始大小",
+    "minified_size": "已压缩大小"
 }

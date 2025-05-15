@@ -67,5 +67,10 @@
     "include-symbols": "Включить символы",
     "generate-password": "Сгенерировать пароль",
     "copy-to-clipboard": "Скопировать в буфер обмена",
-    "strength": "Надежность"
+    "strength": "Надежность",
+    "code_minifier": "Минификатор кода",
+    "minified": "Минифицированный",
+    "copy": "Копировать",
+    "original_size": "Исходный размер",
+    "minified_size": "Минифицированный размер"
 }

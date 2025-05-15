@@ -67,5 +67,10 @@
     "include-symbols": "Inclure symboles",
     "generate-password": "Générer mot de passe",
     "copy-to-clipboard": "Copier dans le presse-papier",
-    "strength": "Force"
+    "strength": "Force",
+    "code_minifier": "Minificateur de code",
+    "minified": "Réduit",
+    "copy": "Copier",
+    "original_size": "Taille originale",
+    "minified_size": "Taille réduite"
 }

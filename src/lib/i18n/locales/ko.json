@@ -67,5 +67,10 @@
     "include-symbols": "기호 포함",
     "generate-password": "비밀번호 생성",
     "copy-to-clipboard": "클립보드에 복사",
-    "strength": "강도"
+    "strength": "강도",
+    "code_minifier": "코드 축소기",
+    "minified": "축소됨",
+    "copy": "복사",
+    "original_size": "원본 크기",
+    "minified_size": "축소된 크기"
 }
