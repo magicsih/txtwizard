@@ -52,23 +52,37 @@
 	}
 
 	function handleChangeAlgorithm(event: Event) {
-		const target = event.target as HTMLSelectElement;
-		values.algorithm = target.value;
+		try {
+			const target = event.target as HTMLSelectElement;
+			values.algorithm = target.value;
+		} finally {
+			window.gtag('event', 'decryption_algorithm_changed', {
+				event_category: 'tool_usage',
+				event_label: 'algorithm',
+				value: values.algorithm
+			});
+		}
 	}
 
 	async function handleOnChangeKey(event: Event) {
-		const target = event.target as HTMLInputElement | null;
-		if (!target) return; // Handle null case
-		values.key = target.value;
+		try {
+			const target = event.target as HTMLInputElement | null;
+			if (!target) return; // Handle null case
+			values.key = target.value;
 
-		const rawKey = Buffer.from(values.key, encodingFormat);
-		cryptoKey = await window.crypto.subtle.importKey(
-			'raw',
-			rawKey,
-			{ name: values.algorithm },
-			false,
-			['encrypt', 'decrypt']
-		);
+			const rawKey = Buffer.from(values.key, encodingFormat);
+			cryptoKey = await window.crypto.subtle.importKey(
+				'raw',
+				rawKey,
+				{ name: values.algorithm },
+				false,
+				['encrypt', 'decrypt']
+			);
+		} finally {
+			window.gtag('event', 'decryption_key_changed', {
+				event_category: 'tool_usage',
+			});
+		}
 	}
 
 	function handleOnChangeIV(event: Event) {
@@ -102,6 +116,12 @@
 			values.outDecryptedText = Buffer.from(new Uint8Array(decrypted)).toString('utf-8');
 		} catch (error) {
 			console.error('Error during decryption:', error);
+		} finally {
+			window.gtag('event', 'decryption_decrypt_button_clicked', {
+				event_category: 'tool_usage',
+				event_label: 'decrypt',
+				algorithm: values.algorithm,
+			});
 		}
 	}
 
