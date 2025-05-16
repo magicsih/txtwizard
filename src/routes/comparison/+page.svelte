@@ -184,20 +184,6 @@
 		background-color: #f5f5f5;
 	}
 
-	.removed {
-		color: red;
-		background-color: #ffe6e6;
-	}
-
-	.added {
-		color: green;
-		background-color: #e6ffe6;
-	}
-
-	.identical {
-		color: grey;
-	}
-
 	.deduplication-options {
 		margin-bottom: 15px;
 	}
