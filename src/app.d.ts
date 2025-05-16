@@ -12,9 +12,10 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
-		interface Window {
-			gtag?: (...args: any[]) => void;
-		}
+	}
+
+	interface Window {
+		gtag?: (...args: any[]) => void;
 	}
 }
 

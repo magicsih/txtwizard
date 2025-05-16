@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import { Buffer } from 'buffer';
+	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 
 	let values = {
 		algorithm: 'AES-GCM',
@@ -23,38 +24,24 @@
 	let cryptoKey: CryptoKey | null = null;
 
 	function handleChangeAlgorithm(event: Event) {
-		try {
-			const target = event.target as HTMLSelectElement;
-			values.algorithm = target.value;
-		} finally {
-			window.gtag('event', 'encryption_algorithm_changed', {
-				event_category: 'tool_usage',
-				event_label: 'algorithm',
-				value: values.algorithm
-			});
-		}
+		const target = event.target as HTMLSelectElement;
+		values.algorithm = target.value;
 	}
 
 	async function handleOnChangeKey(event: Event) {
-		try {
-			const target = event.target as HTMLInputElement | null;
-			if (!target) return; // Handle null case
-			values.key = target.value;
-			values.keyFieldSize = Buffer.from(target.value, encodingFormat).length * 8;
+		const target = event.target as HTMLInputElement | null;
+		if (!target) return; // Handle null case
+		values.key = target.value;
+		values.keyFieldSize = Buffer.from(target.value, encodingFormat).length * 8;
 
-			const rawKey = Buffer.from(values.key, encodingFormat);
-			cryptoKey = await window.crypto.subtle.importKey(
-				'raw',
-				rawKey,
-				{ name: values.algorithm },
-				false,
-				['encrypt', 'decrypt']
-			);
-		} finally {
-			window.gtag('event', 'encryption_key_changed', {
-				event_category: 'tool_usage'
-			});
-		}
+		const rawKey = Buffer.from(values.key, encodingFormat);
+		cryptoKey = await window.crypto.subtle.importKey(
+			'raw',
+			rawKey,
+			{ name: values.algorithm },
+			false,
+			['encrypt', 'decrypt']
+		);
 	}
 
 	function handleOnChangeIV(event: Event) {
@@ -118,10 +105,14 @@
 		} catch (error) {
 			console.error('Error during encryption:', error);
 		} finally {
-			window.gtag('event', 'encryption_encrypt_button_clicked', {
-				event_category: 'tool_usage',
-				event_label: 'encrypt',
-				algorithm: values.algorithm
+			trackToolsUsageEvent('encryption', 'encrypt', {
+				algorithm: values.algorithm,
+				encoding: encodingFormat,
+				key_length: values.key.length,
+				iv_length: values.iv.length,
+				plain_text_length: values.targetPlainText.length,
+				encrypted_text_length: values.outEncryptedText.length,
+				non_empty: values.targetPlainText.length > 0 ? 1 : 0 // Track if the plain text is non-empty
 			});
 		}
 	}

@@ -67,5 +67,18 @@
     "include-symbols": "包括符号",
     "generate-password": "生成密码",
     "copy-to-clipboard": "复制到剪贴板",
-    "strength": "强度"
+    "strength": "强度",
+    "date-calculator": "日期计算器",
+    "invalid_date_format": "无效的日期格式",
+    "date_difference": "日期差",
+    "start_date": "开始日期",
+    "end_date": "结束日期",
+    "calculate_difference": "计算差值",
+    "difference_is": "差值是",
+    "days": "天",
+    "add_subtract_days": "从日期添加/减去天数",
+    "base_date": "基准日期",
+    "days_to_add": "要添加的天数",
+    "calculate_new_date": "计算新日期",
+    "calculated_date_is": "计算出的日期是"
 }

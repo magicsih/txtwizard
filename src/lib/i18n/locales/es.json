@@ -67,5 +67,18 @@
     "include-symbols": "Incluir símbolos",
     "generate-password": "Generar contraseña",
     "copy-to-clipboard": "Copiar al portapapeles",
-    "strength": "Fuerza"
+    "strength": "Fuerza",
+    "date-calculator": "Calculadora de fechas",
+    "invalid_date_format": "Formato de fecha inválido",
+    "date_difference": "Diferencia de fechas",
+    "start_date": "Fecha de inicio",
+    "end_date": "Fecha de finalización",
+    "calculate_difference": "Calcular diferencia",
+    "difference_is": "La diferencia es",
+    "days": "días",
+    "add_subtract_days": "Añadir/Restar días de una fecha",
+    "base_date": "Fecha base",
+    "days_to_add": "Días para añadir",
+    "calculate_new_date": "Calcular nueva fecha",
+    "calculated_date_is": "La fecha calculada es"
 }
