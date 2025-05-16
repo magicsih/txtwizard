@@ -30,7 +30,7 @@ jobs:
 
       - name: Generate build info
         run: |
-          echo '{"buildNumber": "${GITHUB_RUN_NUMBER}", "commit": "${GITHUB_SHA}", "date": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")"}' > src/build-info.json
+          echo "{\"buildNumber\": \"${GITHUB_RUN_NUMBER}\", \"commit\": \"${GITHUB_SHA}\", \"date\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"}" > src/build-info.json
 
       - name: Print build-info.json
         run: cat src/build-info.json
