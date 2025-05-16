@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import { Buffer } from 'buffer';
+	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 
 	let values = {
 		algorithm: 'AES-GCM',
@@ -52,37 +53,23 @@
 	}
 
 	function handleChangeAlgorithm(event: Event) {
-		try {
-			const target = event.target as HTMLSelectElement;
-			values.algorithm = target.value;
-		} finally {
-			window.gtag('event', 'decryption_algorithm_changed', {
-				event_category: 'tool_usage',
-				event_label: 'algorithm',
-				value: values.algorithm
-			});
-		}
+		const target = event.target as HTMLSelectElement;
+		values.algorithm = target.value;
 	}
 
 	async function handleOnChangeKey(event: Event) {
-		try {
-			const target = event.target as HTMLInputElement | null;
-			if (!target) return; // Handle null case
-			values.key = target.value;
+		const target = event.target as HTMLInputElement | null;
+		if (!target) return; // Handle null case
+		values.key = target.value;
 
-			const rawKey = Buffer.from(values.key, encodingFormat);
-			cryptoKey = await window.crypto.subtle.importKey(
-				'raw',
-				rawKey,
-				{ name: values.algorithm },
-				false,
-				['encrypt', 'decrypt']
-			);
-		} finally {
-			window.gtag('event', 'decryption_key_changed', {
-				event_category: 'tool_usage',
-			});
-		}
+		const rawKey = Buffer.from(values.key, encodingFormat);
+		cryptoKey = await window.crypto.subtle.importKey(
+			'raw',
+			rawKey,
+			{ name: values.algorithm },
+			false,
+			['encrypt', 'decrypt']
+		);
 	}
 
 	function handleOnChangeIV(event: Event) {
@@ -117,10 +104,14 @@
 		} catch (error) {
 			console.error('Error during decryption:', error);
 		} finally {
-			window.gtag('event', 'decryption_decrypt_button_clicked', {
-				event_category: 'tool_usage',
-				event_label: 'decrypt',
+			trackToolsUsageEvent('decryption', 'decrypt', {
 				algorithm: values.algorithm,
+				encoding: encodingFormat,
+				key_length: values.key.length,
+				iv_length: values.iv.length,
+				encrypted_text_length: values.targetEncryptedText.length,
+				decrypted_text_length: values.outDecryptedText.length,
+				non_empty: values.targetEncryptedText.length > 0 ? 1 : 0 // Track if the encrypted text is non-empty
 			});
 		}
 	}

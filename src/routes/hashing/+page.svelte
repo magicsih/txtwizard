@@ -13,6 +13,7 @@
 	import { blake2b } from '@noble/hashes/blake2b';
 	import { blake2s } from '@noble/hashes/blake2s';
 	import { sha1 } from '@noble/hashes/sha1'; // legacy
+	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 
 	const algorithms = [
 		'SHA-1',
@@ -91,9 +92,8 @@
 		} catch (error) {
 			console.error('Error hashing text:', error);
 		} finally {
-			window.gtag('event', 'hash_generated', {
-				event_category: 'tool_usage',
-				event_label: algorithm,
+			trackToolsUsageEvent('hashing', 'hash', {
+				algorithm: algorithm,
 				text_length: targetPlainText.length, // 원문 대신 길이만 전송
 				non_empty: targetPlainText.length > 0 ? 1 : 0 // 빈 문자열 여부 추적
 			});
@@ -103,10 +103,11 @@
 	// 복사 버튼 추가 및 이벤트 추적
 	function copyToClipboard(text: string, format: string) {
 		navigator.clipboard.writeText(text);
-		window.gtag('event', 'hash_copied', {
-			event_category: 'user_interaction',
-			event_label: format,
-			hash_algorithm: algorithm
+		trackToolsUsageEvent('hashing', 'copy', {
+			algorithm: algorithm,
+			text_length: targetPlainText.length, // 원문 대신 길이만 전송
+			non_empty: targetPlainText.length > 0 ? 1 : 0, // 빈 문자열 여부 추적
+			format: format // 복사한 형식 (base64 또는 hex)
 		});
 	}
 
