@@ -9,6 +9,7 @@
 		<a href="/decryption">{$t('decryption')}</a>
 		<a href="/encoding-decoding">{$t('encoding')}</a>
 		<a href="/analyzer">{$t('analyzer')}</a>
+		<a href="/date-calculator">{$t('date-calculator')}</a>
 		<a href="/hashing">{$t('hashing')}</a>
 		<a href="/password-generator">{$t('password-generator')}</a>
 		<a href="/compression">{$t('compression')}</a>

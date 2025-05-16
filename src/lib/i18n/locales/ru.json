@@ -67,5 +67,18 @@
     "include-symbols": "Включить символы",
     "generate-password": "Сгенерировать пароль",
     "copy-to-clipboard": "Скопировать в буфер обмена",
-    "strength": "Надежность"
+    "strength": "Надежность",
+    "date-calculator": "Калькулятор дат",
+    "invalid_date_format": "Неверный формат даты",
+    "date_difference": "Разница дат",
+    "start_date": "Дата начала",
+    "end_date": "Дата окончания",
+    "calculate_difference": "Рассчитать разницу",
+    "difference_is": "Разница составляет",
+    "days": "дней",
+    "add_subtract_days": "Добавить/вычесть дни из даты",
+    "base_date": "Базовая дата",
+    "days_to_add": "Дней для добавления",
+    "calculate_new_date": "Рассчитать новую дату",
+    "calculated_date_is": "Рассчитанная дата:"
 }
