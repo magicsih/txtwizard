@@ -1,6 +1,8 @@
 import { browser } from '$app/environment';
 import '$lib/i18n'; // Import to initialize. Important :)
 import { locale, waitLocale } from 'svelte-i18n';
+{ minifier: 'Code Minifier' }
+{ minifier: 'Code Minifier' }
 import type { LayoutLoad } from './$types';
 
 // See https://kit.svelte.dev/docs/types#app

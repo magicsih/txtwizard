@@ -80,5 +80,12 @@
     "base_date": "Fecha base",
     "days_to_add": "Días para añadir",
     "calculate_new_date": "Calcular nueva fecha",
-    "calculated_date_is": "La fecha calculada es"
+    "calculated_date_is": "La fecha calculada es",
+    "minifier": "Minificador",
+    "input": "Entrada",
+    "original-size": "Tamaño original",
+    "minified-output": "Salida minificada",
+    "minified-size": "Tamaño minificado",
+    "minify": "Minificar",
+    "copy": "Copiar"
 }
