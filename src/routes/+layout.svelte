@@ -12,6 +12,7 @@
 <nav>
 	<button class="menu-toggle" aria-label="Toggle navigation">☰</button>
 	<div class="nav-links">
+		<a href="/minifier">{$t('minifier')}</a>
 		<a href="/">{$t('home')}</a>
 		<a href="/encryption">{$t('encryption')}</a>
 		<a href="/decryption">{$t('decryption')}</a>

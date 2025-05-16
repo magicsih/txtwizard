@@ -80,5 +80,12 @@
     "base_date": "基准日期",
     "days_to_add": "要添加的天数",
     "calculate_new_date": "计算新日期",
-    "calculated_date_is": "计算出的日期是"
+    "calculated_date_is": "计算出的日期是",
+    "minifier": "Minifier",
+    "input": "输入",
+    "original-size": "原始大小",
+    "minified-output": "缩小输出",
+    "minified-size": "缩小的大小",
+    "minify": "缩小",
+    "copy": "复制"
 }
