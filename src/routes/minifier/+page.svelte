@@ -62,8 +62,10 @@
 		// collapse whitespace
 		joined = joined.replace(/\s+/g, ' ');
 
-		// tighten spaces around punctuation
-		joined = joined.replace(/\s*([;,:{}()\[\]=+\-*/%<>?&|^~!])\s*/g, '$1');
+		// tighten spaces around punctuation, but preserve spaces around keywords/identifiers
+		// Only remove spaces around punctuation when not between word characters
+		joined = joined.replace(/(\W)\s*([;,:{}()\[\]=+\-*/%<>?&|^~!])\s*/g, '$1$2');
+		joined = joined.replace(/\s*([;,:{}()\[\]=+\-*/%<>?&|^~!])(\W)/g, '$1$2');
 
 		return joined.trim();
 	}
