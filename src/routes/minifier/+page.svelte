@@ -50,7 +50,7 @@
 
 		let noComments = js.replace(/\/\*[\s\S]*?\*\//g, '');
 		// remove // comments but avoid URLs or protocol-like sequences
-		noComments = noComments.replace(/([^:]\/\/.*$)/gm, '$1');
+		noComments = noComments.replace(/(^|[^:])\/\/.*$/gm, '$1');
 
 		const lines = noComments
 			.split(/\r?\n/)
