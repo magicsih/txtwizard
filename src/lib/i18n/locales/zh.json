@@ -82,5 +82,6 @@
     "calculate_new_date": "计算新日期",
     "calculated_date_is": "计算出的日期是",
     "code-minifier": "代码压缩器",
+    "code-minifier-intro": "压缩您的代码以减少文件大小并提高加载时间。支持 JavaScript、CSS 和 HTML。",
     "minify-button": "压缩"
 }

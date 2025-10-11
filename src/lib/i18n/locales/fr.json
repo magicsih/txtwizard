@@ -82,5 +82,6 @@
     "calculate_new_date": "Calculer la nouvelle date",
     "calculated_date_is": "La date calculée est",
     "code-minifier": "Minificateur de Code",
+    "code-minifier-intro": "Minifiez votre code pour réduire la taille du fichier et améliorer les temps de chargement. Prend en charge JavaScript, CSS et HTML.",
     "minify-button": "Minifier"
 }
