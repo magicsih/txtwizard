@@ -80,5 +80,8 @@
     "base_date": "Base Date",
     "days_to_add": "Days to Add",
     "calculate_new_date": "Calculate New Date",
-    "calculated_date_is": "Calculated Date is"
+    "calculated_date_is": "Calculated Date is",
+    "code-minifier": "Code Minifier",
+    "code-minifier-intro": "Minify your code to reduce file size and improve load times. Supports JavaScript, CSS, and HTML.",
+    "minify-button": "Minify"
 }
