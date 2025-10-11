@@ -45,6 +45,9 @@
 			<li>
 				<a href="/currency">{$t('currency')} {$t('tool')}</a> - {$t('currency-intro')}
 			</li>
+			<li>
+				<a href="/minifier">{$t('code-minifier')} {$t('tool')}</a> - {$t('code-minifier-intro')}
+			</li>
 		</ul>
 	</div>
 </body>
