@@ -80,5 +80,7 @@
     "base_date": "기준일",
     "days_to_add": "더할 날짜",
     "calculate_new_date": "새 날짜 계산",
-    "calculated_date_is": "계산된 날짜는"
+    "calculated_date_is": "계산된 날짜는",
+    "code-minifier": "코드 축소기",
+    "minify-button": "축소하기"
 }

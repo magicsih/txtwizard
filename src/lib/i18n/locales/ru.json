@@ -80,5 +80,7 @@
     "base_date": "Базовая дата",
     "days_to_add": "Дней для добавления",
     "calculate_new_date": "Рассчитать новую дату",
-    "calculated_date_is": "Рассчитанная дата:"
+    "calculated_date_is": "Рассчитанная дата:",
+    "code-minifier": "Минификатор кода",
+    "minify-button": "Минифицировать"
 }
