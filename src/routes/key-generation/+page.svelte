@@ -31,8 +31,8 @@
 
 	// Function to update Ethereum and Bitcoin keys based on private key
 	function updateKeysFromPrivateKey(privKey: Uint8Array) {
-		// Generate Ethereum public key from the private key
-		const pubKey = secp256k1.getPublicKey(privKey);
+		// Generate Ethereum public key from the private key (uncompressed format: 65 bytes)
+		const pubKey = secp256k1.getPublicKey(privKey, false);
 
 		// Compute Ethereum address (keccak256 hash of the public key's x, y coordinates, skipping the first byte)
 		const addr = keccak256(pubKey.slice(1)).slice(-20);
