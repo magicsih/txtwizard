@@ -1,5 +1,7 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
+	import { analyzeText } from '$lib/utils/analyzer';
 
 	let inputText = '';
 	let charCountWithSpace = 0;
@@ -11,37 +13,24 @@
 	let byteSize = 0;
 
 	$: {
-		charCountWithSpace = inputText.length;
-		charCountWithoutSpace = inputText.replace(/\s/g, '').length;
-		lineCount = inputText.split('\n').length;
-		wordCount = inputText.split(/\s+/).filter(Boolean).length;
-		// Basic sentence detection using punctuation.
-		// This regex splits the text by periods, question marks, and exclamation points, 
-		// followed by a space or the end of the string.
-		// It's a simple approach and might not be accurate for all types of text.
-		// consider using more sophisticated NLP techniques for better accuracy.
-		// const sentences = inputText.split(/[.?!]\s+|[.?!]$/);
-		// sentenceCount = sentences.length - 1;  // Subtract 1 to exclude empty strings
-		// Improved sentence detection (still basic, but handles more cases)
-		const sentenceEndings = /[.?!](?=\s|$)/g;
-		const sentences = inputText.split(sentenceEndings);
-		// Filter out any empty strings from the split
-		const validSentences = sentences.filter(sentence => sentence.trim() !== '');
-		// The number of valid sentences is the length of the array
-		sentenceCount = validSentences.length;
-		const words = inputText.toLowerCase().split(/\s+/).filter(Boolean);
-		const uniqueWords = new Set(words);
-		uniqueWordCount = uniqueWords.size;
-		byteSize = new TextEncoder().encode(inputText).length;
+		const result = analyzeText(inputText);
+		charCountWithSpace = result.charCountWithSpace;
+		charCountWithoutSpace = result.charCountWithoutSpace;
+		lineCount = result.lineCount;
+		wordCount = result.wordCount;
+		sentenceCount = result.sentenceCount;
+		uniqueWordCount = result.uniqueWordCount;
+		byteSize = result.byteSize;
 	}
+
+	const pageTitle = 'TxtWizard | Text Analyzer Tool';
+	const pageDescription =
+		'Analyze text length, words, sentences, unique words, lines, and byte size in your browser.';
 </script>
 
-<head>
-	<title>TxtWizard | Text Analyzer</title>
-	<meta name="description" content="Text Analyzer tool" />
-</head>
+<SeoHead title={pageTitle} description={pageDescription} path="/analyzer" />
 
-<h2>{$t('analyzer')} {$t('tool')}</h2>
+<h1>{$t('analyzer')} {$t('tool')}</h1>
 
 <div class="container">
 	<div class="form-group">

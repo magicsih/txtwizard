@@ -1,86 +1,80 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
-	import { Buffer } from 'buffer';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
+	import {
+		convertEncoding,
+		decryptText,
+		getByteLength,
+		importAesKey,
+		type AesAlgorithm,
+		type BinaryEncoding
+	} from '$lib/utils/crypto';
 
 	let values = {
-		algorithm: 'AES-GCM',
+		algorithm: 'AES-GCM' as AesAlgorithm,
 		key: '',
 		iv: '',
 		targetEncryptedText: '',
 		outDecryptedText: ''
 	};
 
-	let encodingFormat: 'base64' | 'hex' = 'base64'; // Default encoding format
-	let previousEncodingFormat: 'base64' | 'hex' = 'base64'; // Track previous encoding format for conversion
-
+	let encodingFormat: BinaryEncoding = 'base64';
+	let previousEncodingFormat: BinaryEncoding = 'base64';
 	let cryptoKey: CryptoKey | null = null;
 
-	// Function to convert values between Base64 and Hex formats
-	function convertEncoding(value: string, from: 'base64' | 'hex', to: 'base64' | 'hex'): string {
-		try {
-			return Buffer.from(value, from).toString(to);
-		} catch (error) {
-			alert('Error converting value: Invalid format for ' + from + ' encoding');
-			throw error;
-		}
-	}
-
-	// Function triggered when encoding format is changed
 	function handleEncodingChange(event: Event) {
 		const target = event.target as HTMLSelectElement;
-		const newEncoding = target.value as 'base64' | 'hex';
+		const newEncoding = target.value as BinaryEncoding;
 
 		try {
-			// Convert all values when encoding changes
 			if (values.key) values.key = convertEncoding(values.key, previousEncodingFormat, newEncoding);
 			if (values.iv) values.iv = convertEncoding(values.iv, previousEncodingFormat, newEncoding);
-			if (values.targetEncryptedText)
+			if (values.targetEncryptedText) {
 				values.targetEncryptedText = convertEncoding(
 					values.targetEncryptedText,
 					previousEncodingFormat,
 					newEncoding
 				);
+			}
 
-			previousEncodingFormat = newEncoding; // Set new format as the current format
-			encodingFormat = newEncoding; // Update the current encoding format
+			previousEncodingFormat = newEncoding;
+			encodingFormat = newEncoding;
 		} catch (error) {
-			// In case of an error during conversion, we reset to previous format
 			encodingFormat = previousEncodingFormat;
 			console.error('Error during encoding conversion:', error);
-			return;
 		}
 	}
 
 	function handleChangeAlgorithm(event: Event) {
 		const target = event.target as HTMLSelectElement;
-		values.algorithm = target.value;
+		values.algorithm = target.value as AesAlgorithm;
 	}
 
 	async function handleOnChangeKey(event: Event) {
 		const target = event.target as HTMLInputElement | null;
-		if (!target) return; // Handle null case
+		if (!target) return;
 		values.key = target.value;
-
-		const rawKey = Buffer.from(values.key, encodingFormat);
-		cryptoKey = await window.crypto.subtle.importKey(
-			'raw',
-			rawKey,
-			{ name: values.algorithm },
-			false,
-			['encrypt', 'decrypt']
-		);
+		if (!values.key) {
+			cryptoKey = null;
+			return;
+		}
+		try {
+			cryptoKey = await importAesKey(values.key, values.algorithm, encodingFormat);
+		} catch {
+			cryptoKey = null;
+		}
 	}
 
 	function handleOnChangeIV(event: Event) {
 		const target = event.target as HTMLInputElement | null;
-		if (!target) return; // Handle null case
+		if (!target) return;
 		values.iv = target.value;
 	}
 
 	function handleOnChangeTargetEncryptedText(event: Event) {
 		const target = event.target as HTMLTextAreaElement | null;
-		if (!target) return; // Handle null case
+		if (!target) return;
 		values.targetEncryptedText = target.value;
 	}
 
@@ -91,16 +85,13 @@
 				return;
 			}
 
-			const ivBuffer = Buffer.from(values.iv, encodingFormat);
-			const encryptedBuffer = Buffer.from(values.targetEncryptedText, encodingFormat);
-
-			const decrypted = await window.crypto.subtle.decrypt(
-				{ name: values.algorithm, iv: ivBuffer },
-				cryptoKey,
-				encryptedBuffer
-			);
-
-			values.outDecryptedText = Buffer.from(new Uint8Array(decrypted)).toString('utf-8');
+			values.outDecryptedText = await decryptText({
+				algorithm: values.algorithm,
+				encoding: encodingFormat,
+				key: cryptoKey,
+				iv: values.iv,
+				encryptedText: values.targetEncryptedText
+			});
 		} catch (error) {
 			console.error('Error during decryption:', error);
 		} finally {
@@ -111,26 +102,56 @@
 				iv_length: values.iv.length,
 				encrypted_text_length: values.targetEncryptedText.length,
 				decrypted_text_length: values.outDecryptedText.length,
-				non_empty: values.targetEncryptedText.length > 0 ? 1 : 0 // Track if the encrypted text is non-empty
+				non_empty: values.targetEncryptedText.length > 0 ? 1 : 0
 			});
 		}
 	}
 
-	// Function to get byte length of a string in the current encoding
-	function getByteLength(value: string, encoding: 'base64' | 'hex' | 'utf-8') {
-		return Buffer.from(value, encoding).length;
-	}
+	const pageTitle = 'TxtWizard | Free Online Text Decryption Tool - AES/GCM, AES/CBC';
+	const pageDescription =
+		'Decrypt AES-GCM and AES-CBC ciphertext in your browser using Base64 or Hex encoded keys, IVs, and encrypted text.';
+	const faqStructuredData = {
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: [
+			{
+				'@type': 'Question',
+				name: 'Which AES modes are supported?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'This page supports AES-GCM and AES-CBC.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'Do I need the same encoding used during encryption?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'Yes. The key, IV, and ciphertext encoding must match the original Base64 or Hex format.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'Is the decrypted text sent anywhere?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'No. Decryption runs locally in the browser.'
+				}
+			}
+		]
+	};
 </script>
 
-<head>
-	<title>TxtWizard | Free Online Text Decrypting Tool - AES/GCM, AES/CBC</title>
-</head>
+<SeoHead
+	title={pageTitle}
+	description={pageDescription}
+	path="/decryption"
+	structuredData={faqStructuredData}
+/>
 
-<h2>{$t('decryption')} {$t('tool')} - AES/GCM, AES/CBC</h2>
+<h1>{$t('decryption')} {$t('tool')} - AES/GCM, AES/CBC</h1>
 
-<!-- UI Structure -->
 <div class="container">
-	<!-- Encoding Format Selection -->
 	<div class="form-group">
 		<label for="encoding">Encoding Format</label>
 		<select id="encoding" bind:value={encodingFormat} on:change={handleEncodingChange}>
@@ -139,7 +160,6 @@
 		</select>
 	</div>
 
-	<!-- Algorithm Selection -->
 	<div class="form-group">
 		<label for="algorithm">Algorithm</label>
 		<select id="algorithm" bind:value={values.algorithm} on:change={handleChangeAlgorithm}>
@@ -148,21 +168,18 @@
 		</select>
 	</div>
 
-	<!-- Key Input -->
 	<div class="form-group">
 		<label for="key">Key ({encodingFormat})</label>
 		<input type="text" id="key" bind:value={values.key} on:input={handleOnChangeKey} />
 		<small>{values.key ? `${getByteLength(values.key, encodingFormat)} bytes` : '0 bytes'}</small>
 	</div>
 
-	<!-- IV Input -->
 	<div class="form-group">
 		<label for="iv">IV ({encodingFormat})</label>
 		<input type="text" id="iv" bind:value={values.iv} on:input={handleOnChangeIV} />
 		<small>{values.iv ? `${getByteLength(values.iv, encodingFormat)} bytes` : '0 bytes'}</small>
 	</div>
 
-	<!-- Encrypted Text Input -->
 	<div class="form-group">
 		<label for="encryptedtext">Encrypted Text ({encodingFormat})</label>
 		<textarea
@@ -178,12 +195,10 @@
 		>
 	</div>
 
-	<!-- Decrypt Button -->
 	<div class="form-group">
 		<button on:click={decrypt}>{$t('decrypt-button')}</button>
 	</div>
 
-	<!-- Decrypted Text Output -->
 	<div class="form-group">
 		<label for="decryptedtext">Decrypted Text (UTF-8)</label>
 		<textarea id="decryptedtext" bind:value={values.outDecryptedText} rows="4" readonly></textarea>
@@ -227,6 +242,16 @@
 		and government to securely decode sensitive information. This tool allows you to quickly decrypt
 		AES-encrypted messages back to their original form.
 	</p>
+
+	<h3>Frequently Asked Questions</h3>
+	<dl>
+		<dt>Which AES modes are supported?</dt>
+		<dd>This page supports AES-GCM and AES-CBC.</dd>
+		<dt>Do I need the same encoding used during encryption?</dt>
+		<dd>Yes. The key, IV, and ciphertext encoding must match the original Base64 or Hex format.</dd>
+		<dt>Is the decrypted text sent anywhere?</dt>
+		<dd>No. Decryption runs locally in the browser.</dd>
+	</dl>
 </div>
 
 <style>

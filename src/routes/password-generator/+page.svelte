@@ -1,5 +1,11 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
+	import {
+		calculatePasswordStrength,
+		generatePassword as createPassword,
+		type PasswordOptions
+	} from '$lib/utils/password';
 
 	let passwordLength = 12;
 	let includeUppercase = true;
@@ -9,76 +15,45 @@
 	let generatedPassword = '';
 	let strength = '';
 	let strengthColor = '';
+	let errorMessage = '';
 
-	function generatePassword() {
-		let characterSet = '';
-		const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
-		const numberChars = '0123456789';
-		const symbolChars = '!@#$%^&*()_+~`|}{[]:;<>,.?/';
+	function handleGeneratePassword() {
+		errorMessage = '';
 
-		characterSet += includeUppercase ? uppercaseChars : '';
-		characterSet += includeLowercase ? lowercaseChars : '';
-		characterSet += includeNumbers ? numberChars : '';
-		characterSet += includeSymbols ? symbolChars : '';
+		const options: PasswordOptions = {
+			length: passwordLength,
+			includeUppercase,
+			includeLowercase,
+			includeNumbers,
+			includeSymbols
+		};
 
-		let newPassword = '';
-		for (let i = 0; i < passwordLength; i++) {
-			const randomIndex = Math.floor(Math.random() * characterSet.length);
-			newPassword += characterSet.charAt(randomIndex);
+		try {
+			generatedPassword = createPassword(options);
+			const passwordStrength = calculatePasswordStrength(generatedPassword);
+			strength = passwordStrength.label;
+			strengthColor = passwordStrength.color;
+		} catch (error) {
+			generatedPassword = '';
+			strength = '';
+			strengthColor = '';
+			errorMessage = error instanceof Error ? error.message : 'Failed to generate password.';
 		}
-
-		generatedPassword = newPassword;
-		updateStrength(newPassword);
-	}
-
-	function updateStrength(password: string) {
-		let complexity = 0;
-		if (/[a-z]+/.test(password)) complexity++;
-		if (/[A-Z]+/.test(password)) complexity++;
-		if (/[0-9]+/.test(password)) complexity++;
-		if (/[!@#$%^&*()_+~`|}{[\]:;<>,.?/]+/.test(password)) complexity++;
-
-		const lengthFactor = Math.min(password.length / 8, 1); // Normalize length factor
-		complexity = complexity * lengthFactor;
-
-		// Determine the strength level based on complexity
-		let newStrength = '';
-		let newStrengthColor = '';
-
-		// Determine the strength level based on complexity
-		// Adjust thresholds as needed
-		const weakThreshold = 1;
-		const mediumThreshold = 2;
-
-		// Assign strength level and color
-		// Keep original logic, just update the values
-		if (complexity <= weakThreshold) {
-			newStrength = 'Weak';
-			newStrengthColor = 'red';
-		} else if (complexity <= mediumThreshold) {
-			newStrength = 'Medium';
-			newStrengthColor = 'yellow';
-		} else {
-			newStrength = 'Strong';
-			newStrengthColor = 'green';
-		}
-
-		strength = newStrength;
-		strengthColor = newStrengthColor;
 	}
 
 	function copyToClipboard() {
+		if (!generatedPassword) return;
 		navigator.clipboard.writeText(generatedPassword);
 	}
+
+	const pageTitle = 'TxtWizard | Random Password Generator';
+	const pageDescription =
+		'Generate secure random passwords with configurable length, symbols, numbers, and letter options.';
 </script>
 
-<svelte:head>
-	<title>TxtWizard | Random Password Generator</title>
-	<meta name="description" content="Generate secure, random passwords with customizable options." />
-</svelte:head>
+<SeoHead title={pageTitle} description={pageDescription} path="/password-generator" />
 
-<h2>{$t('password-generator')}</h2>
+<h1>{$t('password-generator')}</h1>
 
 <div class="container">
 	<div class="form-group">
@@ -112,11 +87,14 @@
 		</label>
 	</div>
 
-	<button on:click={generatePassword}>{$t('generate-password')}</button>
+	<button on:click={handleGeneratePassword}>{$t('generate-password')}</button>
+	{#if errorMessage}
+		<p class="error">{errorMessage}</p>
+	{/if}
 
 	{#if generatedPassword}
 		<div class="password-output">
-			<input readonly type="text" value={generatedPassword} />
+			<input readonly type="text" bind:value={generatedPassword} />
 			<button on:click={copyToClipboard}>{$t('copy-to-clipboard')}</button>
 		</div>
 		{#if strength}
@@ -179,5 +157,10 @@
 
 	.slider {
 		width: 100%;
+	}
+
+	.error {
+		color: #b91c1c;
+		margin: 8px 0 0;
 	}
 </style>

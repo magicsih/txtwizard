@@ -31,8 +31,6 @@
     "compress-button": "Compresser",
     "qr-code-gen": "Génération de code QR",
     "qr-code-intro": "Un code QR peut encoder des informations comme du texte, des URLs, etc.",
-    "currency": "Conversion de devises",
-    "currency-intro": "Conversions de devises en utilisant des taux de change en temps réel.",
     "analyzer": "Analyseur",
     "input-text": "Saisir du texte",
     "enter-text": "Entrez le texte",

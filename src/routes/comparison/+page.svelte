@@ -1,96 +1,35 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
+	import {
+		compareTexts as buildDiff,
+		deduplicateText as deduplicateEntries,
+		type DeduplicationType
+	} from '$lib/utils/comparison';
 
 	let text1 = '';
 	let text2 = '';
 	let textToDeduplicate = '';
 	let diff = '';
 	let deduplicatedText = '';
-	let deduplicationType = 'line';
-
-	function escapeHtml(str: string): string {
-		return str
-			.replace(/&/g, '&amp;')
-			.replace(/</g, '&lt;')
-			.replace(/>/g, '&gt;')
-			.replace(/"/g, '&quot;')
-			.replace(/'/g, '&#039;');
-	}
+	let deduplicationType: DeduplicationType = 'line';
 
 	function compareTexts() {
-		const lines1 = text1.split('\n');
-		const lines2 = text2.split('\n');
-		let differences = [];
-
-		let i = 0;
-		let j = 0;
-
-		while (i < lines1.length || j < lines2.length) {
-			const line1 = escapeHtml(lines1[i] || ''); // Escape HTML
-			const line2 = escapeHtml(lines2[j] || ''); // Escape HTML
-
-			if (line1 === line2) {
-				// Lines are identical
-				i++;
-				j++;
-			} else {
-				if (lines1[i] != lines2[j + 1] && lines2[j] != lines1[i + 1]) {
-					if (lines1[i]) differences.push(`<span class='removed'>- ${line1}</span>`);
-					if (lines2[j]) differences.push(`<span class='added'>+ ${line2}</span>`);
-					i++;
-					j++;
-				} else if (lines1[i] == lines2[j + 1]) {
-					if (lines1[i]) differences.push(`<span class='removed'>- ${line1}</span>`);
-					i++;
-					j++; // Ensure j is incremented
-				} else if (lines2[j] == lines1[i + 1]) {
-					if (lines2[j]) differences.push(`<span class='added'>+ ${line2}</span>`);
-					i++; // Ensure i is incremented
-					j++;
-				} else {
-					// Fallback to prevent infinite loop
-					i++;
-					j++;
-				}
-			}
-		}
-
-		diff = differences.join('<br>');
+		diff = buildDiff(text1, text2);
 	}
 
 	function deduplicateText() {
-		const text = textToDeduplicate;
-		const lines = text.split('\n');
-		const sentences = text.split(/[.!?]+/);
-
-		let uniqueEntries = [];
-		let seen = new Set();
-
-		const entries = deduplicationType === 'line' ? lines : sentences;
-
-		for (const entry of entries) {
-			const trimmedEntry = entry.trim();
-			if (trimmedEntry && !seen.has(trimmedEntry)) {
-				uniqueEntries.push(trimmedEntry);
-				seen.add(trimmedEntry);
-			}
-		}
-
-		let result = uniqueEntries.join(deduplicationType === 'line' ? '\n' : '. ');
-
-		if (deduplicationType != 'line') result = result + '.';
-
-		deduplicatedText = result;
+		deduplicatedText = deduplicateEntries(textToDeduplicate, deduplicationType);
 	}
+
+	const pageTitle = 'TxtWizard | Text Comparison and Duplicate Removal Tool';
+	const pageDescription =
+		'Compare two text blocks and remove duplicate lines or sentences directly in your browser.';
 </script>
 
-<head>
-	<title>TxtWizard | Text Comparison Tool</title>
-	<meta name="keywords" content="text, compare, difference, duplicate, remove" />
-	<meta name="description" content="Compare texts and remove duplicate lines or sentences." />
-</head>
+<SeoHead title={pageTitle} description={pageDescription} path="/comparison" />
 
-<h2>{$t('comparison')} {$t('tool')}</h2>
+<h1>{$t('comparison')} {$t('tool')}</h1>
 
 <div class="container">
 	<h3>{$t('text-comparison')}</h3>

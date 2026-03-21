@@ -31,8 +31,6 @@
     "compress-button": "Comprimir",
     "qr-code-gen": "Geração de código QR",
     "qr-code-intro": "Um código QR pode codificar informações, como texto, URLs e outros dados, usado amplamente para pagamentos sem contato e links de sites.",
-    "currency": "Conversão de moeda",
-    "currency-intro": "Conversão de moedas com taxas de câmbio em tempo real.",
     "analyzer": "analisador",
     "input-text": "Texto de entrada",
     "enter-text": "Digite o texto",

@@ -1,92 +1,26 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
 	import { Buffer } from 'buffer';
-	import { sha256, sha384, sha512, sha224, sha512_256 } from '@noble/hashes/sha2';
-	// prettier-ignore
-	import {
-		sha3_224, sha3_256, sha3_384, sha3_512,
-		keccak_224, keccak_256, keccak_384, keccak_512,
-	} from '@noble/hashes/sha3';
-
-	import { ripemd160 } from '@noble/hashes/ripemd160';
-	import { blake3 } from '@noble/hashes/blake3';
-	import { blake2b } from '@noble/hashes/blake2b';
-	import { blake2s } from '@noble/hashes/blake2s';
-	import { sha1 } from '@noble/hashes/sha1'; // legacy
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
+	import { HASH_ALGORITHMS, hashText, type HashAlgorithm } from '$lib/utils/hashing';
 
-	const algorithms = [
-		'SHA-1',
-		'SHA-224',
-		'SHA-256',
-		'SHA-384',
-		'SHA-512',
-		'SHA-512/256',
-		'SHA3-224',
-		'SHA3-256',
-		'SHA3-384',
-		'SHA3-512',
-		'Keccak-224',
-		'Keccak-256',
-		'Keccak-384',
-		'Keccak-512',
-		'RIPEMD160',
-		'BLAKE2s',
-		'BLAKE2b',
-		'BLAKE3'
-	] as const;
-
-	type Algorithm = (typeof algorithms)[number]; // Create a union type from the array
+	const algorithms = HASH_ALGORITHMS;
 
 	let targetPlainText = '';
 	let outHashText = '';
 	let outHexText = '';
-	let algorithm: Algorithm = 'SHA-256'; // Restrict `algorithm` to valid keys
-
-	// Variables to store length and size of hash outputs and plain text
+	let algorithm: HashAlgorithm = 'SHA-256';
 	let plainTextLength = 0;
 	let plainTextBytes = 0;
 	let base64Bytes = 0;
 	let hexBytes = 0;
 
-	// Mapping algorithm names to their hash functions
-	const hashFunctions = {
-		'SHA-1': sha1,
-		'SHA-224': sha224,
-		'SHA-256': sha256,
-		'SHA-384': sha384,
-		'SHA-512': sha512,
-		'SHA-512/256': sha512_256,
-		'SHA3-224': sha3_224,
-		'SHA3-256': sha3_256,
-		'SHA3-384': sha3_384,
-		'SHA3-512': sha3_512,
-		'Keccak-224': keccak_224,
-		'Keccak-256': keccak_256,
-		'Keccak-384': keccak_384,
-		'Keccak-512': keccak_512,
-		RIPEMD160: ripemd160,
-		BLAKE2s: blake2s,
-		BLAKE2b: blake2b,
-		BLAKE3: blake3
-	};
-
 	async function doHash() {
 		try {
-			// Select the hashing function based on the selected algorithm
-			const hashFunction = hashFunctions[algorithm];
-
-			// Get the buffer from the plain text
-			const msg = Buffer.from(targetPlainText, 'utf-8');
-
-			// Hash the message using the selected algorithm
-			const digest = hashFunction(msg);
-
-			// Set Base64 and Hex values
-			outHashText = Buffer.from(digest).toString('base64');
-			outHexText = Buffer.from(digest).toString('hex');
-
-			// Calculate byte size for Base64 and Hex results
+			const result = hashText(targetPlainText, algorithm);
+			outHashText = result.base64;
+			outHexText = result.hex;
 			base64Bytes = Buffer.byteLength(outHashText, 'utf-8');
 			hexBytes = Buffer.byteLength(outHexText, 'utf-8');
 		} catch (error) {
@@ -94,43 +28,33 @@
 		} finally {
 			trackToolsUsageEvent('hashing', 'hash', {
 				algorithm: algorithm,
-				text_length: targetPlainText.length, // 원문 대신 길이만 전송
-				non_empty: targetPlainText.length > 0 ? 1 : 0 // 빈 문자열 여부 추적
+				text_length: targetPlainText.length,
+				non_empty: targetPlainText.length > 0 ? 1 : 0
 			});
 		}
 	}
 
-	// 복사 버튼 추가 및 이벤트 추적
 	function copyToClipboard(text: string, format: string) {
 		navigator.clipboard.writeText(text);
 		trackToolsUsageEvent('hashing', 'copy', {
 			algorithm: algorithm,
-			text_length: targetPlainText.length, // 원문 대신 길이만 전송
-			non_empty: targetPlainText.length > 0 ? 1 : 0, // 빈 문자열 여부 추적
-			format: format // 복사한 형식 (base64 또는 hex)
+			text_length: targetPlainText.length,
+			non_empty: targetPlainText.length > 0 ? 1 : 0,
+			format: format
 		});
 	}
 
-	// Update plain text length and size dynamically
 	$: {
 		plainTextLength = targetPlainText.length;
 		plainTextBytes = Buffer.byteLength(targetPlainText, 'utf-8');
 	}
+
+	const pageTitle = 'TxtWizard | Free Online Hash Generator - SHA, Keccak, BLAKE';
+	const pageDescription =
+		'Generate SHA, SHA-3, Keccak, RIPEMD160, and BLAKE hashes from text directly in your browser.';
 </script>
 
-<head>
-	<title
-		>TxtWizard | Free Online Hash Converter - SHA-1, SHA-256, SHA-516, SHA3, KEKCAK 256/512, BLAKE2b</title
-	>
-	<meta
-		name="keywords"
-		content="online hash converter, sha1, sha256, sha384, sha512, sha3, keccak, ripemd160, blake3, blake2b, hash generator, free hash tool, cryptographic hash, secure hash algorithm, hash calculator"
-	/>
-	<meta
-		name="description"
-		content="Free online hash generator tool. Convert text to SHA-1, SHA-256, SHA-384, SHA-512, SHA3, Keccak, RIPEMD160, BLAKE2, and BLAKE3 hash formats instantly for security verification, checksums, and data integrity."
-	/>
-</head>
+<SeoHead title={pageTitle} description={pageDescription} path="/hashing" />
 
 <header>
 	<h1>{$t('hashing')} {$t('tool')}</h1>
@@ -138,7 +62,6 @@
 
 <main>
 	<section class="container" aria-label="Hash Generator Tool">
-		<!-- Algorithm Selection -->
 		<div class="form-group">
 			<label for="algorithm">Select Hashing Algorithm</label>
 			<select id="algorithm" bind:value={algorithm}>
@@ -148,7 +71,6 @@
 			</select>
 		</div>
 
-		<!-- Plain Text Input -->
 		<div class="form-group">
 			<label for="plainText">Enter Plain Text (UTF-8)</label>
 			<textarea id="plainText" bind:value={targetPlainText} rows="4" placeholder="Enter text here"
@@ -156,12 +78,10 @@
 			<small>{plainTextLength} letters ({plainTextBytes} bytes in size)</small>
 		</div>
 
-		<!-- Hash Button -->
 		<div class="form-group">
 			<button on:click={doHash}>{$t('hash-button')}</button>
 		</div>
 
-		<!-- Base64 Output -->
 		<div class="form-group">
 			<label for="hashBase64">Hash (Base64)</label>
 			<div class="output-container">
@@ -173,7 +93,6 @@
 			<small>{base64Bytes} bytes</small>
 		</div>
 
-		<!-- Hex Output -->
 		<div class="form-group">
 			<label for="hashHex">Hash (Hex)</label>
 			<div class="output-container">

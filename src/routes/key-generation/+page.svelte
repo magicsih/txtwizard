@@ -1,154 +1,102 @@
 <script lang="ts">
-	import { Buffer } from 'buffer';
-	import { getRandomBytesSync } from 'ethereum-cryptography/random';
-	import { secp256k1 } from 'ethereum-cryptography/secp256k1';
-	import { keccak256 } from 'ethereum-cryptography/keccak';
-	import { ripemd160 } from 'ethereum-cryptography/ripemd160';
-	import { sha256 } from 'ethereum-cryptography/sha256';
-	import base58 from 'bs58';
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
+	import {
+		deriveKeysFromNumericInput,
+		generateRandomKeyPair,
+		type DerivedKeys
+	} from '$lib/utils/key-generation';
 
 	let privateKey = '';
-	let privateKeyNumeric = ''; // 새로 추가된 numeric 형식의 private key
+	let privateKeyNumeric = '';
 	let publicKey = '';
 	let address = '';
-
 	let btcPrivateKey = '';
 	let btcPublicKey = '';
 	let btcAddress = '';
 
-	// Function to generate Ethereum and Bitcoin keys
+	function applyDerivedKeys(keys: DerivedKeys) {
+		privateKey = keys.privateKey;
+		privateKeyNumeric = keys.privateKeyNumeric;
+		publicKey = keys.publicKey;
+		address = keys.address;
+		btcPrivateKey = keys.btcPrivateKey;
+		btcPublicKey = keys.btcPublicKey;
+		btcAddress = keys.btcAddress;
+	}
+
 	function generateKeys() {
-		// Generate random private key (32 bytes)
-		const privKey = getRandomBytesSync(32);
-
-		// Store numeric private key as decimal
-		privateKeyNumeric = BigInt('0x' + Buffer.from(privKey).toString('hex')).toString();
-
-		// Update keys and addresses
-		updateKeysFromPrivateKey(privKey);
+		applyDerivedKeys(generateRandomKeyPair());
 	}
 
-	// Function to update Ethereum and Bitcoin keys based on private key
-	function updateKeysFromPrivateKey(privKey: Uint8Array) {
-		// Generate Ethereum public key from the private key (uncompressed format: 65 bytes)
-		const pubKey = secp256k1.getPublicKey(privKey, false);
-
-		// Compute Ethereum address (keccak256 hash of the public key's x, y coordinates, skipping the first byte)
-		const addr = keccak256(pubKey.slice(1)).slice(-20);
-
-		// Store Ethereum private key and public key in hex format
-		privateKey = '0x' + Buffer.from(privKey).toString('hex');
-		publicKey = '0x' + Buffer.from(pubKey).toString('hex');
-
-		// Convert Ethereum address to EIP-55 checksum address
-		address = toChecksumAddress(Buffer.from(addr).toString('hex'));
-
-		// Generate Bitcoin keys
-		generateBitcoinKeys(privKey);
-	}
-
-	// Function to generate Bitcoin keys based on the same private key
-	function generateBitcoinKeys(privKey: Uint8Array) {
-		// Generate Bitcoin public key
-		const pubKey = secp256k1.getPublicKey(privKey, true); // Compressed public key (33 bytes)
-
-		// Compute Bitcoin address (RIPEMD-160 hash of SHA-256 hash of the public key)
-		const hashSha256 = sha256(pubKey);
-		const btcAddr = ripemd160(hashSha256);
-
-		// Add version byte (0x00 for mainnet) at the beginning
-		const versionedPayload = Buffer.concat([Buffer.from([0x00]), btcAddr]);
-
-		// Perform checksum (first 4 bytes of SHA256(SHA256(versionedPayload)))
-		const checksum = sha256(sha256(versionedPayload)).slice(0, 4);
-
-		// Concatenate versioned payload and checksum, then encode with Base58
-		const fullPayload = Buffer.concat([versionedPayload, checksum]);
-		btcAddress = base58.encode(fullPayload);
-
-		// Convert private key to WIF format
-		btcPrivateKey = toWIF(privKey);
-		btcPublicKey = Buffer.from(pubKey).toString('hex');
-	}
-
-	// Function to convert Ethereum address to EIP-55 checksum format
-	function toChecksumAddress(address: string) {
-		const addressLower = address.toLowerCase();
-		const hash = Buffer.from(keccak256(Buffer.from(addressLower, 'utf-8'))).toString('hex');
-
-		let checksumAddress = '0x';
-		for (let i = 0; i < addressLower.length; i++) {
-			checksumAddress +=
-				parseInt(hash[i], 16) >= 8 ? addressLower[i].toUpperCase() : addressLower[i];
-		}
-		return checksumAddress;
-	}
-
-	// Function to convert private key to WIF (Wallet Import Format)
-	function toWIF(privKey: Uint8Array) {
-		// Add version byte (0x80 for mainnet) at the beginning of the private key
-		const versionedPrivKey = Buffer.concat([Buffer.from([0x80]), privKey]);
-
-		// Add a compressed byte (0x01) at the end for compressed public keys
-		const compressedPrivKey = Buffer.concat([versionedPrivKey, Buffer.from([0x01])]);
-
-		// Perform checksum (first 4 bytes of SHA256(SHA256(versionedPrivKey)))
-		const checksum = sha256(sha256(compressedPrivKey)).slice(0, 4);
-
-		// Concatenate versioned private key and checksum, then encode with Base58
-		const fullPayload = Buffer.concat([compressedPrivKey, checksum]);
-		return base58.encode(fullPayload);
-	}
-
-	// Function to handle privateKeyNumeric changes and update keys accordingly
 	function updateKeysFromNumericInput() {
 		try {
-			const privKeyHex = BigInt(privateKeyNumeric).toString(16).padStart(64, '0');
-			const privKey = Uint8Array.from(Buffer.from(privKeyHex, 'hex'));
-
-			// Update keys and addresses based on the new private key
-			updateKeysFromPrivateKey(privKey);
+			applyDerivedKeys(deriveKeysFromNumericInput(privateKeyNumeric));
 		} catch (error) {
 			console.error('Invalid numeric private key input:', error);
 		}
 	}
+
+	const pageTitle = 'TxtWizard | Free Online BTC and ETH Key Generation Tool';
+	const pageDescription =
+		'Generate Bitcoin and Ethereum private keys, public keys, and addresses directly in your browser.';
+	const faqStructuredData = {
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: [
+			{
+				'@type': 'Question',
+				name: 'Are the keys generated on a server?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'No. Key generation runs locally in your browser.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'Can I enter my own private key?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'Yes. You can paste a numeric private key to derive the matching public keys and addresses.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'Should I use generated keys for real funds?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'Only if you fully trust your device and environment. For production wallets, hardware-backed flows are safer.'
+				}
+			}
+		]
+	};
 </script>
 
-<head>
-	<title>Free Online BTC and ETH Key Generation Tool</title>
-	<meta
-		name="keywords"
-		content="secp256k1,ethereum,bitcoin,key,generation,public,private,address"
-	/>
-	<meta
-		name="description"
-		content="Free online tool to generate Ethereum and Bitcoin public-private key pairs and addresses"
-	/>
-</head>
+<SeoHead
+	title={pageTitle}
+	description={pageDescription}
+	path="/key-generation"
+	structuredData={faqStructuredData}
+/>
 
-<h2>{$t('keygen')} {$t('tool')} - {$t('bitcoin')} & {$t('ethereum')}</h2>
+<h1>{$t('keygen')} {$t('tool')} - {$t('bitcoin')} & {$t('ethereum')}</h1>
 
-<!-- Key Generation Tool UI -->
 <div class="container">
-	<!-- Generate Keys Button -->
 	<div class="form-group">
 		<button on:click={generateKeys}>{$t('generate')} ({$t('bitcoin')}, {$t('ethereum')})</button>
 	</div>
 
-	<!-- Private Keys (HEX & WIF) Output -->
 	<div class="form-group">
 		<div>
 			<strong>Private Key (Numeric):</strong>
 			<input type="text" bind:value={privateKeyNumeric} on:change={updateKeysFromNumericInput} />
-			<small
-				>Range: 1 ≤ n ＜
-				115792089237316195423570985008687907852837564279074904382605163141518161494336</small
-			>
+			<small>
+				Range: 1 &lt;= n &lt;
+				115792089237316195423570985008687907852837564279074904382605163141518161494337
+			</small>
 		</div>
 	</div>
 
-	<!-- Bitcoin Address Output -->
 	<div class="form-group">
 		<label for="btcAddress">Bitcoin Address</label>
 		<input type="text" id="btcAddress" bind:value={btcAddress} readonly />
@@ -165,7 +113,6 @@
 		<input type="text" bind:value={btcPrivateKey} readonly />
 	</div>
 
-	<!-- Ethereum Address Output -->
 	<div class="form-group">
 		<label for="ethAddress">Ethereum Address</label>
 		<input type="text" id="ethAddress" bind:value={address} readonly />
@@ -213,6 +160,16 @@
 			using the last 20 bytes.
 		</li>
 	</ol>
+
+	<h3>Frequently Asked Questions</h3>
+	<dl>
+		<dt>Are the keys generated on a server?</dt>
+		<dd>No. Key generation runs locally in your browser.</dd>
+		<dt>Can I enter my own private key?</dt>
+		<dd>Yes. You can paste a numeric private key to derive the matching public keys and addresses.</dd>
+		<dt>Should I use generated keys for real funds?</dt>
+		<dd>Only if you fully trust your device and environment. For production wallets, hardware-backed flows are safer.</dd>
+	</dl>
 </div>
 
 <style>
@@ -256,7 +213,6 @@
 		padding-left: 20px;
 	}
 
-	h2,
 	h3 {
 		margin-bottom: 15px;
 	}
