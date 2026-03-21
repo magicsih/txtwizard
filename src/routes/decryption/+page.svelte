@@ -55,7 +55,15 @@
 		const target = event.target as HTMLInputElement | null;
 		if (!target) return;
 		values.key = target.value;
-		cryptoKey = await importAesKey(values.key, values.algorithm, encodingFormat);
+		if (!values.key) {
+			cryptoKey = null;
+			return;
+		}
+		try {
+			cryptoKey = await importAesKey(values.key, values.algorithm, encodingFormat);
+		} catch {
+			cryptoKey = null;
+		}
 	}
 
 	function handleOnChangeIV(event: Event) {

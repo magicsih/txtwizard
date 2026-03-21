@@ -121,7 +121,7 @@
 		including Base64, Hexadecimal, URL Encoding, and HTML Encoding. Whether you're a developer, a
 		cybersecurity enthusiast, or just someone looking to convert text formats, our tool provides an
 		easy-to-use interface for all your encoding and decoding needs. You can input your plain text
-		and convert it into different formats, or reverse encoded text back into its original formâ€”all
+		and convert it into different formats, or reverse encoded text back into its original form—all
 		in one convenient place.
 	</p>
 
@@ -158,7 +158,7 @@
 	<p>
 		This tool allows you to enter your text and instantly see the converted output in different
 		encoding formats. If you have encoded text, the tool will automatically detect the format and
-		convert it back to plain text for you. Hereâ€™s how to use it:
+		convert it back to plain text for you. Here's how to use it:
 	</p>
 	<ol>
 		<li>

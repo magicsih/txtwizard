@@ -92,7 +92,7 @@
 			<input type="text" bind:value={privateKeyNumeric} on:change={updateKeysFromNumericInput} />
 			<small>
 				Range: 1 &lt;= n &lt;
-				115792089237316195423570985008687907852837564279074904382605163141518161494336
+				115792089237316195423570985008687907852837564279074904382605163141518161494337
 			</small>
 		</div>
 	</div>
@@ -213,7 +213,6 @@
 		padding-left: 20px;
 	}
 
-	h2,
 	h3 {
 		margin-bottom: 15px;
 	}

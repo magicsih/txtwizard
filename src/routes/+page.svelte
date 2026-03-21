@@ -3,6 +3,18 @@
 	import { t } from 'svelte-i18n';
 	import './+page.css';
 
+	type ToolItem = {
+		href: string;
+		titleKey: string;
+		descriptionKey: string;
+		titleSuffix?: string;
+	};
+
+	type ToolGroup = {
+		title: string;
+		tools: ToolItem[];
+	};
+
 	const featuredTools = [
 		{
 			href: '/compression',
@@ -24,7 +36,7 @@
 		}
 	] as const;
 
-	const toolGroups = [
+	const toolGroups: ToolGroup[] = [
 		{
 			title: 'Security',
 			tools: [
@@ -61,7 +73,7 @@
 				{ href: '/minifier', titleKey: 'code-minifier', descriptionKey: 'code-minifier-intro' }
 			]
 		}
-	] as const;
+	];
 
 	const homeDescription =
 		'Browser-based tools for encryption, decryption, compression, hashing, QR code generation, and text utilities.';

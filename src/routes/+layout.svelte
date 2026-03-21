@@ -128,7 +128,10 @@
 	}
 
 	.nav-links {
+		display: flex;
 		flex-wrap: wrap;
+		gap: 0.5rem 1rem;
+		align-items: center;
 	}
 
 	.nav-links a {
@@ -142,7 +145,14 @@
 		}
 
 		.nav-links {
+			display: none;
 			grid-column: 1 / -1;
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		nav.open .nav-links {
+			display: flex;
 		}
 	}
 </style>

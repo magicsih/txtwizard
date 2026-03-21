@@ -38,7 +38,15 @@
 		if (!target) return;
 		values.key = target.value;
 		values.keyFieldSize = values.key ? getBitLength(values.key, encodingFormat) : 0;
-		cryptoKey = await importAesKey(values.key, values.algorithm, encodingFormat);
+		if (!values.key) {
+			cryptoKey = null;
+			return;
+		}
+		try {
+			cryptoKey = await importAesKey(values.key, values.algorithm, encodingFormat);
+		} catch {
+			cryptoKey = null;
+		}
 	}
 
 	function handleOnChangeIV(event: Event) {
