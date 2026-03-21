@@ -35,7 +35,7 @@ export function minifyJS(js: string): string {
 
 	let joined = lines.join(' ');
 	joined = joined.replace(/\s+/g, ' ');
-	joined = joined.replace(/\s*([;,:{}()\[\]=+\-*/%<>?&|^~!])\s*/g, '$1');
+	joined = joined.replace(/\s*([;,:{}()\[\]=*/%<>?&|^~!])\s*/g, '$1');
 
 	return joined.trim();
 }

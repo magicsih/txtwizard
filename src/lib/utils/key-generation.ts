@@ -16,17 +16,14 @@ export type DerivedKeys = {
 	btcAddress: string;
 };
 
-const SECP256K1_MAX = BigInt(
-	'115792089237316195423570985008687907852837564279074904382605163141518161494336'
-);
-
 export function generateRandomKeyPair(): DerivedKeys {
 	return deriveKeysFromPrivateKey(getRandomBytesSync(32));
 }
 
 export function deriveKeysFromNumericInput(privateKeyNumeric: string): DerivedKeys {
 	const value = BigInt(privateKeyNumeric);
-	if (value < 1n || value >= SECP256K1_MAX) {
+	const curveOrder = secp256k1.CURVE.n;
+	if (value < 1n || value >= curveOrder) {
 		throw new Error('Private key must be within the valid secp256k1 range.');
 	}
 

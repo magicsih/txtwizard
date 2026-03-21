@@ -25,6 +25,18 @@ describe('minifyJS', () => {
 	it('removes comments conservatively', () => {
 		expect(minifyJS('const a = 1; // comment\nconst b = 2;')).toBe('const a=1;const b=2;');
 	});
+
+	it('does not merge ++ from a + +b', () => {
+		const result = minifyJS('const c = a + +b;');
+		expect(result).not.toContain('++');
+		expect(result).toContain('+ +');
+	});
+
+	it('does not merge -- from a - -b', () => {
+		const result = minifyJS('const c = a - -b;');
+		expect(result).not.toContain('--');
+		expect(result).toContain('- -');
+	});
 });
 
 describe('minifyCode', () => {
