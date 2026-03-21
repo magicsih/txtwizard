@@ -1,19 +1,18 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
-	import { Buffer } from 'buffer'; // Import Buffer for encoding/decoding
+	import { Buffer } from 'buffer';
+	import { calculateRows, detectAndConvertInput } from '$lib/utils/encoding';
 
-	// Define the reactive values for user input and the auto-converted formats
 	let userInput = '';
 	let plainText = '';
 	let base64 = '';
 	let hex = '';
 	let urlEncode = '';
 	let htmlEncode = '';
-	let detectedEncoding = 'Plain Text'; // Default detected encoding type
-	let decodedBuffer: Buffer; // Buffer to hold the decoded content
+	let detectedEncoding = 'Plain Text';
 
-	// Byte lengths and letter counts
 	let plainTextLength = 0;
 	let plainTextBytes = 0;
 	let base64Length = 0;
@@ -25,69 +24,16 @@
 	let htmlEncodeLength = 0;
 	let htmlEncodeBytes = 0;
 
-	// Function to calculate rows dynamically based on length
-	function calculateRows(textLength: number): number {
-		const minRows = 2;
-		const maxRows = 10;
-		// 50 characters per row approximation, adjust as needed
-		const rows = Math.min(Math.max(Math.ceil(textLength / 50), minRows), maxRows);
-		return rows;
-	}
-
-	// Detect encoding type and perform conversions
 	function handleInputChange() {
-		// If the input is empty, reset all fields and return
-		if (!userInput) {
-			plainText = base64 = hex = urlEncode = htmlEncode = '';
-			detectedEncoding = '';
-			plainTextLength =
-				plainTextBytes =
-				base64Length =
-				base64Bytes =
-				hexLength =
-				hexBytes =
-				urlEncodeLength =
-				urlEncodeBytes =
-				htmlEncodeLength =
-				htmlEncodeBytes =
-					0;
-			return;
-		}
-
 		try {
-			// Reset the decoded buffer
-			decodedBuffer = Buffer.from('');
+			const result = detectAndConvertInput(userInput);
+			plainText = result.plainText;
+			base64 = result.base64;
+			hex = result.hex;
+			urlEncode = result.urlEncode;
+			htmlEncode = result.htmlEncode;
+			detectedEncoding = result.detectedEncoding;
 
-			// Detect encoding type and decode to buffer
-			if (isHex(userInput)) {
-				decodedBuffer = Buffer.from(userInput, 'hex');
-				plainText = decodedBuffer.toString('utf-8');
-				detectedEncoding = 'Hex';
-			} else if (isUrlEncoded(userInput)) {
-				plainText = decodeURIComponent(userInput);
-				decodedBuffer = Buffer.from(plainText, 'utf-8'); // Convert URL-decoded text back to buffer
-				detectedEncoding = 'URL-Encoded';
-			} else if (isHtmlEncoded(userInput)) {
-				plainText = decodeHtmlEntities(userInput);
-				decodedBuffer = Buffer.from(plainText, 'utf-8'); // Convert HTML-decoded text back to buffer
-				detectedEncoding = 'HTML-Encoded';
-			} else if (isBase64(userInput)) {
-				decodedBuffer = Buffer.from(userInput, 'base64');
-				plainText = decodedBuffer.toString('utf-8');
-				detectedEncoding = 'Base64';
-			} else {
-				plainText = userInput;
-				decodedBuffer = Buffer.from(plainText, 'utf-8');
-				detectedEncoding = 'Plain Text';
-			}
-
-			// Convert decoded buffer to all encodings
-			base64 = decodedBuffer.toString('base64');
-			hex = decodedBuffer.toString('hex');
-			urlEncode = encodeURIComponent(decodedBuffer.toString('utf-8'));
-			htmlEncode = encodeHtmlEntities(decodedBuffer.toString('utf-8'));
-
-			// Update lengths and byte sizes
 			plainTextLength = plainText.length;
 			plainTextBytes = Buffer.byteLength(plainText, 'utf-8');
 			base64Length = base64.length;
@@ -103,71 +49,20 @@
 		}
 	}
 
-	// Updated isBase64 function with stricter validation
-	function isBase64(str: string) {
-		// Check if the length is divisible by 4
-		if (str.length % 4 !== 0) {
-			return false;
-		}
-		// Check if the string contains only valid Base64 characters
-		const base64Regex = /^[A-Za-z0-9+/]+={0,2}$/;
-		if (!base64Regex.test(str)) {
-			return false;
-		}
-		// Try decoding the string using Buffer to verify it's valid Base64
-		try {
-			const decoded = Buffer.from(str, 'base64').toString('base64');
-			return decoded === str;
-		} catch (e) {
-			console.error('Error decoding Base64:', e);
-			return false;
-		}
-	}
-
-	// Hex detection remains the same
-	function isHex(str: string) {
-		return /^[0-9a-fA-F]+$/g.test(str) && str.length % 2 === 0;
-	}
-
-	// URL encoding
-	function isUrlEncoded(str: string) {
-		try {
-			return str !== decodeURIComponent(str);
-		} catch (e) {
-			console.error('Error decoding URL:', e);
-			return false;
-		}
-	}
-
-	// HTML encoding
-	function encodeHtmlEntities(str: string) {
-		return str.replace(/[\u00A0-\u9999<>]/gim, function (i) {
-			return '&#' + i.charCodeAt(0) + ';';
-		});
-	}
-	function decodeHtmlEntities(str: string) {
-		let textarea = document.createElement('textarea');
-		textarea.innerHTML = str;
-		return textarea.value;
-	}
-	function isHtmlEncoded(str: string) {
-		return /&[a-z]+;/i.test(str) || /&#\d+;/.test(str);
-	}
-
 	onMount(() => {
-		handleInputChange(); // Initialize with empty state
+		handleInputChange();
 	});
+
+	const pageTitle = 'TxtWizard | Free Online Text Encoding and Decoding Tool';
+	const pageDescription =
+		'Convert plain text, Base64, Hex, URL encoding, and HTML encoding in a single browser-based tool.';
 </script>
 
-<head>
-	<title>TxtWizard | Free Online Text Encoding and Decoding Tool</title>
-</head>
+<SeoHead title={pageTitle} description={pageDescription} path="/encoding-decoding" />
 
-<h2>{$t('encoding')} & {$t('decoding')} {$t('tool')}</h2>
+<h1>{$t('encoding')} & {$t('decoding')} {$t('tool')}</h1>
 
-<!-- UI Structure -->
 <div class="container">
-	<!-- User Input Box -->
 	<div class="form-group">
 		<label for="userInput">Enter Text</label>
 		<textarea
@@ -180,7 +75,6 @@
 		<small>Detected Encoding: {detectedEncoding}</small>
 	</div>
 
-	<!-- Auto-Converted Fields -->
 	<div class="form-group">
 		<label for="plainText">Plain Text</label>
 		<textarea id="plainText" bind:value={plainText} rows={calculateRows(plainTextLength)} readonly
@@ -227,7 +121,7 @@
 		including Base64, Hexadecimal, URL Encoding, and HTML Encoding. Whether you're a developer, a
 		cybersecurity enthusiast, or just someone looking to convert text formats, our tool provides an
 		easy-to-use interface for all your encoding and decoding needs. You can input your plain text
-		and convert it into different formats, or reverse encoded text back into its original form—all
+		and convert it into different formats, or reverse encoded text back into its original formâ€”all
 		in one convenient place.
 	</p>
 
@@ -264,7 +158,7 @@
 	<p>
 		This tool allows you to enter your text and instantly see the converted output in different
 		encoding formats. If you have encoded text, the tool will automatically detect the format and
-		convert it back to plain text for you. Here’s how to use it:
+		convert it back to plain text for you. Hereâ€™s how to use it:
 	</p>
 	<ol>
 		<li>
@@ -337,7 +231,6 @@
 
 <style>
 	.container {
-		/* max-width: 800px; */
 		margin: 20px auto;
 		padding: 20px;
 		border: 1px solid #ccc;

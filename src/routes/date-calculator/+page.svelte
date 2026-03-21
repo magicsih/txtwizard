@@ -1,5 +1,10 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
+	import {
+		addOrSubtractDays as calculateShiftedDate,
+		calculateDateDifference as getDateDifference
+	} from '$lib/utils/date-calculator';
 
 	let startDate = '';
 	let endDate = '';
@@ -10,44 +15,33 @@
 	let calculatedDate = '';
 
 	function calculateDateDifference() {
-		const start = new Date(startDate);
-		const end = new Date(endDate);
+		const result = getDateDifference(startDate, endDate);
+		if (result === null) {
+			dayDifference = 0;
+			alert($t('invalid_date_format'));
+			return;
+		}
 
-		// Check if the dates are valid
-		 if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-            dayDifference = 0;
-            alert( $t('invalid_date_format') );
-            return;  // Exit the function if the date is invalid
-        }
-
-		const diffInMs = Math.abs(end.getTime() - start.getTime());
-		dayDifference = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+		dayDifference = result;
 	}
 
 	function addOrSubtractDays() {
-		const base = new Date(baseDate);
+		const result = calculateShiftedDate(baseDate, daysToAdd);
+		if (result === null) {
+			calculatedDate = '';
+			alert($t('invalid_date_format'));
+			return;
+		}
 
-		// Check if the date is valid
-        if (isNaN(base.getTime())) {
-            calculatedDate = '';
-            alert( $t('invalid_date_format') );
-            return;  // Exit if the date is invalid
-        }
-
-		const newDate = new Date(base);
-		newDate.setDate(base.getDate() + daysToAdd);
-
-		calculatedDate = newDate.toISOString().slice(0, 10);
+		calculatedDate = result;
 	}
+
+	const pageTitle = 'TxtWizard | Date Calculator Tool';
+	const pageDescription =
+		'Calculate day differences between dates or add and subtract days from a selected date in your browser.';
 </script>
 
-<head>
-	<title>TxtWizard | Date Calculator Tool</title>
-	<meta
-		name="description"
-		content="Free online Date Calculator tool. Calculate the number of days between two dates or add/subtract days from a date."
-	/>
-</head>
+<SeoHead title={pageTitle} description={pageDescription} path="/date-calculator" />
 
 <header>
 	<h1>{$t('date-calculator')} {$t('tool')}</h1>
@@ -55,7 +49,6 @@
 
 <main>
 	<section class="container" aria-label="Date Calculator Tool">
-		<!-- Date Difference Calculator -->
 		<div class="tab">
 			<h2>{$t('date_difference')}</h2>
 			<div class="form-group">
@@ -74,7 +67,6 @@
 			{/if}
 		</div>
 
-		<!-- Add/Subtract Days from a Date -->
 		<div class="tab">
 			<h2>{$t('add_subtract_days')}</h2>
 			<div class="form-group">
@@ -156,4 +148,3 @@
 		font-weight: bold;
 	}
 </style>
-

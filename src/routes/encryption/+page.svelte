@@ -1,10 +1,21 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
-	import { Buffer } from 'buffer';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
+	import {
+		AES_ALGORITHM_CONFIG,
+		convertEncoding,
+		encryptText,
+		generateRandomBytes,
+		getBitLength,
+		getByteLength,
+		importAesKey,
+		type AesAlgorithm,
+		type BinaryEncoding
+	} from '$lib/utils/crypto';
 
 	let values = {
-		algorithm: 'AES-GCM',
+		algorithm: 'AES-GCM' as AesAlgorithm,
 		key: '',
 		iv: '',
 		keyFieldSize: 0,
@@ -13,74 +24,46 @@
 		outEncryptedText: ''
 	};
 
-	let encodingFormat: 'base64' | 'hex' = 'base64'; // Default encoding format
-	let previousEncodingFormat: 'base64' | 'hex' = 'base64'; // Track previous encoding format for conversion
-
-	const algorithmSet: Record<string, { keySize: number[]; ivSize: number }> = {
-		'AES-CBC': { keySize: [16, 32], ivSize: 16 },
-		'AES-GCM': { keySize: [16, 32], ivSize: 12 }
-	};
-
+	let encodingFormat: BinaryEncoding = 'base64';
+	let previousEncodingFormat: BinaryEncoding = 'base64';
 	let cryptoKey: CryptoKey | null = null;
 
 	function handleChangeAlgorithm(event: Event) {
 		const target = event.target as HTMLSelectElement;
-		values.algorithm = target.value;
+		values.algorithm = target.value as AesAlgorithm;
 	}
 
 	async function handleOnChangeKey(event: Event) {
 		const target = event.target as HTMLInputElement | null;
-		if (!target) return; // Handle null case
+		if (!target) return;
 		values.key = target.value;
-		values.keyFieldSize = Buffer.from(target.value, encodingFormat).length * 8;
-
-		const rawKey = Buffer.from(values.key, encodingFormat);
-		cryptoKey = await window.crypto.subtle.importKey(
-			'raw',
-			rawKey,
-			{ name: values.algorithm },
-			false,
-			['encrypt', 'decrypt']
-		);
+		values.keyFieldSize = values.key ? getBitLength(values.key, encodingFormat) : 0;
+		cryptoKey = await importAesKey(values.key, values.algorithm, encodingFormat);
 	}
 
 	function handleOnChangeIV(event: Event) {
 		const target = event.target as HTMLInputElement | null;
-		if (!target) return; // Handle null case
+		if (!target) return;
 		values.iv = target.value;
-		values.ivFieldSize = Buffer.from(target.value, encodingFormat).length * 8;
+		values.ivFieldSize = values.iv ? getBitLength(values.iv, encodingFormat) : 0;
 	}
 
 	function handleOnChangeTargetPlainText(event: Event) {
 		const target = event.target as HTMLTextAreaElement | null;
-		if (!target) return; // Handle null case
+		if (!target) return;
 		values.targetPlainText = target.value;
 	}
 
-	async function generateRandomBytes(size: number) {
-		const array = new Uint8Array(size);
-		window.crypto.getRandomValues(array);
-		return Buffer.from(array);
-	}
-
 	async function handleOnClickRandomKey(bitSize: number) {
-		const randomBuffer = await generateRandomBytes(
-			algorithmSet[values.algorithm].keySize[bitSize === 128 ? 0 : 1]
-		);
+		const config = AES_ALGORITHM_CONFIG[values.algorithm];
+		const randomBuffer = generateRandomBytes(config.keySizes[bitSize === 128 ? 0 : 1]);
 		values.key = randomBuffer.toString(encodingFormat);
 		values.keyFieldSize = randomBuffer.length * 8;
-
-		cryptoKey = await window.crypto.subtle.importKey(
-			'raw',
-			randomBuffer,
-			{ name: values.algorithm },
-			false,
-			['encrypt', 'decrypt']
-		);
+		cryptoKey = await importAesKey(values.key, values.algorithm, encodingFormat);
 	}
 
-	async function handleOnClickRandomIV() {
-		const randomBuffer = await generateRandomBytes(algorithmSet[values.algorithm].ivSize);
+	function handleOnClickRandomIV() {
+		const randomBuffer = generateRandomBytes(AES_ALGORITHM_CONFIG[values.algorithm].ivSize);
 		values.iv = randomBuffer.toString(encodingFormat);
 		values.ivFieldSize = randomBuffer.length * 8;
 	}
@@ -92,16 +75,13 @@
 				return;
 			}
 
-			const ivBuffer = Buffer.from(values.iv, encodingFormat);
-			const plainTextBuffer = Buffer.from(values.targetPlainText, 'utf-8');
-
-			const encrypted = await window.crypto.subtle.encrypt(
-				{ name: values.algorithm, iv: ivBuffer },
-				cryptoKey,
-				plainTextBuffer
-			);
-
-			values.outEncryptedText = Buffer.from(new Uint8Array(encrypted)).toString(encodingFormat);
+			values.outEncryptedText = await encryptText({
+				algorithm: values.algorithm,
+				encoding: encodingFormat,
+				key: cryptoKey,
+				iv: values.iv,
+				plainText: values.targetPlainText
+			});
 		} catch (error) {
 			console.error('Error during encryption:', error);
 		} finally {
@@ -112,65 +92,80 @@
 				iv_length: values.iv.length,
 				plain_text_length: values.targetPlainText.length,
 				encrypted_text_length: values.outEncryptedText.length,
-				non_empty: values.targetPlainText.length > 0 ? 1 : 0 // Track if the plain text is non-empty
+				non_empty: values.targetPlainText.length > 0 ? 1 : 0
 			});
 		}
 	}
 
-	// Function to convert values between Base64 and Hex formats
-	function convertEncoding(value: string, from: 'base64' | 'hex', to: 'base64' | 'hex'): string {
-		try {
-			return Buffer.from(value, from).toString(to);
-		} catch (error) {
-			alert('Error converting value: Invalid format for ' + from + ' encoding');
-			throw error;
-		}
-	}
-
-	// Function triggered when encoding format is changed
 	function handleEncodingChange(event: Event) {
 		const target = event.target as HTMLSelectElement;
-		const newEncoding = target.value as 'base64' | 'hex';
+		const newEncoding = target.value as BinaryEncoding;
 
 		try {
-			// Convert all values when encoding changes
 			if (values.key) values.key = convertEncoding(values.key, previousEncodingFormat, newEncoding);
 			if (values.iv) values.iv = convertEncoding(values.iv, previousEncodingFormat, newEncoding);
-			if (values.outEncryptedText)
+			if (values.outEncryptedText) {
 				values.outEncryptedText = convertEncoding(
 					values.outEncryptedText,
 					previousEncodingFormat,
 					newEncoding
 				);
+			}
 
-			// Update field sizes
-			values.keyFieldSize = Buffer.from(values.key, newEncoding).length * 8;
-			values.ivFieldSize = Buffer.from(values.iv, newEncoding).length * 8;
-
-			previousEncodingFormat = newEncoding; // Set new format as the current format
-			encodingFormat = newEncoding; // Update the current encoding format
+			values.keyFieldSize = values.key ? getBitLength(values.key, newEncoding) : 0;
+			values.ivFieldSize = values.iv ? getBitLength(values.iv, newEncoding) : 0;
+			previousEncodingFormat = newEncoding;
+			encodingFormat = newEncoding;
 		} catch (error) {
-			// In case of an error during conversion, we reset to previous format
 			encodingFormat = previousEncodingFormat;
 			console.error('Error during encoding conversion:', error);
-			return;
 		}
 	}
 
-	// Function to get byte length of a string in the current encoding
-	function getByteLength(value: string, encoding: 'base64' | 'hex' | 'utf-8') {
-		return Buffer.from(value, encoding).length;
-	}
+	const pageTitle = 'TxtWizard | Free Online Text Encryption Tool - AES/GCM, AES/CBC';
+	const pageDescription =
+		'Encrypt text with AES-GCM or AES-CBC in the browser and work with Base64 or Hex encoded keys, IVs, and ciphertext.';
+	const faqStructuredData = {
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: [
+			{
+				'@type': 'Question',
+				name: 'Which AES modes are supported?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'This page supports AES-GCM and AES-CBC.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'Can I generate a random key and IV here?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'Yes. You can generate random AES keys and IVs directly in the browser.'
+				}
+			},
+			{
+				'@type': 'Question',
+				name: 'Is the plaintext uploaded anywhere?',
+				acceptedAnswer: {
+					'@type': 'Answer',
+					text: 'No. Encryption runs locally in the browser.'
+				}
+			}
+		]
+	};
 </script>
 
-<head>
-	<title>TxtWizard | Free Online Text Encrypting Tool - AES/GCM, AES/CBC</title>
-</head>
+<SeoHead
+	title={pageTitle}
+	description={pageDescription}
+	path="/encryption"
+	structuredData={faqStructuredData}
+/>
 
-<h2>{$t('encryption')} {$t('tool')} - AES/GCM, AES/CBC</h2>
-<!-- UI Structure -->
+<h1>{$t('encryption')} {$t('tool')} - AES/GCM, AES/CBC</h1>
 <div class="container">
-	<!-- Encoding Format Selection -->
 	<div class="form-group">
 		<label for="encoding">Encoding Format</label>
 		<select id="encoding" bind:value={encodingFormat} on:change={handleEncodingChange}>
@@ -179,7 +174,6 @@
 		</select>
 	</div>
 
-	<!-- Algorithm Selection -->
 	<div class="form-group">
 		<label for="algorithm">Algorithm</label>
 		<select id="algorithm" bind:value={values.algorithm} on:change={handleChangeAlgorithm}>
@@ -188,7 +182,6 @@
 		</select>
 	</div>
 
-	<!-- Key Input -->
 	<div class="form-group">
 		<label for="key">Key ({encodingFormat})</label>
 		<input type="text" id="key" bind:value={values.key} on:input={handleOnChangeKey} />
@@ -201,7 +194,6 @@
 		>
 	</div>
 
-	<!-- IV Input -->
 	<div class="form-group">
 		<label for="iv">IV ({encodingFormat})</label>
 		<input type="text" id="iv" bind:value={values.iv} on:input={handleOnChangeIV} />
@@ -213,7 +205,6 @@
 		>
 	</div>
 
-	<!-- Plain Text Input -->
 	<div class="form-group">
 		<label for="plaintext">Plain Text (UTF-8)</label>
 		<textarea
@@ -229,12 +220,10 @@
 		>
 	</div>
 
-	<!-- Encrypt Button -->
 	<div class="form-group">
 		<button on:click={encrypt}>{$t('encrypt-button')}</button>
 	</div>
 
-	<!-- Encrypted Text Output -->
 	<div class="form-group">
 		<label for="encryptedtext">Encrypted Text ({encodingFormat})</label>
 		<textarea id="encryptedtext" bind:value={values.outEncryptedText} rows="4" readonly></textarea>
@@ -274,6 +263,16 @@
 		sensitive data. With options like AES-GCM and AES-CBC, this tool provides flexibility in
 		choosing the best encryption mode for your needs.
 	</p>
+
+	<h3>Frequently Asked Questions</h3>
+	<dl>
+		<dt>Which AES modes are supported?</dt>
+		<dd>This page supports AES-GCM and AES-CBC.</dd>
+		<dt>Can I generate a random key and IV here?</dt>
+		<dd>Yes. You can generate random AES keys and IVs directly in the browser.</dd>
+		<dt>Is the plaintext uploaded anywhere?</dt>
+		<dd>No. Encryption runs locally in the browser.</dd>
+	</dl>
 </div>
 
 <style>

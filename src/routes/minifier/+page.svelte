@@ -1,74 +1,20 @@
 <script lang="ts">
+	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
-	import { Buffer } from 'buffer';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
+	import {
+		detectLanguageFromFilename,
+		getCodeSizeMetrics,
+		minifyCode,
+		type MinifierLanguage
+	} from '$lib/utils/minifier';
 
-	type Language = 'HTML' | 'CSS' | 'JavaScript';
-	let selectedLanguage: Language = 'HTML';
-
+	let selectedLanguage: MinifierLanguage = 'HTML';
 	let inputCode = '';
 	let outputCode = '';
-
 	let inputSize = 0;
 	let outputSize = 0;
 	let savedBytes = 0;
-
-	function minifyHTML(html: string): string {
-		return html
-			.replace(/<!--[\s\S]*?-->/g, '') // remove comments
-			.replace(/>\s+</g, '><') // remove whitespace between tags
-			.replace(/\s+/g, ' ') // collapse whitespace
-			.trim();
-	}
-
-	function minifyCSS(css: string): string {
-		let minified = css
-			.replace(/\/\*[\s\S]*?\*\//g, '') // remove comments
-			.replace(/\s+/g, ' ') // collapse whitespace
-			.replace(/\s*([;:{},])\s*/g, '$1') // remove whitespace around delimiters
-			.replace(/;}/g, '}'); // remove trailing semicolons in blocks
-
-		// Optimize color values
-		minified = minified.replace(
-			/#([0-9a-fA-F])\1([0-9a-fA-F])\2([0-9a-fA-F])\3/gi,
-			'#$1$2$3'
-		);
-
-		// Optimize zero values
-		minified = minified.replace(/:\s*0(px|em|%|pt|pc|in|cm|mm|ex|rem)/g, ':0');
-		minified = minified.replace(/\s0(px|em|%|pt|pc|in|cm|mm|ex|rem)/g, ' 0');
-
-		return minified.trim();
-	}
-
-	function minifyJS(js: string): string {
-		// Improved, conservative inline JS minifier:
-		// - remove block comments
-		// - remove line comments (avoiding http://)
-		// - trim lines, join into one line, collapse spaces
-		// - tighten spaces around safe punctuation
-
-		let noComments = js.replace(/\/\*[\s\S]*?\*\//g, '');
-		// remove // comments but avoid URLs or protocol-like sequences
-		noComments = noComments.replace(/(^|[^:])\/\/.*$/gm, '$1');
-
-		const lines = noComments
-			.split(/\r?\n/)
-			.map((l: string) => l.trim())
-			.filter((l: string) => l.length > 0);
-
-		let joined = lines.join(' ');
-
-		// collapse whitespace
-		joined = joined.replace(/\s+/g, ' ');
-
-		// tighten spaces around punctuation, but preserve spaces around keywords/identifiers
-		// Only remove spaces around punctuation when not between word characters
-		joined = joined.replace(/(\W)\s*([;,:{}()\[\]=+\-*/%<>?&|^~!])\s*/g, '$1$2');
-		joined = joined.replace(/\s*([;,:{}()\[\]=+\-*/%<>?&|^~!])(\W)/g, '$1$2');
-
-		return joined.trim();
-	}
 
 	function minify() {
 		if (!inputCode) {
@@ -76,17 +22,7 @@
 			return;
 		}
 
-		switch (selectedLanguage) {
-			case 'HTML':
-				outputCode = minifyHTML(inputCode);
-				break;
-			case 'CSS':
-				outputCode = minifyCSS(inputCode);
-				break;
-			case 'JavaScript':
-				outputCode = minifyJS(inputCode);
-				break;
-		}
+		outputCode = minifyCode(inputCode, selectedLanguage);
 		trackToolsUsageEvent('minifier', 'minify', {
 			language: selectedLanguage,
 			input_length: inputCode.length
@@ -105,42 +41,25 @@
 	async function handleFileUpload(event: Event) {
 		const target = event.target as HTMLInputElement;
 		const file = target.files?.[0];
-		if (file) {
-			inputCode = await file.text();
-			const extension = file.name.split('.').pop()?.toLowerCase();
-			if (extension === 'html' || extension === 'htm') {
-				selectedLanguage = 'HTML';
-			} else if (extension === 'css') {
-				selectedLanguage = 'CSS';
-			} else if (extension === 'js') {
-				selectedLanguage = 'JavaScript';
-			}
-		}
+		if (!file) return;
+
+		inputCode = await file.text();
+		selectedLanguage = detectLanguageFromFilename(file.name) ?? selectedLanguage;
 	}
 
 	$: {
-		inputSize = Buffer.byteLength(inputCode, 'utf-8');
-		if (outputCode) {
-			outputSize = Buffer.byteLength(outputCode, 'utf-8');
-			savedBytes = inputSize - outputSize;
-		} else {
-			outputSize = 0;
-			savedBytes = 0;
-		}
+		const metrics = getCodeSizeMetrics(inputCode, outputCode);
+		inputSize = metrics.inputSize;
+		outputSize = metrics.outputSize;
+		savedBytes = metrics.savedBytes;
 	}
+
+	const pageTitle = 'TxtWizard | Code Minifier - HTML, CSS, JS';
+	const pageDescription =
+		'Minify HTML, CSS, and JavaScript in your browser to reduce file size and clean up code output.';
 </script>
 
-<head>
-	<title>Code Minifier - HTML, CSS, JS | TxtWizard</title>
-	<meta
-		name="description"
-		content="Free online code minifier for HTML, CSS, and JavaScript. Reduce file size and improve website performance by removing unnecessary characters from your code."
-	/>
-	<meta
-		name="keywords"
-		content="minify, minifier, html, css, javascript, code, compress, optimizer, online tool"
-	/>
-</head>
+<SeoHead title={pageTitle} description={pageDescription} path="/minifier" />
 
 <header>
 	<h1>{$t('code-minifier')} {$t('tool')}</h1>
@@ -320,4 +239,3 @@
 		padding-left: 20px;
 	}
 </style>
-
