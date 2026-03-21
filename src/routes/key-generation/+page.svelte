@@ -213,7 +213,6 @@
 		padding-left: 20px;
 	}
 
-	h2,
 	h3 {
 		margin-bottom: 15px;
 	}
