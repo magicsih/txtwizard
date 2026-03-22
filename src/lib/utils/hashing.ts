@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import { sha256, sha384, sha512, sha224, sha512_256 } from '@noble/hashes/sha2';
+import { sha256, sha384, sha512, sha224, sha512_256 } from '@noble/hashes/sha2.js';
 import {
 	sha3_224,
 	sha3_256,
@@ -9,12 +9,10 @@ import {
 	keccak_256,
 	keccak_384,
 	keccak_512
-} from '@noble/hashes/sha3';
-import { ripemd160 } from '@noble/hashes/ripemd160';
-import { blake3 } from '@noble/hashes/blake3';
-import { blake2b } from '@noble/hashes/blake2b';
-import { blake2s } from '@noble/hashes/blake2s';
-import { sha1 } from '@noble/hashes/sha1';
+} from '@noble/hashes/sha3.js';
+import { ripemd160, sha1 } from '@noble/hashes/legacy.js';
+import { blake3 } from '@noble/hashes/blake3.js';
+import { blake2b, blake2s } from '@noble/hashes/blake2.js';
 
 export const HASH_ALGORITHMS = [
 	'SHA-1',
