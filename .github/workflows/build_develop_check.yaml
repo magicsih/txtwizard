@@ -1,4 +1,4 @@
-name: Check Svelte TypeScript Linting
+name: Build Check (Develop)
 
 on:
   push:
@@ -13,7 +13,7 @@ on:
       - 'README.md'
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,8 +29,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # - name: Run ESLint
-      #   run: npm run lint
-
-      - name: Run Type Check
-        run: npm run check
+      - name: Build
+        run: npm run build
