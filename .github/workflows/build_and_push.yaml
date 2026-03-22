@@ -26,7 +26,7 @@ jobs:
       image_digest: ${{ steps.docker_build.outputs.digest }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Generate build info
         run: |
