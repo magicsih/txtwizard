@@ -19,7 +19,7 @@
     "decoding": "Decodificação",
     "encryption-intro": "Criptografe dados confidenciais usando AES-GCM ou AES-CBC.",
     "decryption-intro": "Descriptografe dados criptografados com AES para o formato original.",
-    "jwt-intro": "Decode JSON Web Tokens, inspect claims, and verify signatures in your browser.",
+    "jwt-intro": "Decodifique JSON Web Tokens, inspecione declarações (claims) e verifique assinaturas diretamente no seu navegador.",
     "hashing-intro": "Crie hashes criptográficos como MD5, SHA1, SHA256 e outros.",
     "compression-intro": "Comprime texto usando Gzip, Bzip2 e Deflate.",
     "keygen-intro": "Gere pares de chaves Bitcoin e Ethereum diretamente no navegador.",
