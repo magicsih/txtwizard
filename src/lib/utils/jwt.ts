@@ -59,12 +59,6 @@ const ECDSA_CURVE_BY_ALG = {
 	ES512: 'P-521'
 } as const;
 
-const ECDSA_SIGNATURE_PART_LENGTH = {
-	ES256: 32,
-	ES384: 48,
-	ES512: 66
-} as const;
-
 const RSA_PSS_SALT_LENGTH = {
 	PS256: 32,
 	PS384: 48,
@@ -171,7 +165,7 @@ export async function verifyJwtSignature(params: {
 	}
 
 	const data = textEncoder.encode(parsed.signingInput);
-	const signature = toArrayBuffer(normalizeSignatureForVerify(parsed.signature, algorithm));
+	const signature = toArrayBuffer(parsed.signature);
 	const cryptoKey = await importVerificationKey(algorithm, params.key, params.secretEncoding ?? 'utf-8');
 	const verificationParams = getVerificationParams(algorithm);
 	const isValid = await crypto.subtle.verify(verificationParams, cryptoKey, signature, data);
@@ -217,7 +211,7 @@ export async function generateJwt(params: {
 		cryptoKey,
 		textEncoder.encode(signingInput)
 	);
-	const signatureBytes = normalizeSignatureForOutput(new Uint8Array(signature), algorithm);
+	const signatureBytes = new Uint8Array(signature);
 
 	return {
 		token: `${signingInput}.${encodeBase64Url(signatureBytes)}`,
@@ -474,158 +468,10 @@ function decodePemPrivateKey(pem: string): Uint8Array {
 	return Uint8Array.from(Buffer.from(body, 'base64'));
 }
 
-function normalizeSignatureForVerify(signature: Uint8Array, algorithm: string): Uint8Array {
-	if (!algorithm.startsWith('ES')) {
-		return signature;
-	}
-
-	const partLength = ECDSA_SIGNATURE_PART_LENGTH[algorithm as keyof typeof ECDSA_SIGNATURE_PART_LENGTH];
-	if (signature.length !== partLength * 2) {
-		throw new Error(`Invalid ${algorithm} signature length.`);
-	}
-
-	return joseToDer(signature, partLength);
-}
-
-function normalizeSignatureForOutput(signature: Uint8Array, algorithm: string): Uint8Array {
-	if (!algorithm.startsWith('ES')) {
-		return signature;
-	}
-
-	const partLength = ECDSA_SIGNATURE_PART_LENGTH[algorithm as keyof typeof ECDSA_SIGNATURE_PART_LENGTH];
-	return derToJose(signature, partLength);
-}
-
-function joseToDer(signature: Uint8Array, partLength: number): Uint8Array {
-	const r = trimLeadingZeros(signature.slice(0, partLength));
-	const s = trimLeadingZeros(signature.slice(partLength));
-
-	const derR = needsDerPadding(r) ? prependZero(r) : r;
-	const derS = needsDerPadding(s) ? prependZero(s) : s;
-	const payloadLength = 2 + derR.length + 2 + derS.length;
-
-	return Uint8Array.from([
-		0x30,
-		...encodeDerLength(payloadLength),
-		0x02,
-		...encodeDerLength(derR.length),
-		...derR,
-		0x02,
-		...encodeDerLength(derS.length),
-		...derS
-	]);
-}
-
-function trimLeadingZeros(value: Uint8Array): Uint8Array {
-	let index = 0;
-	while (index < value.length - 1 && value[index] === 0) {
-		index += 1;
-	}
-
-	return value.slice(index);
-}
-
-function needsDerPadding(value: Uint8Array): boolean {
-	return value.length > 0 && (value[0] & 0x80) === 0x80;
-}
-
-function prependZero(value: Uint8Array): Uint8Array {
-	return Uint8Array.from([0, ...value]);
-}
-
-function encodeDerLength(length: number): number[] {
-	if (length < 0x80) {
-		return [length];
-	}
-
-	const bytes: number[] = [];
-	let remaining = length;
-
-	while (remaining > 0) {
-		bytes.unshift(remaining & 0xff);
-		remaining >>= 8;
-	}
-
-	return [0x80 | bytes.length, ...bytes];
-}
-
 function toArrayBuffer(value: Uint8Array): ArrayBuffer {
 	return value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength) as ArrayBuffer;
 }
 
 function encodeBase64UrlJson(value: JwtValue): string {
 	return encodeBase64Url(textEncoder.encode(JSON.stringify(value)));
-}
-
-function derToJose(signature: Uint8Array, partLength: number): Uint8Array {
-	let offset = 0;
-
-	if (signature[offset++] !== 0x30) {
-		throw new Error('Invalid DER ECDSA signature.');
-	}
-
-	const sequenceLength = readDerLength(signature, offset);
-	offset = sequenceLength.nextOffset;
-
-	if (signature[offset++] !== 0x02) {
-		throw new Error('Invalid DER ECDSA signature.');
-	}
-
-	const rLength = readDerLength(signature, offset);
-	offset = rLength.nextOffset;
-	const r = signature.slice(offset, offset + rLength.length);
-	offset += rLength.length;
-
-	if (signature[offset++] !== 0x02) {
-		throw new Error('Invalid DER ECDSA signature.');
-	}
-
-	const sLength = readDerLength(signature, offset);
-	offset = sLength.nextOffset;
-	const s = signature.slice(offset, offset + sLength.length);
-	offset += sLength.length;
-
-	if (offset !== signature.length || sequenceLength.length <= 0) {
-		throw new Error('Invalid DER ECDSA signature length.');
-	}
-
-	return Uint8Array.from([
-		...leftPad(trimLeadingZeros(r), partLength),
-		...leftPad(trimLeadingZeros(s), partLength)
-	]);
-}
-
-function readDerLength(value: Uint8Array, offset: number): { length: number; nextOffset: number } {
-	const first = value[offset];
-	if (first === undefined) {
-		throw new Error('Invalid DER length.');
-	}
-
-	if ((first & 0x80) === 0) {
-		return { length: first, nextOffset: offset + 1 };
-	}
-
-	const byteCount = first & 0x7f;
-	if (byteCount === 0 || byteCount > 4) {
-		throw new Error('Unsupported DER length encoding.');
-	}
-
-	let length = 0;
-	for (let index = 0; index < byteCount; index += 1) {
-		length = (length << 8) | value[offset + 1 + index];
-	}
-
-	return { length, nextOffset: offset + 1 + byteCount };
-}
-
-function leftPad(value: Uint8Array, length: number): Uint8Array {
-	if (value.length > length) {
-		throw new Error('ECDSA signature part is longer than expected.');
-	}
-
-	if (value.length === length) {
-		return value;
-	}
-
-	return Uint8Array.from([...new Uint8Array(length - value.length), ...value]);
 }
