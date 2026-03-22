@@ -177,9 +177,14 @@ export async function verifyJwtSignature(params: {
 	let isValid = false;
 
 	for (const signature of verificationSignatures) {
-		isValid = await crypto.subtle.verify(verificationParams, cryptoKey, signature, data);
-		if (isValid) {
-			break;
+		try {
+			isValid = await crypto.subtle.verify(verificationParams, cryptoKey, signature, data);
+			if (isValid) {
+				break;
+			}
+		} catch {
+			// Some runtimes reject mismatched ECDSA signature formats instead of returning false.
+			// Keep trying the remaining candidate encodings.
 		}
 	}
 
@@ -481,19 +486,6 @@ function decodePemPrivateKey(pem: string): Uint8Array {
 	return Uint8Array.from(Buffer.from(body, 'base64'));
 }
 
-function normalizeSignatureForVerify(signature: Uint8Array, algorithm: string): Uint8Array {
-	if (!algorithm.startsWith('ES')) {
-		return signature;
-	}
-
-	const partLength = ECDSA_SIGNATURE_PART_LENGTH[algorithm as keyof typeof ECDSA_SIGNATURE_PART_LENGTH];
-	if (signature.length !== partLength * 2) {
-		throw new Error(`Invalid ${algorithm} signature length.`);
-	}
-
-	return joseToDer(signature, partLength);
-}
-
 function normalizeSignatureForOutput(signature: Uint8Array, algorithm: string): Uint8Array {
 	if (!algorithm.startsWith('ES')) {
 		return signature;
@@ -520,15 +512,32 @@ function getVerificationSignatures(signature: Uint8Array, algorithm: string): Ar
 		return [toArrayBuffer(signature)];
 	}
 
-	const normalized = normalizeSignatureForVerify(signature, algorithm);
-	const rawBuffer = toArrayBuffer(signature);
-	const normalizedBuffer = toArrayBuffer(normalized);
+	const candidates: ArrayBuffer[] = [toArrayBuffer(signature)];
+	const partLength = ECDSA_SIGNATURE_PART_LENGTH[algorithm as keyof typeof ECDSA_SIGNATURE_PART_LENGTH];
 
-	if (buffersEqual(rawBuffer, normalizedBuffer)) {
-		return [rawBuffer];
+	try {
+		const joseCandidate =
+			signature.length === partLength * 2 ? signature : derToJose(signature, partLength);
+		const joseBuffer = toArrayBuffer(joseCandidate);
+		if (!candidates.some((candidate) => buffersEqual(candidate, joseBuffer))) {
+			candidates.push(joseBuffer);
+		}
+	} catch {
+		// Ignore conversion failure and fall back to the original signature bytes.
 	}
 
-	return [rawBuffer, normalizedBuffer];
+	try {
+		const derCandidate =
+			signature.length === partLength * 2 ? joseToDer(signature, partLength) : signature;
+		const derBuffer = toArrayBuffer(derCandidate);
+		if (!candidates.some((candidate) => buffersEqual(candidate, derBuffer))) {
+			candidates.push(derBuffer);
+		}
+	} catch {
+		// Ignore conversion failure and fall back to the original signature bytes.
+	}
+
+	return candidates;
 }
 
 function joseToDer(signature: Uint8Array, partLength: number): Uint8Array {

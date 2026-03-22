@@ -16,6 +16,54 @@ function createSigningInput(header: Record<string, unknown>, payload: Record<str
 	return `${toBase64Url(encoder.encode(JSON.stringify(header)))}.${toBase64Url(encoder.encode(JSON.stringify(payload)))}`;
 }
 
+function joseToDer(signature: Uint8Array, partLength: number): Uint8Array {
+	const r = trimLeadingZeros(signature.slice(0, partLength));
+	const s = trimLeadingZeros(signature.slice(partLength));
+	const derR = needsDerPadding(r) ? Uint8Array.from([0, ...r]) : r;
+	const derS = needsDerPadding(s) ? Uint8Array.from([0, ...s]) : s;
+	const payloadLength = 2 + derR.length + 2 + derS.length;
+
+	return Uint8Array.from([
+		0x30,
+		...encodeDerLength(payloadLength),
+		0x02,
+		...encodeDerLength(derR.length),
+		...derR,
+		0x02,
+		...encodeDerLength(derS.length),
+		...derS
+	]);
+}
+
+function trimLeadingZeros(value: Uint8Array): Uint8Array {
+	let index = 0;
+	while (index < value.length - 1 && value[index] === 0) {
+		index += 1;
+	}
+
+	return value.slice(index);
+}
+
+function needsDerPadding(value: Uint8Array): boolean {
+	return value.length > 0 && (value[0] & 0x80) === 0x80;
+}
+
+function encodeDerLength(length: number): number[] {
+	if (length < 0x80) {
+		return [length];
+	}
+
+	const bytes: number[] = [];
+	let remaining = length;
+
+	while (remaining > 0) {
+		bytes.unshift(remaining & 0xff);
+		remaining >>= 8;
+	}
+
+	return [0x80 | bytes.length, ...bytes];
+}
+
 async function signHs256(signingInput: string, secret: string): Promise<string> {
 	const key = await crypto.subtle.importKey(
 		'raw',
@@ -122,6 +170,32 @@ describe('verifyJwtSignature', () => {
 		});
 
 		await expect(verifyJwtSignature({ token: result.token, key: publicKeyPem })).resolves.toMatchObject({
+			status: 'valid'
+		});
+	});
+
+	it('verifies an ES256 token whose signature segment is DER encoded', async () => {
+		const keyPair = await crypto.subtle.generateKey(
+			{
+				name: 'ECDSA',
+				namedCurve: 'P-256'
+			},
+			true,
+			['sign', 'verify']
+		);
+		const signingInput = createSigningInput({ alg: 'ES256', typ: 'JWT' }, { sub: 'der-user' });
+		const signature = await crypto.subtle.sign(
+			{ name: 'ECDSA', hash: 'SHA-256' },
+			keyPair.privateKey,
+			encoder.encode(signingInput)
+		);
+		const rawSignature = new Uint8Array(signature);
+		const derSignature =
+			rawSignature.length === 64 ? joseToDer(rawSignature, 32) : rawSignature;
+		const publicKeyPem = await exportPublicKeyPem(keyPair.publicKey);
+		const token = `${signingInput}.${toBase64Url(derSignature)}`;
+
+		await expect(verifyJwtSignature({ token, key: publicKeyPem })).resolves.toMatchObject({
 			status: 'valid'
 		});
 	});
