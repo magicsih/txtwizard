@@ -13,6 +13,7 @@
 
 	const navItems = [
 		{ href: '/', label: 'home' },
+		{ href: '/jwt', label: 'jwt' },
 		{ href: '/encryption', label: 'encryption' },
 		{ href: '/decryption', label: 'decryption' },
 		{ href: '/encoding-decoding', label: 'encoding' },
