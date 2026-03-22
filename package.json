@@ -40,6 +40,9 @@
 		"vitest": "^2.1.9"
 	},
 	"type": "module",
+	"engines": {
+		"node": ">=20"
+	},
 	"dependencies": {
 		"@noble/hashes": "^1.5.0",
 		"bs58": "^6.0.0",
