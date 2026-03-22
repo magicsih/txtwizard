@@ -124,6 +124,8 @@
 		return 'unknown';
 	}
 
+	$: verificationInputMode = getVerificationInputMode();
+
 	function getGeneratorInputMode() {
 		if (generatorAlgorithm.startsWith('HS')) {
 			return 'secret';
@@ -349,10 +351,10 @@
 			<section>
 				<h3 class="section-title">Registered Claims</h3>
 				<div class="claims-form">
-					<input type="text" bind:value={issuer} placeholder="iss (issuer)" />
-					<input type="text" bind:value={subject} placeholder="sub (subject)" />
-					<input type="text" bind:value={audience} placeholder="aud (audience)" />
-					<input type="text" bind:value={jwtId} placeholder="jti (JWT ID)" />
+					<input type="text" bind:value={issuer} placeholder="iss (issuer)" aria-label="Issuer (iss)" />
+					<input type="text" bind:value={subject} placeholder="sub (subject)" aria-label="Subject (sub)" />
+					<input type="text" bind:value={audience} placeholder="aud (audience)" aria-label="Audience (aud)" />
+					<input type="text" bind:value={jwtId} placeholder="jti (JWT ID)" aria-label="JWT ID (jti)" />
 				</div>
 				<div class="preset-row">
 					<button type="button" class="secondary-button" on:click={applyRegisteredClaims}
@@ -433,17 +435,21 @@
 			<div class="panel-header">
 				<h2>Verification</h2>
 				<p>
-					{#if getVerificationInputMode() === 'secret'}
+					{#if verificationInputMode === 'secret'}
 						Use the same shared secret that signed this token.
-					{:else if getVerificationInputMode() === 'public-key'}
+					{:else if verificationInputMode === 'public-key'}
 						Provide a PEM-encoded public key for asymmetric verification.
-					{:else}
+					{:else if verificationInputMode === 'none'}
 						This token does not require signature verification.
+					{:else if verificationInputMode === 'unsupported'}
+						This algorithm is not supported by this tool and cannot be verified here.
+					{:else}
+						Parse a JWT token to enable verification.
 					{/if}
 				</p>
 			</div>
 
-			{#if getVerificationInputMode() === 'secret'}
+			{#if verificationInputMode === 'secret'}
 				<label for="secret-encoding">Secret Encoding</label>
 				<select id="secret-encoding" bind:value={secretEncoding}>
 					<option value="utf-8">UTF-8 text</option>
@@ -458,7 +464,7 @@
 					bind:value={verificationKey}
 					placeholder="Enter the HMAC secret"
 				/>
-			{:else if getVerificationInputMode() === 'public-key'}
+			{:else if verificationInputMode === 'public-key'}
 				<label for="verification-key">Public Key (PEM)</label>
 				<textarea
 					id="verification-key"
@@ -466,12 +472,16 @@
 					bind:value={verificationKey}
 					placeholder="-----BEGIN PUBLIC KEY-----"
 				></textarea>
-			{:else}
+			{:else if verificationInputMode === 'none'}
 				<p class="notice">Unsigned `alg=none` tokens can be decoded, but there is no signature to verify.</p>
+			{:else if verificationInputMode === 'unsupported'}
+				<p class="notice">This algorithm is not supported by this tool. Signature verification is unavailable.</p>
+			{:else}
+				<p class="notice">Unknown algorithm. Signature verification is unavailable.</p>
 			{/if}
 
 			<div class="actions">
-				<button on:click={handleVerify} disabled={verificationStatus === 'running'}>
+				<button on:click={handleVerify} disabled={verificationStatus === 'running' || verificationInputMode === 'unsupported' || verificationInputMode === 'unknown'}>
 					{verificationStatus === 'running' ? 'Verifying...' : 'Verify Signature'}
 				</button>
 			</div>

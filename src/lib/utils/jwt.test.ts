@@ -151,6 +151,68 @@ describe('generateJwt', () => {
 			status: 'valid'
 		});
 	});
+
+	it('generates and verifies a PS256 token', async () => {
+		const keyPair = await crypto.subtle.generateKey(
+			{
+				name: 'RSA-PSS',
+				modulusLength: 2048,
+				publicExponent: new Uint8Array([1, 0, 1]),
+				hash: 'SHA-256'
+			},
+			true,
+			['sign', 'verify']
+		);
+		const privateKeyPem = await exportPrivateKeyPem(keyPair.privateKey);
+		const publicKeyPem = await exportPublicKeyPem(keyPair.publicKey);
+		const result = await generateJwt({
+			header: { alg: 'PS256', typ: 'JWT' },
+			payload: { sub: 'generated-ps-user' },
+			key: privateKeyPem
+		});
+
+		await expect(verifyJwtSignature({ token: result.token, key: publicKeyPem })).resolves.toMatchObject({
+			status: 'valid'
+		});
+	});
+
+	it('generates and verifies an ES256 token', async () => {
+		const keyPair = await crypto.subtle.generateKey(
+			{ name: 'ECDSA', namedCurve: 'P-256' },
+			true,
+			['sign', 'verify']
+		);
+		const privateKeyPem = await exportPrivateKeyPem(keyPair.privateKey);
+		const publicKeyPem = await exportPublicKeyPem(keyPair.publicKey);
+		const result = await generateJwt({
+			header: { alg: 'ES256', typ: 'JWT' },
+			payload: { sub: 'generated-ec-user' },
+			key: privateKeyPem
+		});
+
+		await expect(verifyJwtSignature({ token: result.token, key: publicKeyPem })).resolves.toMatchObject({
+			status: 'valid'
+		});
+	});
+
+	it('generates and verifies an ES384 token', async () => {
+		const keyPair = await crypto.subtle.generateKey(
+			{ name: 'ECDSA', namedCurve: 'P-384' },
+			true,
+			['sign', 'verify']
+		);
+		const privateKeyPem = await exportPrivateKeyPem(keyPair.privateKey);
+		const publicKeyPem = await exportPublicKeyPem(keyPair.publicKey);
+		const result = await generateJwt({
+			header: { alg: 'ES384', typ: 'JWT' },
+			payload: { sub: 'generated-ec384-user' },
+			key: privateKeyPem
+		});
+
+		await expect(verifyJwtSignature({ token: result.token, key: publicKeyPem })).resolves.toMatchObject({
+			status: 'valid'
+		});
+	});
 });
 
 describe('inspectRegisteredClaims', () => {
