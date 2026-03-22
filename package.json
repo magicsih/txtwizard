@@ -54,6 +54,7 @@
 		"svelte-i18n": "^4.0.0"
 	},
 	"overrides": {
+		"cookie": "^0.7.2",
 		"svelte-i18n": {
 			"esbuild": "^0.25.12"
 		}
