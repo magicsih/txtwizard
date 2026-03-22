@@ -112,10 +112,15 @@
 			return 'none';
 		}
 
-		if (algorithm) {
+		// Known supported public-key algorithms: RS*, PS*, ES*
+		if (algorithm.startsWith('RS') || algorithm.startsWith('PS') || algorithm.startsWith('ES')) {
 			return 'public-key';
 		}
 
+		if (algorithm) {
+			// Non-empty but not supported: treat as unsupported to avoid misleading UI
+			return 'unsupported';
+		}
 		return 'unknown';
 	}
 
