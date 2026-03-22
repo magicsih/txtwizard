@@ -33,6 +33,7 @@
 
 	let generatorAlgorithm: JwtAlgorithm = 'HS256';
 	let generatorSecretEncoding: JwtSecretEncoding = 'utf-8';
+	let previousGeneratorSecretEncoding: JwtSecretEncoding = 'utf-8';
 	let generatorKey = '';
 	let issuer = '';
 	let subject = '';
@@ -56,6 +57,9 @@
 	let parseError = '';
 	let verificationKey = '';
 	let secretEncoding: JwtSecretEncoding = 'utf-8';
+	let previousVerificationSecretEncoding: JwtSecretEncoding = 'utf-8';
+	let verificationInputMode: 'secret' | 'public-key' | 'none' | 'unsupported' | 'unknown' =
+		'unknown';
 	let verificationStatus: 'idle' | 'running' | 'done' = 'idle';
 	let verificationResult = '';
 	let verificationTone: 'neutral' | 'success' | 'danger' | 'warning' = 'neutral';
@@ -87,6 +91,7 @@
 			parsed = null;
 			parseError = '';
 			claimStatuses = [];
+			verificationInputMode = 'unknown';
 			return;
 		}
 
@@ -94,9 +99,11 @@
 			parsed = parseJwt(token);
 			parseError = '';
 			claimStatuses = inspectRegisteredClaims(parsed.payload);
+			verificationInputMode = getVerificationInputMode();
 		} catch (error) {
 			parsed = null;
 			claimStatuses = [];
+			verificationInputMode = 'unknown';
 			parseError = error instanceof Error ? error.message : 'Failed to decode JWT.';
 		}
 	}
@@ -124,8 +131,6 @@
 		return 'unknown';
 	}
 
-	$: verificationInputMode = getVerificationInputMode();
-
 	function getGeneratorInputMode() {
 		if (generatorAlgorithm.startsWith('HS')) {
 			return 'secret';
@@ -150,6 +155,44 @@
 		}
 
 		generatorKey = Buffer.from(randomBytes).toString(generatorSecretEncoding);
+	}
+
+	function handleGeneratorSecretInput(event: Event) {
+		const target = event.target as HTMLInputElement;
+		generatorKey = target.value;
+		generatorSecretEncoding = detectSecretEncoding(target.value, generatorSecretEncoding);
+		previousGeneratorSecretEncoding = generatorSecretEncoding;
+	}
+
+	function handleVerificationSecretInput(event: Event) {
+		const target = event.target as HTMLInputElement;
+		verificationKey = target.value;
+		secretEncoding = detectSecretEncoding(target.value, secretEncoding);
+		previousVerificationSecretEncoding = secretEncoding;
+	}
+
+	function handleGeneratorSecretEncodingChange(event: Event) {
+		const target = event.target as HTMLSelectElement;
+		const nextEncoding = target.value as JwtSecretEncoding;
+		generatorKey = convertSecretEncoding(
+			generatorKey,
+			previousGeneratorSecretEncoding,
+			nextEncoding
+		);
+		generatorSecretEncoding = nextEncoding;
+		previousGeneratorSecretEncoding = nextEncoding;
+	}
+
+	function handleVerificationSecretEncodingChange(event: Event) {
+		const target = event.target as HTMLSelectElement;
+		const nextEncoding = target.value as JwtSecretEncoding;
+		verificationKey = convertSecretEncoding(
+			verificationKey,
+			previousVerificationSecretEncoding,
+			nextEncoding
+		);
+		secretEncoding = nextEncoding;
+		previousVerificationSecretEncoding = nextEncoding;
 	}
 
 	function applyTimeClaimsPreset(durationMinutes: number) {
@@ -197,19 +240,33 @@
 		try {
 			const header = parseJsonObject(generatorHeaderText, 'JWT header');
 			const payload = parseJsonObject(generatorPayloadText, 'JWT payload');
+			const normalizedHeader = {
+				...header,
+				alg: generatorAlgorithm,
+				typ: typeof header.typ === 'string' ? header.typ : 'JWT'
+			};
 			const result = await generateJwt({
-				header: {
-					...header,
-					alg: generatorAlgorithm,
-					typ: typeof header.typ === 'string' ? header.typ : 'JWT'
-				},
+				header: normalizedHeader,
 				payload,
 				key: generatorKey,
 				secretEncoding: generatorSecretEncoding
 			});
 
 			token = result.token;
-			generatorStatus = 'JWT generated and loaded into the decoder below.';
+			if (generatorAlgorithm.startsWith('HS')) {
+				verificationKey = generatorKey;
+				secretEncoding = generatorSecretEncoding;
+				previousVerificationSecretEncoding = generatorSecretEncoding;
+				generatorStatus =
+					'JWT generated, loaded into the decoder, and the HMAC secret was copied to verification.';
+			} else if (generatorAlgorithm === 'none') {
+				verificationKey = '';
+				generatorStatus = 'Unsigned JWT generated and loaded into the decoder below.';
+			} else {
+				verificationKey = '';
+				generatorStatus =
+					'JWT generated and loaded into the decoder below. Verification requires the matching public key.';
+			}
 			generatorTone = 'success';
 			decodeToken();
 		} catch (error) {
@@ -271,6 +328,76 @@
 		delete target[key];
 	}
 
+	function detectSecretEncoding(
+		value: string,
+		currentEncoding: JwtSecretEncoding
+	): JwtSecretEncoding {
+		const trimmedValue = value.trim();
+		if (!trimmedValue) {
+			return currentEncoding;
+		}
+
+		if (isLikelyHex(trimmedValue)) {
+			return 'hex';
+		}
+
+		if (isLikelyBase64(trimmedValue)) {
+			return 'base64';
+		}
+
+		return 'utf-8';
+	}
+
+	function convertSecretEncoding(
+		value: string,
+		fromEncoding: JwtSecretEncoding,
+		toEncoding: JwtSecretEncoding
+	): string {
+		if (!value || fromEncoding === toEncoding) {
+			return value;
+		}
+
+		try {
+			if (fromEncoding === 'utf-8') {
+				return Buffer.from(value, 'utf-8').toString(toEncoding);
+			}
+
+			if (toEncoding === 'utf-8') {
+				return Buffer.from(value, fromEncoding).toString('utf-8');
+			}
+
+			return Buffer.from(value, fromEncoding).toString(toEncoding);
+		} catch {
+			return value;
+		}
+	}
+
+	function isLikelyHex(value: string): boolean {
+		return value.length >= 16 && value.length % 2 === 0 && /^[0-9a-fA-F]+$/.test(value);
+	}
+
+	function isLikelyBase64(value: string): boolean {
+		if (value.length < 8 || /[^A-Za-z0-9+/=]/.test(value) || isLikelyHex(value)) {
+			return false;
+		}
+
+		const normalizedValue = value.replace(/=+$/g, '');
+
+		try {
+			const decoded = Buffer.from(value, 'base64');
+			if (decoded.length === 0) {
+				return false;
+			}
+
+			const reEncoded = decoded.toString('base64').replace(/=+$/g, '');
+			const hasBase64Signal = /[+/=]/.test(value) || /[A-Z]/.test(value) || /\d/.test(value);
+
+			return hasBase64Signal && reEncoded === normalizedValue;
+		} catch {
+			return false;
+		}
+	}
+
 	const pageTitle = 'TxtWizard | Free Online JWT Decoder, Generator, and Verification Viewer';
 	const pageDescription =
 		'Generate JWTs, decode headers and claims, inspect exp/nbf/iat, and verify HS, RS, PS, or ES signatures directly in your browser.';
@@ -308,7 +435,11 @@
 			{#if getGeneratorInputMode() === 'secret'}
 				<div>
 					<label for="generator-secret-encoding">Secret Encoding</label>
-					<select id="generator-secret-encoding" bind:value={generatorSecretEncoding}>
+					<select
+						id="generator-secret-encoding"
+						bind:value={generatorSecretEncoding}
+						on:change={handleGeneratorSecretEncodingChange}
+					>
 						<option value="utf-8">UTF-8 text</option>
 						<option value="base64">Base64</option>
 						<option value="hex">Hex</option>
@@ -324,6 +455,7 @@
 					id="generator-secret"
 					type="text"
 					bind:value={generatorKey}
+					on:input={handleGeneratorSecretInput}
 					placeholder="Enter the HMAC secret"
 				/>
 				<button type="button" class="secondary-button" on:click={generateRandomSecret}
@@ -451,7 +583,11 @@
 
 			{#if verificationInputMode === 'secret'}
 				<label for="secret-encoding">Secret Encoding</label>
-				<select id="secret-encoding" bind:value={secretEncoding}>
+				<select
+					id="secret-encoding"
+					bind:value={secretEncoding}
+					on:change={handleVerificationSecretEncodingChange}
+				>
 					<option value="utf-8">UTF-8 text</option>
 					<option value="base64">Base64</option>
 					<option value="hex">Hex</option>
@@ -462,6 +598,7 @@
 					id="verification-secret"
 					type="text"
 					bind:value={verificationKey}
+					on:input={handleVerificationSecretInput}
 					placeholder="Enter the HMAC secret"
 				/>
 			{:else if verificationInputMode === 'public-key'}

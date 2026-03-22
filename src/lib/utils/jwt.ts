@@ -59,6 +59,12 @@ const ECDSA_CURVE_BY_ALG = {
 	ES512: 'P-521'
 } as const;
 
+const ECDSA_SIGNATURE_PART_LENGTH = {
+	ES256: 32,
+	ES384: 48,
+	ES512: 66
+} as const;
+
 const RSA_PSS_SALT_LENGTH = {
 	PS256: 32,
 	PS384: 48,
@@ -165,10 +171,22 @@ export async function verifyJwtSignature(params: {
 	}
 
 	const data = textEncoder.encode(parsed.signingInput);
-	const signature = toArrayBuffer(parsed.signature);
 	const cryptoKey = await importVerificationKey(algorithm, params.key, params.secretEncoding ?? 'utf-8');
 	const verificationParams = getVerificationParams(algorithm);
-	const isValid = await crypto.subtle.verify(verificationParams, cryptoKey, signature, data);
+	const verificationSignatures = getVerificationSignatures(parsed.signature, algorithm);
+	let isValid = false;
+
+	for (const signature of verificationSignatures) {
+		try {
+			isValid = await crypto.subtle.verify(verificationParams, cryptoKey, signature, data);
+			if (isValid) {
+				break;
+			}
+		} catch {
+			// Some runtimes reject mismatched ECDSA signature formats instead of returning false.
+			// Keep trying the remaining candidate encodings.
+		}
+	}
 
 	return isValid
 		? { status: 'valid', message: 'Signature is valid for the supplied key.' }
@@ -211,7 +229,7 @@ export async function generateJwt(params: {
 		cryptoKey,
 		textEncoder.encode(signingInput)
 	);
-	const signatureBytes = new Uint8Array(signature);
+	const signatureBytes = normalizeSignatureForOutput(new Uint8Array(signature), algorithm);
 
 	return {
 		token: `${signingInput}.${encodeBase64Url(signatureBytes)}`,
@@ -468,10 +486,199 @@ function decodePemPrivateKey(pem: string): Uint8Array {
 	return Uint8Array.from(Buffer.from(body, 'base64'));
 }
 
+function normalizeSignatureForOutput(signature: Uint8Array, algorithm: string): Uint8Array {
+	if (!algorithm.startsWith('ES')) {
+		return signature;
+	}
+
+	const partLength = ECDSA_SIGNATURE_PART_LENGTH[algorithm as keyof typeof ECDSA_SIGNATURE_PART_LENGTH];
+	if (signature.length === partLength * 2) {
+		return signature;
+	}
+
+	return derToJose(signature, partLength);
+}
+
 function toArrayBuffer(value: Uint8Array): ArrayBuffer {
 	return value.buffer.slice(value.byteOffset, value.byteOffset + value.byteLength) as ArrayBuffer;
 }
 
 function encodeBase64UrlJson(value: JwtValue): string {
 	return encodeBase64Url(textEncoder.encode(JSON.stringify(value)));
+}
+
+function getVerificationSignatures(signature: Uint8Array, algorithm: string): ArrayBuffer[] {
+	if (!algorithm.startsWith('ES')) {
+		return [toArrayBuffer(signature)];
+	}
+
+	const candidates: ArrayBuffer[] = [toArrayBuffer(signature)];
+	const partLength = ECDSA_SIGNATURE_PART_LENGTH[algorithm as keyof typeof ECDSA_SIGNATURE_PART_LENGTH];
+
+	try {
+		const joseCandidate =
+			signature.length === partLength * 2 ? signature : derToJose(signature, partLength);
+		const joseBuffer = toArrayBuffer(joseCandidate);
+		if (!candidates.some((candidate) => buffersEqual(candidate, joseBuffer))) {
+			candidates.push(joseBuffer);
+		}
+	} catch {
+		// Ignore conversion failure and fall back to the original signature bytes.
+	}
+
+	try {
+		const derCandidate =
+			signature.length === partLength * 2 ? joseToDer(signature, partLength) : signature;
+		const derBuffer = toArrayBuffer(derCandidate);
+		if (!candidates.some((candidate) => buffersEqual(candidate, derBuffer))) {
+			candidates.push(derBuffer);
+		}
+	} catch {
+		// Ignore conversion failure and fall back to the original signature bytes.
+	}
+
+	return candidates;
+}
+
+function joseToDer(signature: Uint8Array, partLength: number): Uint8Array {
+	const r = trimLeadingZeros(signature.slice(0, partLength));
+	const s = trimLeadingZeros(signature.slice(partLength));
+
+	const derR = needsDerPadding(r) ? prependZero(r) : r;
+	const derS = needsDerPadding(s) ? prependZero(s) : s;
+	const payloadLength = 2 + derR.length + 2 + derS.length;
+
+	return Uint8Array.from([
+		0x30,
+		...encodeDerLength(payloadLength),
+		0x02,
+		...encodeDerLength(derR.length),
+		...derR,
+		0x02,
+		...encodeDerLength(derS.length),
+		...derS
+	]);
+}
+
+function derToJose(signature: Uint8Array, partLength: number): Uint8Array {
+	let offset = 0;
+
+	if (signature[offset++] !== 0x30) {
+		throw new Error('Invalid DER ECDSA signature.');
+	}
+
+	const sequenceLength = readDerLength(signature, offset);
+	offset = sequenceLength.nextOffset;
+
+	if (signature[offset++] !== 0x02) {
+		throw new Error('Invalid DER ECDSA signature.');
+	}
+
+	const rLength = readDerLength(signature, offset);
+	offset = rLength.nextOffset;
+	const r = signature.slice(offset, offset + rLength.length);
+	offset += rLength.length;
+
+	if (signature[offset++] !== 0x02) {
+		throw new Error('Invalid DER ECDSA signature.');
+	}
+
+	const sLength = readDerLength(signature, offset);
+	offset = sLength.nextOffset;
+	const s = signature.slice(offset, offset + sLength.length);
+	offset += sLength.length;
+
+	if (offset !== signature.length || sequenceLength.length <= 0) {
+		throw new Error('Invalid DER ECDSA signature length.');
+	}
+
+	return Uint8Array.from([
+		...leftPad(trimLeadingZeros(r), partLength),
+		...leftPad(trimLeadingZeros(s), partLength)
+	]);
+}
+
+function trimLeadingZeros(value: Uint8Array): Uint8Array {
+	let index = 0;
+	while (index < value.length - 1 && value[index] === 0) {
+		index += 1;
+	}
+
+	return value.slice(index);
+}
+
+function needsDerPadding(value: Uint8Array): boolean {
+	return value.length > 0 && (value[0] & 0x80) === 0x80;
+}
+
+function prependZero(value: Uint8Array): Uint8Array {
+	return Uint8Array.from([0, ...value]);
+}
+
+function encodeDerLength(length: number): number[] {
+	if (length < 0x80) {
+		return [length];
+	}
+
+	const bytes: number[] = [];
+	let remaining = length;
+
+	while (remaining > 0) {
+		bytes.unshift(remaining & 0xff);
+		remaining >>= 8;
+	}
+
+	return [0x80 | bytes.length, ...bytes];
+}
+
+function readDerLength(value: Uint8Array, offset: number): { length: number; nextOffset: number } {
+	const first = value[offset];
+	if (first === undefined) {
+		throw new Error('Invalid DER length.');
+	}
+
+	if ((first & 0x80) === 0) {
+		return { length: first, nextOffset: offset + 1 };
+	}
+
+	const byteCount = first & 0x7f;
+	if (byteCount === 0 || byteCount > 4) {
+		throw new Error('Unsupported DER length encoding.');
+	}
+
+	let length = 0;
+	for (let index = 0; index < byteCount; index += 1) {
+		length = (length << 8) | value[offset + 1 + index];
+	}
+
+	return { length, nextOffset: offset + 1 + byteCount };
+}
+
+function leftPad(value: Uint8Array, length: number): Uint8Array {
+	if (value.length > length) {
+		throw new Error('ECDSA signature part is longer than expected.');
+	}
+
+	if (value.length === length) {
+		return value;
+	}
+
+	return Uint8Array.from([...new Uint8Array(length - value.length), ...value]);
+}
+
+function buffersEqual(left: ArrayBuffer, right: ArrayBuffer): boolean {
+	if (left.byteLength !== right.byteLength) {
+		return false;
+	}
+
+	const leftView = new Uint8Array(left);
+	const rightView = new Uint8Array(right);
+
+	for (let index = 0; index < leftView.length; index += 1) {
+		if (leftView[index] !== rightView[index]) {
+			return false;
+		}
+	}
+
+	return true;
 }
