@@ -40,6 +40,7 @@
 		{
 			title: 'Security',
 			tools: [
+				{ href: '/jwt', titleKey: 'jwt', descriptionKey: 'jwt-intro' },
 				{ href: '/encryption', titleKey: 'encryption', descriptionKey: 'encryption-intro' },
 				{ href: '/decryption', titleKey: 'decryption', descriptionKey: 'decryption-intro' },
 				{ href: '/hashing', titleKey: 'hashing', descriptionKey: 'hashing-intro' },
