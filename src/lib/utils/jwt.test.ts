@@ -103,6 +103,28 @@ describe('verifyJwtSignature', () => {
 			status: 'valid'
 		});
 	});
+
+	it('verifies a valid ES256 token with a PEM public key', async () => {
+		const keyPair = await crypto.subtle.generateKey(
+			{
+				name: 'ECDSA',
+				namedCurve: 'P-256'
+			},
+			true,
+			['sign', 'verify']
+		);
+		const privateKeyPem = await exportPrivateKeyPem(keyPair.privateKey);
+		const publicKeyPem = await exportPublicKeyPem(keyPair.publicKey);
+		const result = await generateJwt({
+			header: { alg: 'ES256', typ: 'JWT' },
+			payload: { sub: 'ecdsa-user' },
+			key: privateKeyPem
+		});
+
+		await expect(verifyJwtSignature({ token: result.token, key: publicKeyPem })).resolves.toMatchObject({
+			status: 'valid'
+		});
+	});
 });
 
 describe('generateJwt', () => {
