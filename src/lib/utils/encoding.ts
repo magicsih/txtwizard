@@ -104,10 +104,31 @@ export function encodeHtmlEntities(str: string): string {
 	});
 }
 
+const namedHtmlEntities: Record<string, string> = {
+	amp: '&',
+	lt: '<',
+	gt: '>',
+	quot: '"',
+	apos: "'",
+	nbsp: '\u00A0'
+};
+
 export function decodeHtmlEntities(str: string): string {
-	const textarea = document.createElement('textarea');
-	textarea.innerHTML = str;
-	return textarea.value;
+	return str.replace(/&(#x[0-9a-fA-F]+|#\d+|[a-zA-Z]+);/g, (match, entity: string) => {
+		if (entity[0] === '#') {
+			const isHex = entity[1] === 'x' || entity[1] === 'X';
+			const code = isHex ? parseInt(entity.slice(2), 16) : parseInt(entity.slice(1), 10);
+			if (!Number.isFinite(code) || code < 0 || code > 0x10ffff) {
+				return match;
+			}
+			try {
+				return String.fromCodePoint(code);
+			} catch {
+				return match;
+			}
+		}
+		return namedHtmlEntities[entity] ?? match;
+	});
 }
 
 export function isHtmlEncoded(str: string): boolean {
