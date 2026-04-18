@@ -114,7 +114,7 @@ const namedHtmlEntities: Record<string, string> = {
 };
 
 export function decodeHtmlEntities(str: string): string {
-	return str.replace(/&(#x[0-9a-fA-F]+|#\d+|[a-zA-Z]+);/g, (match, entity: string) => {
+	return str.replace(/&(#[xX][0-9a-fA-F]+|#\d+|[a-zA-Z]+);/g, (match, entity: string) => {
 		if (entity[0] === '#') {
 			const isHex = entity[1] === 'x' || entity[1] === 'X';
 			const code = isHex ? parseInt(entity.slice(2), 16) : parseInt(entity.slice(1), 10);
