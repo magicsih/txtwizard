@@ -60,6 +60,23 @@ describe('replaceRegex', () => {
 			expect(result.output).toBe('bXnana');
 		}
 	});
+
+	it('reports a single replacement count when g flag is not set (regression)', () => {
+		const result = replaceRegex('a', '', 'banana', 'X');
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			expect(result.replacementCount).toBe(1);
+		}
+	});
+
+	it('reports zero replacements when pattern does not match', () => {
+		const result = replaceRegex('z', '', 'banana', 'X');
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			expect(result.replacementCount).toBe(0);
+			expect(result.output).toBe('banana');
+		}
+	});
 });
 
 describe('highlightMatches', () => {
@@ -77,5 +94,13 @@ describe('highlightMatches', () => {
 
 	it('returns a single unmatched segment when there are no matches', () => {
 		expect(highlightMatches('hello', [])).toEqual([{ text: 'hello', matched: false }]);
+	});
+
+	it('ignores zero-length matches without duplicating segments (regression)', () => {
+		const matches = [
+			{ match: '', index: 0, groups: [], namedGroups: {} },
+			{ match: '', index: 3, groups: [], namedGroups: {} }
+		];
+		expect(highlightMatches('abc', matches)).toEqual([{ text: 'abc', matched: false }]);
 	});
 });

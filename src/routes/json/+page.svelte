@@ -54,6 +54,9 @@
 			} else {
 				outputText = '';
 				errorMessage = result.error;
+				if (result.line != null && result.column != null) {
+					errorLocation = `Line ${result.line}, column ${result.column}`;
+				}
 			}
 		}
 

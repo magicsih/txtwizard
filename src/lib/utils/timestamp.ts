@@ -4,8 +4,18 @@ export type TimestampParseResult =
 	| { ok: true; date: Date; sourceUnit: TimestampUnit | 'iso' }
 	| { ok: false; error: string };
 
-const MIN_ALLOWED_MS = Date.UTC(1, 0, 1);
-const MAX_ALLOWED_MS = Date.UTC(9999, 11, 31, 23, 59, 59, 999);
+function utcMs(year: number, month = 0, day = 1, hour = 0, minute = 0, second = 0, ms = 0): number {
+	const date = new Date(Date.UTC(2000, month, day, hour, minute, second, ms));
+	date.setUTCFullYear(year);
+	return date.getTime();
+}
+
+const MIN_ALLOWED_MS = utcMs(1, 0, 1);
+const MAX_ALLOWED_MS = utcMs(9999, 11, 31, 23, 59, 59, 999);
+
+function inSupportedRange(ms: number): boolean {
+	return Number.isFinite(ms) && ms >= MIN_ALLOWED_MS && ms <= MAX_ALLOWED_MS;
+}
 
 export function parseTimestampInput(value: string): TimestampParseResult {
 	const trimmed = value.trim();
@@ -19,16 +29,33 @@ export function parseTimestampInput(value: string): TimestampParseResult {
 			return { ok: false, error: 'Numeric value is out of range.' };
 		}
 
-		const looksLikeMs = Math.abs(numeric) >= 1e12;
-		const ms = looksLikeMs ? numeric : numeric * 1000;
-		if (ms < MIN_ALLOWED_MS || ms > MAX_ALLOWED_MS) {
-			return { ok: false, error: 'Timestamp is outside the supported range (year 1 – 9999).' };
+		// Numbers with 13+ integer digits are unambiguously milliseconds;
+		// shorter values are tried as seconds first and fall back to ms
+		// when the seconds interpretation overflows the supported range.
+		// This way millisecond epochs before ~2001 (e.g. 946684800000)
+		// are still classified correctly.
+		const digitCount = trimmed.replace(/^-/, '').split('.')[0].length;
+		const candidates: Array<{ ms: number; unit: TimestampUnit }> =
+			digitCount >= 13
+				? [
+						{ ms: numeric, unit: 'milliseconds' },
+						{ ms: numeric * 1000, unit: 'seconds' }
+					]
+				: [
+						{ ms: numeric * 1000, unit: 'seconds' },
+						{ ms: numeric, unit: 'milliseconds' }
+					];
+
+		for (const candidate of candidates) {
+			if (inSupportedRange(candidate.ms)) {
+				const date = new Date(candidate.ms);
+				if (!Number.isNaN(date.getTime())) {
+					return { ok: true, date, sourceUnit: candidate.unit };
+				}
+			}
 		}
-		const date = new Date(ms);
-		if (Number.isNaN(date.getTime())) {
-			return { ok: false, error: 'Could not interpret numeric value as a timestamp.' };
-		}
-		return { ok: true, date, sourceUnit: looksLikeMs ? 'milliseconds' : 'seconds' };
+
+		return { ok: false, error: 'Timestamp is outside the supported range (year 1 – 9999).' };
 	}
 
 	const date = new Date(trimmed);

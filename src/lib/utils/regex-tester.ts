@@ -91,11 +91,14 @@ export function replaceRegex(
 		return { ok: false, error: error instanceof Error ? error.message : String(error) };
 	}
 
-	const countRegex = compile(pattern, normalized.includes('g') ? normalized : `${normalized}g`);
 	let replacementCount = 0;
-	const countMatches = input.match(countRegex);
-	if (countMatches) {
-		replacementCount = countMatches.length;
+	if (normalized.includes('g')) {
+		const countMatches = input.match(regex);
+		if (countMatches) {
+			replacementCount = countMatches.length;
+		}
+	} else {
+		replacementCount = regex.test(input) ? 1 : 0;
 	}
 
 	const output = input.replace(regex, replacement);
@@ -106,14 +109,18 @@ export function highlightMatches(
 	input: string,
 	matches: RegexMatch[]
 ): Array<{ text: string; matched: boolean }> {
-	if (matches.length === 0) {
+	// Zero-length matches (e.g. /a*/, /^/, lookarounds) have nothing to render
+	// and would otherwise duplicate or stall the cursor walk below.
+	const renderable = matches.filter((m) => m.match.length > 0);
+	if (renderable.length === 0) {
 		return input ? [{ text: input, matched: false }] : [];
 	}
 
-	const sorted = [...matches].sort((a, b) => a.index - b.index);
+	const sorted = [...renderable].sort((a, b) => a.index - b.index);
 	const segments: Array<{ text: string; matched: boolean }> = [];
 	let cursor = 0;
 	for (const m of sorted) {
+		if (m.index < cursor) continue;
 		if (m.index > cursor) {
 			segments.push({ text: input.slice(cursor, m.index), matched: false });
 		}

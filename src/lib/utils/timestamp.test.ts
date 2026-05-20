@@ -30,6 +30,27 @@ describe('parseTimestampInput', () => {
 		}
 	});
 
+	it('detects 12-digit millisecond epoch before 2001 (regression)', () => {
+		// 946684800000 ms == 2000-01-01 UTC. As seconds it would overflow
+		// the supported range, so the parser must fall back to milliseconds.
+		const result = parseTimestampInput('946684800000');
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			expect(result.sourceUnit).toBe('milliseconds');
+			expect(result.date.toISOString()).toBe('2000-01-01T00:00:00.000Z');
+		}
+	});
+
+	it('accepts a year-1 timestamp (regression for Date.UTC year offset)', () => {
+		const yearOneDate = new Date(Date.UTC(2000, 0, 1));
+		yearOneDate.setUTCFullYear(1);
+		const result = parseTimestampInput(String(yearOneDate.getTime()));
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			expect(result.date.getUTCFullYear()).toBe(1);
+		}
+	});
+
 	it('rejects empty input', () => {
 		expect(parseTimestampInput('   ').ok).toBe(false);
 	});
