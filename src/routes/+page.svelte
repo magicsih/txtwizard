@@ -71,7 +71,8 @@
 			tools: [
 				{ href: '/compression', titleKey: 'compression', descriptionKey: 'compression-intro' },
 				{ href: '/qrcode', titleKey: 'qr-code-gen', descriptionKey: 'qr-code-intro' },
-				{ href: '/minifier', titleKey: 'code-minifier', descriptionKey: 'code-minifier-intro' }
+				{ href: '/minifier', titleKey: 'code-minifier', descriptionKey: 'code-minifier-intro' },
+				{ href: '/color', titleKey: 'color-tool', descriptionKey: 'color-intro' }
 			]
 		}
 	];
