@@ -19,7 +19,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.55.0",
+		"@sveltejs/kit": "^2.60.1",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@types/eslint": "^9.6.0",
 		"@types/node": "^22.19.15",
