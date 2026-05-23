@@ -39,7 +39,7 @@
 
 	function copyToClipboard(text: string) {
 		if (!text) return;
-		navigator.clipboard.writeText(text);
+		navigator.clipboard.writeText(text).catch(() => {});
 		trackToolsUsageEvent('regex', 'copy', { output_length: text.length });
 	}
 
