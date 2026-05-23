@@ -23,11 +23,10 @@ body {
 	font-family: var(--font);
 	line-height: 1.5;
 	margin: 1rem;
-	padding-bottom: 3.5rem;
+	padding-bottom: 4.5rem;
 	min-height: calc(100vh - 2rem);
 	/* Account for top/bottom margin */
 	box-sizing: border-box;
-	padding-bottom: 4.5rem;
 }
 
 h1,
