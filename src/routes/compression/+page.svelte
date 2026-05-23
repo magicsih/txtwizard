@@ -130,8 +130,8 @@
 			between size reduction and speed.
 		</li>
 		<li>
-			<strong>Deflate:</strong> A fast and efficient compression algorithm commonly used in ZIP, PNG, and
-			HTTP payloads.
+			<strong>Deflate:</strong> A fast and efficient compression algorithm commonly used in ZIP, PNG,
+			and HTTP payloads.
 		</li>
 		<li>
 			<strong>ZIP:</strong> Standard ZIP archive output containing a single text file.
@@ -146,7 +146,9 @@
 	<p>Follow these steps to compress your data:</p>
 	<ol>
 		<li>Enter your plain text into the text box provided.</li>
-		<li>Select your desired compression algorithm: GZIP, Deflate, ZIP, or ZIP (Max Compression).</li>
+		<li>
+			Select your desired compression algorithm: GZIP, Deflate, ZIP, or ZIP (Max Compression).
+		</li>
 		<li>Click the "Compress" button to generate the compressed data.</li>
 		<li>The compressed result will be displayed in Base64 and Hex formats.</li>
 		<li>You will also see the compression ratio, original size, and compressed size.</li>
@@ -175,7 +177,9 @@
 		<dt>Does this tool upload my text?</dt>
 		<dd>No. Compression runs in your browser, so the input stays on your device.</dd>
 		<dt>What is the difference between ZIP and ZIP (Max Compression)?</dt>
-		<dd>Both create ZIP output, but the max mode uses stronger compression settings and may be slower.</dd>
+		<dd>
+			Both create ZIP output, but the max mode uses stronger compression settings and may be slower.
+		</dd>
 		<dt>Why are both Base64 and Hex shown?</dt>
 		<dd>They make binary compressed output easier to inspect, copy, and reuse in other tools.</dd>
 	</dl>
@@ -185,9 +189,10 @@
 	.container {
 		margin: 20px auto;
 		padding: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 8px;
-		background-color: #f9f9f9;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	.form-group {
@@ -207,21 +212,27 @@
 		padding: 10px;
 		margin-top: 5px;
 		border-radius: 4px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		font-size: 1em;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 
 	textarea[readonly] {
-		background-color: #f0f0f0;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	button {
+		border: none;
+		background-color: var(--link);
+		color: var(--bg-1);
 		cursor: pointer;
 	}
 
 	.metrics {
 		margin-top: 10px;
-		color: #666;
+		color: var(--fg-2);
 	}
 
 	ol {

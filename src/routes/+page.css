@@ -9,6 +9,7 @@
 		linear-gradient(135deg, #fffef9 0%, #eef5ff 48%, #f4fbf2 100%);
 	border: 1px solid rgba(86, 118, 170, 0.18);
 	box-shadow: 0 20px 50px rgba(53, 83, 120, 0.12);
+	color: #14263a;
 }
 
 .hero-copy,
@@ -150,6 +151,7 @@
 
 .tool-groups {
 	margin-top: 1.6rem;
+	color: var(--fg-1);
 }
 
 .tool-groups h2 {
@@ -167,7 +169,7 @@
 	font-size: 1.05rem;
 	letter-spacing: 0.02em;
 	text-transform: uppercase;
-	color: #446179;
+	color: var(--fg-2);
 }
 
 .tool-grid {
@@ -182,6 +184,7 @@
 	background: linear-gradient(180deg, #ffffff, #f6f8fb);
 	border: 1px solid rgba(84, 102, 127, 0.12);
 	box-shadow: 0 10px 20px rgba(53, 71, 94, 0.06);
+	color: #14263a;
 }
 
 .tool-card-top {

@@ -120,7 +120,7 @@
 		width: 2.2rem;
 		height: 2.2rem;
 		border-radius: 0.75rem;
-		background: linear-gradient(135deg, #0e4d8b, #3e8e41);
+		background: linear-gradient(135deg, #0b3f73, #2f6f32);
 		color: white;
 		font-size: 0.82rem;
 		letter-spacing: 0.03em;

@@ -19,7 +19,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.1",
 		"@sveltejs/adapter-static": "^3.0.10",
-		"@sveltejs/kit": "^2.55.0",
+		"@sveltejs/kit": "^2.60.1",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@types/eslint": "^9.6.0",
 		"@types/node": "^22.19.15",
@@ -30,12 +30,12 @@
 		"globals": "^17.4.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.5.1",
-		"svelte": "^5.54.1",
+		"svelte": "^5.55.9",
 		"svelte-check": "^4.4.5",
 		"svelte-sitemap": "^3.0.1",
 		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.57.1",
-		"vite": "^7.3.1",
+		"vite": "^7.3.2",
 		"vitest": "^4.1.0"
 	},
 	"type": "module",

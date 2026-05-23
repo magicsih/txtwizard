@@ -166,9 +166,14 @@
 		<dt>Are the keys generated on a server?</dt>
 		<dd>No. Key generation runs locally in your browser.</dd>
 		<dt>Can I enter my own private key?</dt>
-		<dd>Yes. You can paste a numeric private key to derive the matching public keys and addresses.</dd>
+		<dd>
+			Yes. You can paste a numeric private key to derive the matching public keys and addresses.
+		</dd>
 		<dt>Should I use generated keys for real funds?</dt>
-		<dd>Only if you fully trust your device and environment. For production wallets, hardware-backed flows are safer.</dd>
+		<dd>
+			Only if you fully trust your device and environment. For production wallets, hardware-backed
+			flows are safer.
+		</dd>
 	</dl>
 </div>
 
@@ -176,9 +181,10 @@
 	.container {
 		margin: 20px auto;
 		padding: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 8px;
-		background-color: #f9f9f9;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	.form-group {
@@ -197,15 +203,21 @@
 		padding: 10px;
 		margin-top: 5px;
 		border-radius: 4px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		font-size: 1em;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 
 	input[readonly] {
-		background-color: #f0f0f0;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	button {
+		border: none;
+		background-color: var(--link);
+		color: var(--bg-1);
 		cursor: pointer;
 	}
 
