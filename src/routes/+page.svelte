@@ -63,15 +63,27 @@
 				},
 				{ href: '/comparison', titleKey: 'comparison', descriptionKey: 'text-comparison' },
 				{ href: '/analyzer', titleKey: 'analyzer', descriptionKey: 'input-text' },
-				{ href: '/date-calculator', titleKey: 'date-calculator', descriptionKey: 'date_difference' }
+				{
+					href: '/date-calculator',
+					titleKey: 'date-calculator',
+					descriptionKey: 'date_difference'
+				},
+				{ href: '/timestamp', titleKey: 'timestamp-tool', descriptionKey: 'timestamp-intro' }
+			]
+		},
+		{
+			title: 'Developer',
+			tools: [
+				{ href: '/json', titleKey: 'json-tool', descriptionKey: 'json-intro' },
+				{ href: '/regex', titleKey: 'regex-tool', descriptionKey: 'regex-intro' },
+				{ href: '/minifier', titleKey: 'code-minifier', descriptionKey: 'code-minifier-intro' }
 			]
 		},
 		{
 			title: 'Utilities',
 			tools: [
 				{ href: '/compression', titleKey: 'compression', descriptionKey: 'compression-intro' },
-				{ href: '/qrcode', titleKey: 'qr-code-gen', descriptionKey: 'qr-code-intro' },
-				{ href: '/minifier', titleKey: 'code-minifier', descriptionKey: 'code-minifier-intro' }
+				{ href: '/qrcode', titleKey: 'qr-code-gen', descriptionKey: 'qr-code-intro' }
 			]
 		}
 	];

@@ -25,7 +25,10 @@
 		{ href: '/key-generation', label: 'keygen' },
 		{ href: '/qrcode', label: 'qr-code-gen' },
 		{ href: '/comparison', label: 'comparison' },
-		{ href: '/minifier', label: 'code-minifier' }
+		{ href: '/minifier', label: 'code-minifier' },
+		{ href: '/json', label: 'json-tool' },
+		{ href: '/regex', label: 'regex-tool' },
+		{ href: '/timestamp', label: 'timestamp-tool' }
 	];
 
 	$: if ($page.url.pathname) {
