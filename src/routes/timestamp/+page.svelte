@@ -42,7 +42,7 @@
 
 	function copyToClipboard(text: string) {
 		if (!text) return;
-		navigator.clipboard.writeText(String(text));
+		navigator.clipboard.writeText(String(text)).catch(() => {});
 		trackToolsUsageEvent('timestamp', 'copy', {});
 	}
 
