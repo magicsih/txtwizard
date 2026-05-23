@@ -77,9 +77,10 @@
 	.container {
 		margin: 20px auto;
 		padding: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 8px;
-		background-color: #f9f9f9;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	.text-input {
@@ -95,13 +96,15 @@
 	textarea {
 		width: 100%;
 		padding: 8px;
-		border: 1px solid #ddd;
+		border: 1px solid var(--bg-3);
 		border-radius: 4px;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 		resize: vertical;
 	}
 
 	button {
-		background-color: #4caf50;
+		background-color: #2e7d32;
 		color: white;
 		padding: 10px 15px;
 		border: none;
@@ -111,16 +114,17 @@
 	}
 
 	button:hover {
-		background-color: #3e8e41;
+		background-color: #1b5e20;
 	}
 
 	.diff-output,
 	.deduplicated-output {
 		margin-top: 20px;
 		padding: 10px;
-		border: 1px solid #eee;
+		border: 1px solid var(--bg-3);
 		border-radius: 4px;
-		background-color: #f5f5f5;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 
 	.deduplication-options {
@@ -130,8 +134,10 @@
 	select {
 		width: 100%;
 		padding: 8px;
-		border: 1px solid #ddd;
+		border: 1px solid var(--bg-3);
 		border-radius: 4px;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 		font-size: 1em;
 	}
 </style>

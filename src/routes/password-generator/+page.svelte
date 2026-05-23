@@ -17,6 +17,13 @@
 	let strengthColor = '';
 	let errorMessage = '';
 
+	function getStrengthColor(color: string) {
+		if (color === 'red') return 'var(--danger-text)';
+		if (color === 'yellow') return 'var(--warning-text)';
+		if (color === 'green') return 'var(--success-text)';
+		return 'var(--fg-1)';
+	}
+
 	function handleGeneratePassword() {
 		errorMessage = '';
 
@@ -99,7 +106,7 @@
 		</div>
 		{#if strength}
 			<p>
-				{$t('strength')}: <span style="color: {strengthColor}">{strength}</span>
+				{$t('strength')}: <span style="color: {getStrengthColor(strengthColor)}">{strength}</span>
 			</p>
 		{/if}
 	{/if}
@@ -109,9 +116,10 @@
 	.container {
 		margin: 20px auto;
 		padding: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 8px;
-		background-color: #f9f9f9;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 		max-width: 600px;
 	}
 
@@ -128,13 +136,15 @@
 		width: 100%;
 		padding: 10px;
 		margin-top: 5px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 4px;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 		box-sizing: border-box;
 	}
 
 	button {
-		background-color: #4caf50;
+		background-color: #2e7d32;
 		color: white;
 		padding: 14px 20px;
 		margin: 8px 0;
@@ -145,14 +155,16 @@
 	}
 
 	button:hover {
-		background-color: #45a049;
+		background-color: #1b5e20;
 	}
 
 	.password-output {
 		margin-top: 20px;
-		border: 1px solid #ddd;
+		border: 1px solid var(--bg-3);
 		padding: 10px;
 		border-radius: 4px;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 
 	.slider {

@@ -62,7 +62,9 @@
 			<button on:click={calculateDateDifference}>{$t('calculate_difference')}</button>
 			{#if dayDifference}
 				<div class="result">
-					{$t('difference_is')} {dayDifference} {$t('days')}
+					{$t('difference_is')}
+					{dayDifference}
+					{$t('days')}
 				</div>
 			{/if}
 		</div>
@@ -80,7 +82,8 @@
 			<button on:click={addOrSubtractDays}>{$t('calculate_new_date')}</button>
 			{#if calculatedDate}
 				<div class="result">
-					{$t('calculated_date_is')} {calculatedDate}
+					{$t('calculated_date_is')}
+					{calculatedDate}
 				</div>
 			{/if}
 		</div>
@@ -91,17 +94,19 @@
 	.container {
 		margin: 20px auto;
 		padding: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 8px;
-		background-color: #f9f9f9;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	.tab {
 		margin-bottom: 20px;
 		padding: 15px;
-		border: 1px solid #ddd;
+		border: 1px solid var(--bg-3);
 		border-radius: 4px;
-		background-color: #fff;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 
 	.form-group {
@@ -120,13 +125,15 @@
 		padding: 8px;
 		font-size: 1em;
 		margin-top: 5px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 4px;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 		box-sizing: border-box;
 	}
 
 	button {
-		background-color: #4caf50;
+		background-color: #2e7d32;
 		color: white;
 		padding: 10px 15px;
 		border: none;
@@ -136,15 +143,16 @@
 	}
 
 	button:hover {
-		background-color: #3e8e41;
+		background-color: #1b5e20;
 	}
 
 	.result {
 		margin-top: 15px;
 		padding: 10px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 4px;
-		background-color: #f0f0f0;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 		font-weight: bold;
 	}
 </style>

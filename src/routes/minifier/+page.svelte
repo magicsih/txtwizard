@@ -68,8 +68,9 @@
 <main>
 	<section class="container" aria-label="Code Minifier Tool">
 		<div class="tabs">
-			<button class:active={selectedLanguage === 'HTML'} on:click={() => (selectedLanguage = 'HTML')}
-				>HTML</button
+			<button
+				class:active={selectedLanguage === 'HTML'}
+				on:click={() => (selectedLanguage = 'HTML')}>HTML</button
 			>
 			<button class:active={selectedLanguage === 'CSS'} on:click={() => (selectedLanguage = 'CSS')}
 				>CSS</button
@@ -123,18 +124,21 @@
 			<li>Select the code language (HTML, CSS, or JavaScript) using the tabs.</li>
 			<li>Paste your code into the input box or upload a file.</li>
 			<li>Click the "Minify" button.</li>
-			<li>The minified code will appear in the output box. You can then copy it to your clipboard.</li>
+			<li>
+				The minified code will appear in the output box. You can then copy it to your clipboard.
+			</li>
 		</ol>
 
 		<h3>Benefits of Minification</h3>
 		<ul>
-			<li><strong>Reduced File Size:</strong> Smaller files are transferred faster over the network.</li>
+			<li>
+				<strong>Reduced File Size:</strong> Smaller files are transferred faster over the network.
+			</li>
 			<li>
 				<strong>Improved Load Times:</strong> Faster file downloads lead to quicker page rendering.
 			</li>
 			<li>
-				<strong>Lower Bandwidth Consumption:</strong> Saves bandwidth for both the server and the
-				user.
+				<strong>Lower Bandwidth Consumption:</strong> Saves bandwidth for both the server and the user.
 			</li>
 		</ul>
 	</section>
@@ -144,9 +148,10 @@
 	.container {
 		margin: 20px auto;
 		padding: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 8px;
-		background-color: #f9f9f9;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 	.form-group {
 		margin-bottom: 20px;
@@ -162,20 +167,23 @@
 		padding: 10px;
 		font-size: 1em;
 		margin-top: 5px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 4px;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 	button {
 		cursor: pointer;
-		background-color: #f0f0f0;
-		color: #333;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 	textarea[readonly] {
-		background-color: #f0f0f0;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 	small {
 		display: block;
-		color: #666;
+		color: var(--fg-2);
 		margin-top: 5px;
 	}
 	.output-container {
@@ -196,8 +204,9 @@
 	.tabs button {
 		flex: 1;
 		padding: 10px;
-		border: 1px solid #ccc;
-		background-color: #f0f0f0;
+		border: 1px solid var(--bg-3);
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 		cursor: pointer;
 		border-radius: 0;
 		margin-top: 0;
@@ -211,9 +220,9 @@
 		border-bottom-right-radius: 4px;
 	}
 	.tabs button.active {
-		background-color: #e0e0e0;
+		background-color: var(--bg-3);
 		font-weight: bold;
-		color: #000;
+		color: var(--fg-1);
 	}
 	.file-and-size {
 		display: flex;
