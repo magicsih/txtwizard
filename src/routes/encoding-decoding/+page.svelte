@@ -233,8 +233,10 @@
 	.container {
 		margin: 20px auto;
 		padding: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 8px;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	.form-group {
@@ -252,17 +254,20 @@
 		padding: 8px;
 		margin-top: 5px;
 		border-radius: 4px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 		font-size: 1em;
 	}
 
 	textarea[readonly] {
-		background-color: #f9f9f9;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	small {
 		display: block;
-		color: #666;
+		color: var(--fg-2);
 		margin-top: 5px;
 	}
 </style>

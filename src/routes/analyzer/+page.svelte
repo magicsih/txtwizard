@@ -35,7 +35,8 @@
 <div class="container">
 	<div class="form-group">
 		<label for="inputText">{$t('input-text')}</label>
-		<textarea id="inputText" bind:value={inputText} rows="10" placeholder="{$t('enter-text')}"></textarea>
+		<textarea id="inputText" bind:value={inputText} rows="10" placeholder={$t('enter-text')}
+		></textarea>
 	</div>
 
 	<div class="results">
@@ -53,9 +54,10 @@
 	.container {
 		margin: 20px auto;
 		padding: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 8px;
-		background-color: #f9f9f9;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	.form-group {
@@ -73,16 +75,19 @@
 		padding: 10px;
 		font-size: 1em;
 		margin-top: 5px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 4px;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 
 	.results {
 		margin-top: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		padding: 10px;
 		border-radius: 4px;
-		background-color: #fff;
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 
 	.results p {

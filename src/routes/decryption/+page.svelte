@@ -258,8 +258,10 @@
 	.container {
 		margin: 20px auto;
 		padding: 20px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
 		border-radius: 8px;
+		background-color: var(--bg-2);
+		color: var(--fg-1);
 	}
 
 	.form-group {
@@ -280,18 +282,23 @@
 		padding: 8px;
 		margin-top: 5px;
 		border-radius: 4px;
-		border: 1px solid #ccc;
+		border: 1px solid var(--bg-3);
+		background-color: var(--bg-1);
+		color: var(--fg-1);
 	}
 
 	button {
 		width: auto;
 		padding: 8px 12px;
+		border: none;
+		background-color: var(--link);
+		color: var(--bg-1);
 		cursor: pointer;
 	}
 
 	small {
 		display: block;
 		margin-top: 5px;
-		color: #666;
+		color: var(--fg-2);
 	}
 </style>

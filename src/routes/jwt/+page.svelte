@@ -148,8 +148,7 @@
 		crypto.getRandomValues(randomBytes);
 
 		if (generatorSecretEncoding === 'utf-8') {
-			const alphabet =
-				'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*';
+			const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%^&*';
 			generatorKey = Array.from(randomBytes, (value) => alphabet[value % alphabet.length]).join('');
 			return;
 		}
@@ -415,7 +414,9 @@
 	<section class="panel">
 		<div class="panel-header">
 			<h2>JWT Generator</h2>
-			<p>Create a token from editable header and payload JSON, then inspect it immediately below.</p>
+			<p>
+				Create a token from editable header and payload JSON, then inspect it immediately below.
+			</p>
 		</div>
 
 		<div class="generator-top">
@@ -483,10 +484,30 @@
 			<section>
 				<h3 class="section-title">Registered Claims</h3>
 				<div class="claims-form">
-					<input type="text" bind:value={issuer} placeholder="iss (issuer)" aria-label="Issuer (iss)" />
-					<input type="text" bind:value={subject} placeholder="sub (subject)" aria-label="Subject (sub)" />
-					<input type="text" bind:value={audience} placeholder="aud (audience)" aria-label="Audience (aud)" />
-					<input type="text" bind:value={jwtId} placeholder="jti (JWT ID)" aria-label="JWT ID (jti)" />
+					<input
+						type="text"
+						bind:value={issuer}
+						placeholder="iss (issuer)"
+						aria-label="Issuer (iss)"
+					/>
+					<input
+						type="text"
+						bind:value={subject}
+						placeholder="sub (subject)"
+						aria-label="Subject (sub)"
+					/>
+					<input
+						type="text"
+						bind:value={audience}
+						placeholder="aud (audience)"
+						aria-label="Audience (aud)"
+					/>
+					<input
+						type="text"
+						bind:value={jwtId}
+						placeholder="jti (JWT ID)"
+						aria-label="JWT ID (jti)"
+					/>
 				</div>
 				<div class="preset-row">
 					<button type="button" class="secondary-button" on:click={applyRegisteredClaims}
@@ -610,15 +631,24 @@
 					placeholder="-----BEGIN PUBLIC KEY-----"
 				></textarea>
 			{:else if verificationInputMode === 'none'}
-				<p class="notice">Unsigned `alg=none` tokens can be decoded, but there is no signature to verify.</p>
+				<p class="notice">
+					Unsigned `alg=none` tokens can be decoded, but there is no signature to verify.
+				</p>
 			{:else if verificationInputMode === 'unsupported'}
-				<p class="notice">This algorithm is not supported by this tool. Signature verification is unavailable.</p>
+				<p class="notice">
+					This algorithm is not supported by this tool. Signature verification is unavailable.
+				</p>
 			{:else}
 				<p class="notice">Unknown algorithm. Signature verification is unavailable.</p>
 			{/if}
 
 			<div class="actions">
-				<button on:click={handleVerify} disabled={verificationStatus === 'running' || verificationInputMode === 'unsupported' || verificationInputMode === 'unknown'}>
+				<button
+					on:click={handleVerify}
+					disabled={verificationStatus === 'running' ||
+						verificationInputMode === 'unsupported' ||
+						verificationInputMode === 'unknown'}
+				>
 					{verificationStatus === 'running' ? 'Verifying...' : 'Verify Signature'}
 				</button>
 			</div>
@@ -713,8 +743,8 @@
 	<h3>Supported signing and verification algorithms</h3>
 	<p>
 		The page supports unsigned tokens (`none`), HMAC (`HS256`, `HS384`, `HS512`), RSA PKCS#1
-		(`RS256`, `RS384`, `RS512`), RSA-PSS (`PS256`, `PS384`, `PS512`), and ECDSA (`ES256`,
-		`ES384`, `ES512`).
+		(`RS256`, `RS384`, `RS512`), RSA-PSS (`PS256`, `PS384`, `PS512`), and ECDSA (`ES256`, `ES384`,
+		`ES512`).
 	</p>
 
 	<h3>When to use it</h3>
@@ -740,9 +770,10 @@
 
 	.panel {
 		padding: 1.25rem;
-		border: 1px solid #d7dee7;
+		border: 1px solid var(--bg-3);
 		border-radius: 1rem;
-		background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+		background: linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+		color: var(--fg-1);
 		box-shadow: 0 16px 36px rgba(15, 23, 42, 0.06);
 	}
 
@@ -757,7 +788,7 @@
 
 	.panel-header p {
 		margin-top: 0;
-		color: #4b5563;
+		color: var(--fg-2);
 	}
 
 	label {
@@ -772,10 +803,11 @@
 	button {
 		width: 100%;
 		padding: 0.85rem 0.95rem;
-		border: 1px solid #c7d2e0;
+		border: 1px solid var(--bg-3);
 		border-radius: 0.8rem;
 		font: inherit;
-		background: white;
+		background: var(--bg-1);
+		color: var(--fg-1);
 	}
 
 	textarea,
@@ -816,9 +848,9 @@
 	}
 
 	.secondary-button {
-		background: #e8eef7;
-		color: #183b63;
-		border: 1px solid #c7d2e0;
+		background: var(--bg-2);
+		color: var(--fg-1);
+		border: 1px solid var(--bg-3);
 	}
 
 	button:disabled {
@@ -874,14 +906,15 @@
 	.snapshot-card {
 		padding: 1rem;
 		border-radius: 0.85rem;
-		background: white;
-		border: 1px solid #d7dee7;
+		background: var(--bg-1);
+		border: 1px solid var(--bg-3);
+		color: var(--fg-1);
 	}
 
 	.stat-card span,
 	.snapshot-card span {
 		display: block;
-		color: #64748b;
+		color: var(--fg-2);
 		font-size: 0.85rem;
 	}
 
@@ -903,13 +936,14 @@
 		grid-template-columns: 80px 120px minmax(220px, 1fr) minmax(180px, 1fr);
 		padding: 0.85rem 1rem;
 		border-radius: 0.8rem;
-		background: white;
-		border: 1px solid #d7dee7;
+		background: var(--bg-1);
+		border: 1px solid var(--bg-3);
+		color: var(--fg-1);
 		align-items: center;
 	}
 
 	.claim-head {
-		background: #edf4ff;
+		background: var(--bg-2);
 		font-weight: 700;
 	}
 
