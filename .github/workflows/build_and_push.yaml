@@ -1,11 +1,7 @@
-name: Build and Deploy
+name: Manual Kubernetes Deploy
 
 on:
-  push:
-    branches: [ main ]
-    paths-ignore:
-      - 'docs/**'
-      - 'README.md'
+  workflow_dispatch:
 
 env:
   APP_NAME: txtwizard
