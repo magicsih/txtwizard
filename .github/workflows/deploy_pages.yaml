@@ -1,0 +1,97 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - 'README.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+env:
+  INDEXNOW_HOST: txtwizard.net
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate build info
+        run: |
+          echo "{\"buildNumber\": \"${GITHUB_RUN_NUMBER}\", \"commit\": \"${GITHUB_SHA}\", \"date\": \"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"}" > src/build-info.json
+
+      - name: Build static site
+        run: npm run build
+
+      - name: Prepare GitHub Pages artifact
+        run: touch build/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: build
+          include-hidden-files: true
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  update-index:
+    runs-on: ubuntu-latest
+    needs: deploy
+
+    steps:
+      - name: Send IndexNow request
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        run: |
+          if [ -z "${INDEXNOW_KEY}" ]; then
+            echo "INDEXNOW_KEY is not configured; skipping IndexNow."
+            exit 0
+          fi
+
+          curl --fail -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            -d '{
+              "host": "${{ env.INDEXNOW_HOST }}",
+              "key": "'"${INDEXNOW_KEY}"'",
+              "keyLocation": "https://${{ env.INDEXNOW_HOST }}/'"${INDEXNOW_KEY}"'.txt",
+              "urlList": [
+                "https://${{ env.INDEXNOW_HOST }}/compression",
+                "https://${{ env.INDEXNOW_HOST }}/decryption",
+                "https://${{ env.INDEXNOW_HOST }}/encoding-decoding",
+                "https://${{ env.INDEXNOW_HOST }}/encryption",
+                "https://${{ env.INDEXNOW_HOST }}/key-generation",
+                "https://${{ env.INDEXNOW_HOST }}/hashing",
+                "https://${{ env.INDEXNOW_HOST }}/"
+              ]
+            }'
