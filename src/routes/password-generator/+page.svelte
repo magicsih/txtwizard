@@ -1,5 +1,7 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import { amazonSearch } from '$lib/affiliate';
 	import { t } from 'svelte-i18n';
 	import {
 		calculatePasswordStrength,
@@ -111,6 +113,14 @@
 		{/if}
 	{/if}
 </div>
+
+<AffiliateBox
+	heading="Beyond passwords: add a hardware security key"
+	intro="A strong generated password is a great start. For the accounts that matter most, add a hardware security key for phishing-resistant two-factor authentication:"
+	items={[
+		{ label: 'YubiKey security keys', url: amazonSearch('YubiKey security key'), note: 'hardware 2FA' }
+	]}
+/>
 
 <style>
 	.container {
