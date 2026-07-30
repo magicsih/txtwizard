@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import { Buffer } from 'buffer';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
@@ -52,9 +53,53 @@
 	const pageTitle = 'TxtWizard | Free Online Hash Generator - SHA, Keccak, BLAKE';
 	const pageDescription =
 		'Generate SHA, SHA-3, Keccak, RIPEMD160, and BLAKE hashes from text directly in your browser.';
+
+	const structuredData = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'SoftwareApplication',
+			name: 'TxtWizard Hash Generator',
+			url: 'https://www.txtwizard.net/hashing',
+			applicationCategory: 'DeveloperApplication',
+			operatingSystem: 'Any',
+			browserRequirements: 'Requires a modern web browser',
+			description: pageDescription,
+			offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: [
+				{
+					'@type': 'Question',
+					name: 'Is my text uploaded when I generate a hash?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'No. Hashing runs entirely in your browser, so the input never leaves your device.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Which hash algorithms are supported?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'SHA family (including SHA-256), SHA-3/Keccak, RIPEMD160, and BLAKE hashes are supported.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Can I reverse a hash back into the original text?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'No. Hashing is a one-way function, so the original text cannot be recovered from the hash.'
+					}
+				}
+			]
+		}
+	];
 </script>
 
-<SeoHead title={pageTitle} description={pageDescription} path="/hashing" />
+<SeoHead title={pageTitle} description={pageDescription} path="/hashing" {structuredData} />
 
 <header>
 	<h1>{$t('hashing')} {$t('tool')}</h1>
@@ -102,6 +147,9 @@
 			<small>{hexBytes} bytes</small>
 		</div>
 	</section>
+
+	<AdUnit placement="toolResult" />
+
 	<section class="description" aria-label="Information about Hashing">
 		<h2>What is Hashing?</h2>
 		<p>

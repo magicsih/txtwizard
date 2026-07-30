@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import {
 		deriveKeysFromNumericInput,
@@ -143,6 +144,8 @@
 		store your private key, as it is critical for accessing your cryptocurrency assets.
 	</p>
 </div>
+
+<AdUnit placement="toolResult" />
 
 <div class="description">
 	<h3>Outputs:</h3>
