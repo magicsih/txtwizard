@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import {
 		COMPRESSION_ALGORITHMS,
@@ -104,6 +105,8 @@
 		<textarea id="hashHex" bind:value={outHexText} rows="4" readonly></textarea>
 	</div>
 </div>
+
+<AdUnit placement="toolResult" />
 
 <div class="description">
 	<h3>About the Compression Tool</h3>
