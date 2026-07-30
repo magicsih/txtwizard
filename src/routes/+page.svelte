@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import './+page.css';
 
@@ -150,6 +151,8 @@
 			</div>
 		</div>
 	</section>
+
+	<AdUnit placement="homeInline" />
 
 	<section class="tool-groups">
 		<h2>{$t('our-tools')}</h2>

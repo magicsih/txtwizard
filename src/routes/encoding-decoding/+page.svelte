@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import { Buffer } from 'buffer';
@@ -56,9 +57,58 @@
 	const pageTitle = 'TxtWizard | Free Online Text Encoding and Decoding Tool';
 	const pageDescription =
 		'Convert plain text, Base64, Hex, URL encoding, and HTML encoding in a single browser-based tool.';
+
+	const structuredData = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'SoftwareApplication',
+			name: 'TxtWizard Encoding & Decoding Tool',
+			url: 'https://www.txtwizard.net/encoding-decoding',
+			applicationCategory: 'DeveloperApplication',
+			operatingSystem: 'Any',
+			browserRequirements: 'Requires a modern web browser',
+			description: pageDescription,
+			offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: [
+				{
+					'@type': 'Question',
+					name: 'Which encodings can this tool convert?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'It converts between plain text, Base64, Hex, URL encoding, and HTML encoding.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Does the encoder send my text anywhere?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'No. All encoding and decoding happens in your browser, so the input stays on your device.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Does it detect the input encoding automatically?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Yes. The tool detects the likely input encoding and shows all conversions at once.'
+					}
+				}
+			]
+		}
+	];
 </script>
 
-<SeoHead title={pageTitle} description={pageDescription} path="/encoding-decoding" />
+<SeoHead
+	title={pageTitle}
+	description={pageDescription}
+	path="/encoding-decoding"
+	{structuredData}
+/>
 
 <h1>{$t('encoding')} & {$t('decoding')} {$t('tool')}</h1>
 
@@ -113,6 +163,8 @@
 		<small>{htmlEncodeLength} letters ({htmlEncodeBytes} bytes in size)</small>
 	</div>
 </div>
+
+<AdUnit placement="toolResult" />
 
 <div class="description">
 	<h3>About the Text Encoding and Decoding Tool</h3>

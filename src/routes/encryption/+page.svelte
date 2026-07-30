@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import {
@@ -242,6 +243,8 @@
 		>
 	</div>
 </div>
+
+<AdUnit placement="toolResult" />
 
 <div class="description">
 	<h3>What is Encryption?</h3>
