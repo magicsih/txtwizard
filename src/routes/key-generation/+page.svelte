@@ -1,6 +1,8 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
+	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import { amazonSearch } from '$lib/affiliate';
 	import { t } from 'svelte-i18n';
 	import {
 		deriveKeysFromNumericInput,
@@ -144,6 +146,23 @@
 		store your private key, as it is critical for accessing your cryptocurrency assets.
 	</p>
 </div>
+
+<AffiliateBox
+	heading="Storing real crypto? Use a hardware wallet"
+	intro="This tool generates keys in your browser — perfect for learning and testing, but not safe for real funds. For actual crypto, use a hardware wallet that creates and stores keys offline:"
+	items={[
+		{
+			label: 'Ledger hardware wallets',
+			url: amazonSearch('Ledger hardware wallet'),
+			note: 'offline key storage'
+		},
+		{
+			label: 'Trezor hardware wallets',
+			url: amazonSearch('Trezor hardware wallet'),
+			note: 'open-source firmware'
+		}
+	]}
+/>
 
 <AdUnit placement="toolResult" />
 
