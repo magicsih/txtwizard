@@ -2,6 +2,8 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
+	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import { amazonSearch } from '$lib/affiliate';
 	import {
 		COMPRESSION_ALGORITHMS,
 		compressText,
@@ -105,6 +107,23 @@
 		<textarea id="hashHex" bind:value={outHexText} rows="4" readonly></textarea>
 	</div>
 </div>
+
+<AffiliateBox
+	heading="Working with large files or backups?"
+	intro="This tool compresses text right in your browser. When you're moving or storing bigger data, faster storage and a solid grasp of compression help:"
+	items={[
+		{
+			label: 'Portable SSD drives',
+			url: amazonSearch('portable SSD external drive'),
+			note: 'fast external storage'
+		},
+		{
+			label: 'Data compression & algorithms books',
+			url: amazonSearch('data compression algorithms book'),
+			note: 'go deeper'
+		}
+	]}
+/>
 
 <AdUnit placement="toolResult" />
 

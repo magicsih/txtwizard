@@ -3,6 +3,8 @@
 	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
+	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import { amazonSearch } from '$lib/affiliate';
 	import {
 		convertEncoding,
 		decryptText,
@@ -210,6 +212,23 @@
 		>
 	</div>
 </div>
+
+<AffiliateBox
+	heading="Learning how encryption works?"
+	intro="This tool decrypts AES ciphertext in your browser. To go from experimenting with crypto to securing real data, these are a solid next step:"
+	items={[
+		{
+			label: 'YubiKey security keys',
+			url: amazonSearch('YubiKey security key'),
+			note: 'hardware 2FA'
+		},
+		{
+			label: 'Applied cryptography books',
+			url: amazonSearch('applied cryptography book'),
+			note: 'learn the fundamentals'
+		}
+	]}
+/>
 
 <AdUnit placement="toolResult" />
 
