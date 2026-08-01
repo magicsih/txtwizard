@@ -3,6 +3,8 @@
 	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
+	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import { amazonSearch } from '$lib/affiliate';
 	import {
 		AES_ALGORITHM_CONFIG,
 		convertEncoding,
@@ -243,6 +245,23 @@
 		>
 	</div>
 </div>
+
+<AffiliateBox
+	heading="Serious about protecting real data?"
+	intro="This tool encrypts text locally in your browser — perfect for learning AES. To secure actual accounts and secrets, a hardware security key adds phishing-resistant protection:"
+	items={[
+		{
+			label: 'YubiKey security keys',
+			url: amazonSearch('YubiKey security key'),
+			note: 'hardware 2FA'
+		},
+		{
+			label: 'Applied cryptography books',
+			url: amazonSearch('applied cryptography book'),
+			note: 'learn the fundamentals'
+		}
+	]}
+/>
 
 <AdUnit placement="toolResult" />
 

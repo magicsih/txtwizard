@@ -1,6 +1,8 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
+	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import { amazonSearch } from '$lib/affiliate';
 	import { generateQRCodeDataUrl } from '$lib/utils/qrcode';
 
 	let qrInputText = '';
@@ -42,6 +44,23 @@
 		{/if}
 	</div>
 </div>
+
+<AffiliateBox
+	heading="Printing or scanning QR codes often?"
+	intro="This tool generates QR codes right in your browser. If you print labels or scan codes regularly, these make it easier:"
+	items={[
+		{
+			label: 'Label printers',
+			url: amazonSearch('label printer'),
+			note: 'print QR labels'
+		},
+		{
+			label: 'Barcode & QR scanners',
+			url: amazonSearch('QR code barcode scanner'),
+			note: 'fast scanning'
+		}
+	]}
+/>
 
 <div class="description">
 	<h2>What is a QR Code?</h2>

@@ -2,6 +2,8 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
+	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import { amazonSearch } from '$lib/affiliate';
 	import './+page.css';
 
 	type ToolItem = {
@@ -177,4 +179,21 @@
 			</div>
 		{/each}
 	</section>
+
+	<AffiliateBox
+		heading="Sharpen your security and dev skills"
+		intro="Every TxtWizard tool runs entirely in your browser. To go deeper on the security and encoding topics these tools touch, start here:"
+		items={[
+			{
+				label: 'Applied cryptography books',
+				url: amazonSearch('applied cryptography book'),
+				note: 'security fundamentals'
+			},
+			{
+				label: 'YubiKey security keys',
+				url: amazonSearch('YubiKey security key'),
+				note: 'hardware 2FA'
+			}
+		]}
+	/>
 </main>
