@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import { Buffer } from 'buffer';
@@ -204,6 +205,7 @@
 			<li>BLAKE2 and BLAKE3 offer excellent performance for high-speed applications</li>
 		</ul>
 	</section>
+	<RelatedTools tool="hashing" />
 </main>
 
 <style>

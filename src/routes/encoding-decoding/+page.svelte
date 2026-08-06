@@ -1,7 +1,9 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
+	import { trackToolsUsageDebounced } from '$lib/utils/analytics';
 	import { onMount } from 'svelte';
 	import { Buffer } from 'buffer';
 	import { calculateRows, detectAndConvertInput } from '$lib/utils/encoding';
@@ -47,6 +49,16 @@
 			htmlEncodeBytes = Buffer.byteLength(htmlEncode, 'utf-8');
 		} catch (error) {
 			console.error('Error processing input', error);
+		}
+
+		// Conversion happens while typing, and onMount runs it once with an empty
+		// input — debounce and skip the empty case so events reflect real usage.
+		if (userInput.length > 0) {
+			trackToolsUsageDebounced('encoding-decoding', 'convert', {
+				detected_encoding: detectedEncoding,
+				input_text_length: userInput.length,
+				plain_text_bytes: plainTextBytes
+			});
 		}
 	}
 
@@ -165,6 +177,8 @@
 </div>
 
 <AdUnit placement="toolResult" />
+
+<RelatedTools tool="encoding-decoding" />
 
 <div class="description">
 	<h3>About the Text Encoding and Decoding Tool</h3>

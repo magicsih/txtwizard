@@ -1,6 +1,7 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
@@ -213,6 +214,8 @@
 	</div>
 </div>
 
+<AdUnit placement="toolResult" />
+
 <AffiliateBox
 	heading="Learning how encryption works?"
 	intro="This tool decrypts AES ciphertext in your browser. To go from experimenting with crypto to securing real data, these are a solid next step:"
@@ -230,7 +233,7 @@
 	]}
 />
 
-<AdUnit placement="toolResult" />
+<RelatedTools tool="decryption" heading="Next steps with your plaintext" />
 
 <div class="description">
 	<h3>What is Decryption?</h3>

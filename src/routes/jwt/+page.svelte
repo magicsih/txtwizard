@@ -1,7 +1,9 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { Buffer } from 'buffer';
 	import { t } from 'svelte-i18n';
+	import { trackToolsUsageDebounced, trackToolsUsageEvent } from '$lib/utils/analytics';
 	import {
 		formatJson,
 		generateJwt,
@@ -106,6 +108,13 @@
 			verificationInputMode = 'unknown';
 			parseError = error instanceof Error ? error.message : 'Failed to decode JWT.';
 		}
+
+		// Also runs on every keystroke in the token field — debounce it.
+		trackToolsUsageDebounced('jwt', 'decode', {
+			algorithm: typeof parsed?.header.alg === 'string' ? parsed.header.alg : 'unknown',
+			token_length: token.length,
+			succeeded: parsed ? 1 : 0
+		});
 	}
 
 	function getVerificationInputMode() {
@@ -268,9 +277,19 @@
 			}
 			generatorTone = 'success';
 			decodeToken();
+			trackToolsUsageEvent('jwt', 'generate', {
+				algorithm: generatorAlgorithm,
+				secret_encoding: generatorSecretEncoding,
+				succeeded: 1
+			});
 		} catch (error) {
 			generatorStatus = error instanceof Error ? error.message : 'Failed to generate JWT.';
 			generatorTone = 'danger';
+			trackToolsUsageEvent('jwt', 'generate', {
+				algorithm: generatorAlgorithm,
+				secret_encoding: generatorSecretEncoding,
+				succeeded: 0
+			});
 		}
 	}
 
@@ -288,6 +307,11 @@
 				secretEncoding
 			});
 			verificationResult = result.message;
+			trackToolsUsageEvent('jwt', 'verify', {
+				algorithm: typeof parsed?.header.alg === 'string' ? parsed.header.alg : 'unknown',
+				secret_encoding: secretEncoding,
+				result: result.status
+			});
 			verificationTone =
 				result.status === 'valid'
 					? 'success'
@@ -731,6 +755,8 @@
 		</section>
 	{/if}
 </div>
+
+<RelatedTools tool="jwt" />
 
 <div class="description">
 	<h3>What this JWT tool does</h3>

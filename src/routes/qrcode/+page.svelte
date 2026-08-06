@@ -2,18 +2,32 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import { t } from 'svelte-i18n';
 	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { amazonSearch } from '$lib/affiliate';
+	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import { generateQRCodeDataUrl } from '$lib/utils/qrcode';
 
 	let qrInputText = '';
 	let qrCodeDataUrl = '';
 
 	async function generateQRCode() {
+		let ok = 1;
 		try {
 			qrCodeDataUrl = await generateQRCodeDataUrl(qrInputText);
 		} catch (error) {
+			ok = 0;
 			console.error('Error generating QR code:', error);
 		}
+		trackToolsUsageEvent('qrcode', 'generate', {
+			input_text_length: qrInputText.length,
+			is_url: /^https?:\/\//i.test(qrInputText.trim()) ? 1 : 0,
+			non_empty: qrInputText.length > 0 ? 1 : 0,
+			succeeded: ok
+		});
+	}
+
+	function trackDownload() {
+		trackToolsUsageEvent('qrcode', 'download', { input_text_length: qrInputText.length });
 	}
 
 	const pageTitle = 'TxtWizard | Free Online QR Code Generator';
@@ -40,7 +54,7 @@
 	<div class="form-group" style="text-align: center;">
 		{#if qrCodeDataUrl}
 			<img src={qrCodeDataUrl} alt="Generated QR Code" />
-			<a href={qrCodeDataUrl} download="qrcode.png">Download QR Code</a>
+			<a href={qrCodeDataUrl} download="qrcode.png" on:click={trackDownload}>Download QR Code</a>
 		{/if}
 	</div>
 </div>
@@ -61,6 +75,8 @@
 		}
 	]}
 />
+
+<RelatedTools tool="qrcode" />
 
 <div class="description">
 	<h2>What is a QR Code?</h2>

@@ -1,7 +1,9 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { amazonSearch } from '$lib/affiliate';
+	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import { t } from 'svelte-i18n';
 	import {
 		calculatePasswordStrength,
@@ -48,11 +50,22 @@
 			strengthColor = '';
 			errorMessage = error instanceof Error ? error.message : 'Failed to generate password.';
 		}
+
+		trackToolsUsageEvent('password-generator', 'generate', {
+			length: passwordLength,
+			include_uppercase: includeUppercase ? 1 : 0,
+			include_lowercase: includeLowercase ? 1 : 0,
+			include_numbers: includeNumbers ? 1 : 0,
+			include_symbols: includeSymbols ? 1 : 0,
+			strength,
+			succeeded: generatedPassword.length > 0 ? 1 : 0
+		});
 	}
 
 	function copyToClipboard() {
 		if (!generatedPassword) return;
 		navigator.clipboard.writeText(generatedPassword);
+		trackToolsUsageEvent('password-generator', 'copy', { length: generatedPassword.length });
 	}
 
 	const pageTitle = 'TxtWizard | Random Password Generator';
@@ -118,9 +131,15 @@
 	heading="Beyond passwords: add a hardware security key"
 	intro="A strong generated password is a great start. For the accounts that matter most, add a hardware security key for phishing-resistant two-factor authentication:"
 	items={[
-		{ label: 'YubiKey security keys', url: amazonSearch('YubiKey security key'), note: 'hardware 2FA' }
+		{
+			label: 'YubiKey security keys',
+			url: amazonSearch('YubiKey security key'),
+			note: 'hardware 2FA'
+		}
 	]}
 />
+
+<RelatedTools tool="password-generator" />
 
 <style>
 	.container {

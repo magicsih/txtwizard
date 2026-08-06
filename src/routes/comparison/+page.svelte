@@ -1,6 +1,8 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
+	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import {
 		compareTexts as buildDiff,
 		deduplicateText as deduplicateEntries,
@@ -16,10 +18,21 @@
 
 	function compareTexts() {
 		diff = buildDiff(text1, text2);
+		trackToolsUsageEvent('comparison', 'compare', {
+			text1_length: text1.length,
+			text2_length: text2.length,
+			non_empty: text1.length > 0 && text2.length > 0 ? 1 : 0
+		});
 	}
 
 	function deduplicateText() {
 		deduplicatedText = deduplicateEntries(textToDeduplicate, deduplicationType);
+		trackToolsUsageEvent('comparison', 'deduplicate', {
+			deduplication_type: deduplicationType,
+			input_text_length: textToDeduplicate.length,
+			output_text_length: deduplicatedText.length,
+			non_empty: textToDeduplicate.length > 0 ? 1 : 0
+		});
 	}
 
 	const pageTitle = 'TxtWizard | Text Comparison and Duplicate Removal Tool';
@@ -72,6 +85,8 @@
 		<textarea readonly rows="6">{deduplicatedText}</textarea>
 	</div>
 </div>
+
+<RelatedTools tool="comparison" />
 
 <style>
 	.container {

@@ -2,7 +2,9 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
 	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { amazonSearch } from '$lib/affiliate';
+	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import { t } from 'svelte-i18n';
 	import {
 		deriveKeysFromNumericInput,
@@ -30,14 +32,22 @@
 
 	function generateKeys() {
 		applyDerivedKeys(generateRandomKeyPair());
+		trackToolsUsageEvent('key-generation', 'generate', { source: 'random' });
 	}
 
 	function updateKeysFromNumericInput() {
+		let ok = 1;
 		try {
 			applyDerivedKeys(deriveKeysFromNumericInput(privateKeyNumeric));
 		} catch (error) {
+			ok = 0;
 			console.error('Invalid numeric private key input:', error);
 		}
+		trackToolsUsageEvent('key-generation', 'derive', {
+			source: 'numeric_input',
+			input_length: privateKeyNumeric.length,
+			succeeded: ok
+		});
 	}
 
 	const pageTitle = 'TxtWizard | Free Online BTC and ETH Key Generation Tool';
@@ -147,6 +157,8 @@
 	</p>
 </div>
 
+<AdUnit placement="toolResult" />
+
 <AffiliateBox
 	heading="Storing real crypto? Use a hardware wallet"
 	intro="This tool generates keys in your browser — perfect for learning and testing, but not safe for real funds. For actual crypto, use a hardware wallet that creates and stores keys offline:"
@@ -164,7 +176,7 @@
 	]}
 />
 
-<AdUnit placement="toolResult" />
+<RelatedTools tool="key-generation" heading="Next steps with your key pair" />
 
 <div class="description">
 	<h3>Outputs:</h3>

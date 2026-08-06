@@ -1,6 +1,8 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
+	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import {
 		addOrSubtractDays as calculateShiftedDate,
 		calculateDateDifference as getDateDifference
@@ -16,6 +18,10 @@
 
 	function calculateDateDifference() {
 		const result = getDateDifference(startDate, endDate);
+		trackToolsUsageEvent('date-calculator', 'date_difference', {
+			succeeded: result === null ? 0 : 1
+		});
+
 		if (result === null) {
 			dayDifference = 0;
 			alert($t('invalid_date_format'));
@@ -27,6 +33,11 @@
 
 	function addOrSubtractDays() {
 		const result = calculateShiftedDate(baseDate, daysToAdd);
+		trackToolsUsageEvent('date-calculator', 'shift_date', {
+			days_to_add: daysToAdd,
+			succeeded: result === null ? 0 : 1
+		});
+
 		if (result === null) {
 			calculatedDate = '';
 			alert($t('invalid_date_format'));
@@ -88,6 +99,8 @@
 			{/if}
 		</div>
 	</section>
+
+	<RelatedTools tool="date-calculator" />
 </main>
 
 <style>
