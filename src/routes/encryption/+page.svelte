@@ -1,6 +1,7 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
@@ -246,6 +247,8 @@
 	</div>
 </div>
 
+<AdUnit placement="toolResult" />
+
 <AffiliateBox
 	heading="Serious about protecting real data?"
 	intro="This tool encrypts text locally in your browser — perfect for learning AES. To secure actual accounts and secrets, a hardware security key adds phishing-resistant protection:"
@@ -263,7 +266,7 @@
 	]}
 />
 
-<AdUnit placement="toolResult" />
+<RelatedTools tool="encryption" heading="Next steps with your ciphertext" />
 
 <div class="description">
 	<h3>What is Encryption?</h3>

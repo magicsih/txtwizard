@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
 	import { onDestroy, onMount } from 'svelte';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
@@ -167,6 +168,7 @@
 			<li><code>2025-01-01T00:00:00Z</code> &rarr; 1735689600 / 1735689600000</li>
 		</ul>
 	</section>
+	<RelatedTools tool="timestamp" />
 </main>
 
 <style>

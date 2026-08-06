@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import {
@@ -142,6 +143,7 @@
 			</li>
 		</ul>
 	</section>
+	<RelatedTools tool="minifier" />
 </main>
 
 <style>

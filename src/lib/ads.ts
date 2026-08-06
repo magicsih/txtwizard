@@ -21,7 +21,14 @@ export const AD_SLOTS = {
 	// look here right after clicking generate/convert). Reused across tools.
 	toolResult: '8839886302',
 	// Inline unit on the home page.
-	homeInline: '7526804635'
+	homeInline: '7526804635',
+	// Placed inside the long-form explainer copy further down a tool page.
+	// Worth having only where visitors actually read: BigQuery shows
+	// /compression at ~64s per user and /decryption, /key-generation,
+	// /encryption at 25-35s, versus ~8s on the home page.
+	// TODO: create a responsive Display unit in AdSense and paste its slot id.
+	// Until then this renders nothing in production.
+	articleInline: ''
 } as const;
 
 export type AdPlacement = keyof typeof AD_SLOTS;

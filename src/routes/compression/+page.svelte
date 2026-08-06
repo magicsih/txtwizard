@@ -1,7 +1,9 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
+	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
 	import { amazonSearch } from '$lib/affiliate';
 	import {
@@ -24,10 +26,23 @@
 	const algorithms = COMPRESSION_ALGORITHMS;
 
 	function doCompress() {
-		const result = compressText(targetPlainText, selectedAlgorithm);
-		outHashText = result.base64;
-		outHexText = result.hex;
-		metrics = result.metrics;
+		try {
+			const result = compressText(targetPlainText, selectedAlgorithm);
+			outHashText = result.base64;
+			outHexText = result.hex;
+			metrics = result.metrics;
+		} catch (error) {
+			console.error('Error during compression:', error);
+		} finally {
+			trackToolsUsageEvent('compression', 'compress', {
+				algorithm: selectedAlgorithm,
+				original_size: metrics.originalSize,
+				output_size: metrics.outputSize,
+				compression_ratio: metrics.compressionRatio,
+				input_text_length: targetPlainText.length,
+				non_empty: targetPlainText.length > 0 ? 1 : 0
+			});
+		}
 	}
 
 	const pageTitle = 'TxtWizard | Free Online Compression Tool - GZIP, Deflate, ZIP';
@@ -108,6 +123,8 @@
 	</div>
 </div>
 
+<AdUnit placement="toolResult" />
+
 <AffiliateBox
 	heading="Working with large files or backups?"
 	intro="This tool compresses text right in your browser. When you're moving or storing bigger data, faster storage and a solid grasp of compression help:"
@@ -125,7 +142,7 @@
 	]}
 />
 
-<AdUnit placement="toolResult" />
+<RelatedTools tool="compression" heading="Next steps with your compressed output" />
 
 <div class="description">
 	<h3>About the Compression Tool</h3>
@@ -143,6 +160,8 @@
 		honest view of the formats it actually generates, with outputs available in both Base64 and Hex.
 	</p>
 </div>
+
+<AdUnit placement="articleInline" />
 
 <div class="description">
 	<h3>Compression Algorithms Supported</h3>

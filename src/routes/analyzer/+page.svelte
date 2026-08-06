@@ -1,6 +1,8 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
+	import { trackToolsUsageDebounced } from '$lib/utils/analytics';
 	import { analyzeText } from '$lib/utils/analyzer';
 
 	let inputText = '';
@@ -21,6 +23,18 @@
 		sentenceCount = result.sentenceCount;
 		uniqueWordCount = result.uniqueWordCount;
 		byteSize = result.byteSize;
+
+		// The analyzer has no submit button — results update while typing. Fire a
+		// single debounced event per editing burst, and never for the empty
+		// initial state, so a page load alone does not count as usage.
+		if (inputText.length > 0) {
+			trackToolsUsageDebounced('analyzer', 'analyze', {
+				input_text_length: inputText.length,
+				word_count: wordCount,
+				line_count: lineCount,
+				byte_size: byteSize
+			});
+		}
 	}
 
 	const pageTitle = 'TxtWizard | Text Analyzer Tool';
@@ -49,6 +63,8 @@
 		<p>{$t('byte-size')}: {byteSize} bytes</p>
 	</div>
 </div>
+
+<RelatedTools tool="analyzer" />
 
 <style>
 	.container {
