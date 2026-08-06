@@ -1,16 +1,27 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { dev } from '$app/environment';
 	import { AD_CLIENT, getAdSlot, type AdPlacement } from '$lib/ads';
+	import { isLikelyAutomated } from '$lib/utils/analytics';
 
 	export let placement: AdPlacement;
 	export let label = 'Advertisement';
 
 	const slot = getAdSlot(placement);
-	const configured = slot.length > 0;
+	const hasSlot = slot.length > 0;
 
-	onMount(() => {
-		if (!configured) return;
+	// The <ins> is mounted client-side only, so `isLikelyAutomated()` can read
+	// `navigator` first. Keeping the unit out of automated sessions avoids
+	// serving impressions to traffic that would count as invalid.
+	let render = false;
+
+	onMount(async () => {
+		if (!hasSlot || isLikelyAutomated()) return;
+
+		render = true;
+		// Wait for the <ins> to be in the DOM before AdSense scans for it.
+		await tick();
+
 		try {
 			const w = window as unknown as { adsbygoogle?: unknown[] };
 			(w.adsbygoogle = w.adsbygoogle || []).push({});
@@ -20,7 +31,7 @@
 	});
 </script>
 
-{#if configured}
+{#if render}
 	<aside class="ad-slot" aria-label={label}>
 		<ins
 			class="adsbygoogle"
@@ -31,7 +42,7 @@
 			data-full-width-responsive="true"
 		></ins>
 	</aside>
-{:else if dev}
+{:else if dev && !hasSlot}
 	<aside class="ad-slot ad-placeholder" aria-label="Ad placeholder">
 		<span>Ad slot &ldquo;{placement}&rdquo; — set its id in src/lib/ads.ts</span>
 	</aside>

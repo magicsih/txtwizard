@@ -1,6 +1,10 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { t } from 'svelte-i18n';
+	import { initTrafficQuality } from '$lib/utils/analytics';
+
+	onMount(initTrafficQuality);
 
 	export let data: {
 		buildInfo: {
