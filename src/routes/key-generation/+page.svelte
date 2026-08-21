@@ -50,9 +50,9 @@
 		});
 	}
 
-	const pageTitle = 'TxtWizard | Free Online BTC and ETH Key Generation Tool';
+	const pageTitle = 'Bitcoin & Ethereum Private Key Generator | TxtWizard';
 	const pageDescription =
-		'Generate Bitcoin and Ethereum private keys, public keys, and addresses directly in your browser.';
+		'Generate Bitcoin and Ethereum private keys, public keys, and addresses locally in your browser for learning and testing.';
 	const faqStructuredData = {
 		'@context': 'https://schema.org',
 		'@type': 'FAQPage',
@@ -92,7 +92,7 @@
 	structuredData={faqStructuredData}
 />
 
-<h1>{$t('keygen')} {$t('tool')} - {$t('bitcoin')} & {$t('ethereum')}</h1>
+<h1>Free Bitcoin &amp; Ethereum Private Key Generator</h1>
 
 <div class="container">
 	<div class="form-group">
@@ -182,16 +182,16 @@
 	<h3>Outputs:</h3>
 	<ol>
 		<li>
-			<strong>Private Keys (HEX & WIF):</strong> Ethereum Private Key in HEX format, Bitcoin Private
-			Key in WIF format.
+			<strong>Private Keys (HEX & WIF):</strong> Ethereum Private Key in HEX format, Bitcoin Private Key
+			in WIF format.
 		</li>
 		<li>
 			<strong>Bitcoin Address:</strong> Derived by first taking the SHA-256 hash of the public key, followed
 			by the RIPEMD-160 hash, and then Base58Check encoded.
 		</li>
 		<li>
-			<strong>Ethereum Address:</strong> Derived by taking the Keccak-256 hash of the public key and
-			using the last 20 bytes.
+			<strong>Ethereum Address:</strong> Derived by taking the Keccak-256 hash of the public key and using
+			the last 20 bytes.
 		</li>
 	</ol>
 

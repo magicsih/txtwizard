@@ -2,7 +2,7 @@
 	import { onMount, tick } from 'svelte';
 	import { dev } from '$app/environment';
 	import { AD_CLIENT, getAdSlot, type AdPlacement } from '$lib/ads';
-	import { isLikelyAutomated } from '$lib/utils/analytics';
+	import { isLikelyAutomated, trackAnalyticsEvent } from '$lib/utils/analytics';
 
 	export let placement: AdPlacement;
 	export let label = 'Advertisement';
@@ -14,26 +14,83 @@
 	// `navigator` first. Keeping the unit out of automated sessions avoids
 	// serving impressions to traffic that would count as invalid.
 	let render = false;
+	let adElement: HTMLElement;
 
-	onMount(async () => {
+	onMount(() => {
 		if (!hasSlot || isLikelyAutomated()) return;
 
-		render = true;
-		// Wait for the <ins> to be in the DOM before AdSense scans for it.
-		await tick();
+		let disposed = false;
+		let statusReported = false;
+		let statusObserver: MutationObserver | undefined;
+		let statusTimeout: ReturnType<typeof setTimeout> | undefined;
 
-		try {
-			const w = window as unknown as { adsbygoogle?: unknown[] };
-			(w.adsbygoogle = w.adsbygoogle || []).push({});
-		} catch {
-			// Ad blocker or loader not ready yet — safe to ignore.
+		function sourcePath(): string {
+			return window.location.pathname;
 		}
+
+		function reportStatus(status: string) {
+			if (disposed || statusReported) return;
+			statusReported = true;
+			trackAnalyticsEvent('ad_slot_status', {
+				placement,
+				source_path: sourcePath(),
+				ad_status: status
+			});
+			statusObserver?.disconnect();
+			if (statusTimeout) clearTimeout(statusTimeout);
+		}
+
+		void (async () => {
+			render = true;
+			// Wait for the <ins> to be in the DOM before AdSense scans for it.
+			await tick();
+			if (disposed) return;
+
+			trackAnalyticsEvent('ad_slot_rendered', {
+				placement,
+				source_path: sourcePath()
+			});
+
+			if (typeof MutationObserver !== 'undefined') {
+				statusObserver = new MutationObserver(() => {
+					const status = adElement?.getAttribute('data-ad-status');
+					if (status) reportStatus(status);
+				});
+				statusObserver.observe(adElement, {
+					attributes: true,
+					attributeFilter: ['data-ad-status']
+				});
+			}
+
+			try {
+				const w = window as unknown as { adsbygoogle?: unknown[] };
+				(w.adsbygoogle = w.adsbygoogle || []).push({});
+			} catch {
+				reportStatus('push_error');
+				return;
+			}
+
+			const currentStatus = adElement?.getAttribute('data-ad-status');
+			if (currentStatus) {
+				reportStatus(currentStatus);
+				return;
+			}
+
+			statusTimeout = setTimeout(() => reportStatus('unresolved'), 10_000);
+		})();
+
+		return () => {
+			disposed = true;
+			statusObserver?.disconnect();
+			if (statusTimeout) clearTimeout(statusTimeout);
+		};
 	});
 </script>
 
 {#if render}
 	<aside class="ad-slot" aria-label={label}>
 		<ins
+			bind:this={adElement}
 			class="adsbygoogle"
 			style="display:block"
 			data-ad-client={AD_CLIENT}

@@ -37,17 +37,23 @@ export function initTrafficQuality() {
 	});
 }
 
+export function trackAnalyticsEvent(eventName: string, params: Record<string, unknown> = {}) {
+	if (typeof window === 'undefined' || !window.gtag) return;
+
+	window.gtag('event', eventName, {
+		...params,
+		automated: isLikelyAutomated() ? 1 : 0
+	});
+}
+
 export function trackToolsUsageEvent(
 	toolName: string,
 	eventName: string,
-	params: Record<string, any> = {}
+	params: Record<string, unknown> = {}
 ) {
-	if (typeof window === 'undefined' || !window.gtag) return;
-
-	window.gtag('event', 'tools_usage', {
+	trackAnalyticsEvent('tools_usage', {
 		tool_name: toolName,
 		event_name: eventName,
-		automated: isLikelyAutomated() ? 1 : 0,
 		...params
 	});
 }
@@ -60,7 +66,7 @@ const debounceTimers = new Map<string, ReturnType<typeof setTimeout>>();
 export function trackToolsUsageDebounced(
 	toolName: string,
 	eventName: string,
-	params: Record<string, any> = {},
+	params: Record<string, unknown> = {},
 	wait = 1500
 ) {
 	if (typeof window === 'undefined') return;

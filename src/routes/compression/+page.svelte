@@ -45,7 +45,7 @@
 		}
 	}
 
-	const pageTitle = 'TxtWizard | Free Online Compression Tool - GZIP, Deflate, ZIP';
+	const pageTitle = 'Online GZIP Text Compression Tool - Deflate, ZIP | TxtWizard';
 	const pageDescription =
 		'Compress plain text with GZIP, Deflate, and ZIP in the browser and get Base64, Hex, and compression ratio details.';
 	const faqStructuredData = {
@@ -86,13 +86,13 @@
 	path="/compression"
 	structuredData={faqStructuredData}
 />
-<h1>{$t('compression')} {$t('tool')} - GZIP, Deflate, ZIP</h1>
+<h1>Online GZIP Text Compression Tool - Deflate, ZIP</h1>
 
 <div class="container">
 	<div class="form-group">
 		<label for="algorithm">Select Compression Algorithm</label>
 		<select id="algorithm" bind:value={selectedAlgorithm}>
-			{#each algorithms as algorithm}
+			{#each algorithms as algorithm (algorithm)}
 				<option value={algorithm}>{getCompressionLabel(algorithm)}</option>
 			{/each}
 		</select>
