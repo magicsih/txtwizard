@@ -6,8 +6,10 @@
 // encrypt -> decrypt, generate a key -> use it) so the next click is useful
 // rather than a generic tool dump.
 
+import type { Pathname } from '$app/types';
+
 export type RelatedTool = {
-	href: string;
+	href: Pathname;
 	/** i18n key, same keys the nav uses. */
 	labelKey: string;
 	/** Short reason to click through. */

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { resolve } from '$app/paths';
 	import { t } from 'svelte-i18n';
 	import { getRelatedTools } from '$lib/related-tools';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
@@ -8,19 +10,51 @@
 	export let heading = 'Continue with';
 
 	$: related = getRelatedTools(tool);
+	let navElement: HTMLElement;
 
-	function handleClick(targetHref: string) {
-		trackToolsUsageEvent(tool, 'related_tool_click', { target_tool: targetHref });
+	onMount(() => {
+		if (!navElement || typeof IntersectionObserver === 'undefined') return;
+
+		let impressionTracked = false;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				const visible = entries.some(
+					(entry) => entry.isIntersecting && entry.intersectionRatio >= 0.25
+				);
+				if (!visible || impressionTracked) return;
+
+				impressionTracked = true;
+				trackToolsUsageEvent(tool, 'related_tools_impression', {
+					source_tool: tool,
+					target_tools: related.map((item) => item.href).join(','),
+					target_count: related.length
+				});
+				observer.disconnect();
+			},
+			{ threshold: 0.25 }
+		);
+
+		observer.observe(navElement);
+		return () => observer.disconnect();
+	});
+
+	function handleClick(targetHref: string, linkPosition: number) {
+		trackToolsUsageEvent(tool, 'related_tool_click', {
+			source_tool: tool,
+			target_tool: targetHref,
+			link_position: linkPosition,
+			transport_type: 'beacon'
+		});
 	}
 </script>
 
 {#if related.length > 0}
-	<nav class="related" aria-label="Related tools">
+	<nav class="related" aria-label="Related tools" bind:this={navElement}>
 		<h3>{heading}</h3>
 		<ul>
-			{#each related as item}
+			{#each related as item, index (item.href)}
 				<li>
-					<a href={item.href} on:click={() => handleClick(item.href)}>
+					<a href={resolve(item.href, {})} on:click={() => handleClick(item.href, index + 1)}>
 						<span class="name">{$t(item.labelKey)}</span>
 						<span class="blurb">{item.blurb}</span>
 					</a>
