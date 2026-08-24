@@ -1,13 +1,13 @@
-name: Check Svelte TypeScript Linting
+name: Check Svelte TypeScript and Unit Tests
 
 on:
   push:
-    branches: [ develop ]
+    branches: [develop]
     paths-ignore:
       - 'docs/**'
       - 'README.md'
   pull_request:
-    branches: [ develop ]
+    branches: [main, develop]
     paths-ignore:
       - 'docs/**'
       - 'README.md'
@@ -34,3 +34,6 @@ jobs:
 
       - name: Run Type Check
         run: npm run check
+
+      - name: Run Unit Tests
+        run: npm test -- --run

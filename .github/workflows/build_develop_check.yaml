@@ -1,13 +1,13 @@
-name: Build Check (Develop)
+name: Build Check
 
 on:
   push:
-    branches: [ develop ]
+    branches: [develop]
     paths-ignore:
       - 'docs/**'
       - 'README.md'
   pull_request:
-    branches: [ develop ]
+    branches: [main, develop]
     paths-ignore:
       - 'docs/**'
       - 'README.md'
