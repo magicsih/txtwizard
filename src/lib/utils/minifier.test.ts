@@ -13,11 +13,17 @@ describe('minifyHTML', () => {
 	it('removes comments and collapses whitespace', () => {
 		expect(minifyHTML('<!-- x --><div> a </div>')).toBe('<div> a </div>');
 	});
+
+	it('removes comments reintroduced by nested delimiters', () => {
+		expect(minifyHTML('<!<!-- hidden -->----><div>safe</div>')).toBe('<div>safe</div>');
+	});
 });
 
 describe('minifyCSS', () => {
 	it('removes comments and extra spaces', () => {
-		expect(minifyCSS('/*x*/ body { color: #ffffff; margin: 0px; }')).toBe('body{color:#fff;margin:0}');
+		expect(minifyCSS('/*x*/ body { color: #ffffff; margin: 0px; }')).toBe(
+			'body{color:#fff;margin:0}'
+		);
 	});
 });
 
