@@ -3,11 +3,15 @@ import { Buffer } from 'buffer';
 export type MinifierLanguage = 'HTML' | 'CSS' | 'JavaScript';
 
 export function minifyHTML(html: string): string {
-	return html
-		.replace(/<!--[\s\S]*?-->/g, '')
-		.replace(/>\s+</g, '><')
-		.replace(/\s+/g, ' ')
-		.trim();
+	let withoutComments = html;
+	let previous: string;
+
+	do {
+		previous = withoutComments;
+		withoutComments = withoutComments.replace(/<!--[\s\S]*?-->/g, '');
+	} while (withoutComments !== previous);
+
+	return withoutComments.replace(/>\s+</g, '><').replace(/\s+/g, ' ').trim();
 }
 
 export function minifyCSS(css: string): string {
@@ -35,7 +39,7 @@ export function minifyJS(js: string): string {
 
 	let joined = lines.join(' ');
 	joined = joined.replace(/\s+/g, ' ');
-	joined = joined.replace(/\s*([;,:{}()\[\]=*/%<>?&|^~!])\s*/g, '$1');
+	joined = joined.replace(/\s*([;,:{}()[\]=*/%<>?&|^~!])\s*/g, '$1');
 
 	return joined.trim();
 }
