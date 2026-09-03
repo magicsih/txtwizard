@@ -48,7 +48,7 @@
 		"dayjs": "^1.11.20",
 		"elapsed-time": "^0.0.1",
 		"ethereum-cryptography": "^3.0.0",
-		"fflate": "^0.8.2",
+		"fflate": "^0.8.3",
 		"qrcode": "^1.5.4",
 		"svelte-i18n": "^4.0.0"
 	},
