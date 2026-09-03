@@ -99,7 +99,7 @@ export function isUrlEncoded(str: string): boolean {
 }
 
 export function encodeHtmlEntities(str: string): string {
-	return str.replace(/[\u00A0-\u9999<>]/gim, (character) => {
+	return str.replace(/[\u00A0-\u9999<>&"']/g, (character) => {
 		return `&#${character.charCodeAt(0)};`;
 	});
 }
