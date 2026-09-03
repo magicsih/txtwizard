@@ -32,6 +32,10 @@ describe('encodeHtmlEntities', () => {
 		expect(encodeHtmlEntities('hello\n\u00a0é香한글😀')).toBe('hello\n&#160;&#233;&#39321;한글😀');
 		expect(encodeHtmlEntities('')).toBe('');
 	});
+
+	it('preserves Unicode case variants matched outside the literal range', () => {
+		expect(encodeHtmlEntities('\ua7ab\uab70')).toBe('&#42923;&#43888;');
+	});
 });
 
 describe('detectAndConvertInput HTML output', () => {
