@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
@@ -111,6 +112,8 @@
 			>
 		</div>
 	</section>
+
+	<AdUnit placement="toolResult" />
 
 	<section class="description">
 		<h2>About the Code Minifier Tool</h2>

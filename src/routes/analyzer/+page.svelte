@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageDebounced } from '$lib/utils/analytics';
@@ -63,6 +64,8 @@
 		<p>{$t('byte-size')}: {byteSize} bytes</p>
 	</div>
 </div>
+
+<AdUnit placement="toolResult" />
 
 <RelatedTools tool="analyzer" />
 

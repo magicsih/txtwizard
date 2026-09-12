@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
 	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { amazonSearch } from '$lib/affiliate';
@@ -138,6 +139,8 @@
 		}
 	]}
 />
+
+<AdUnit placement="toolResult" />
 
 <RelatedTools tool="password-generator" />
 
