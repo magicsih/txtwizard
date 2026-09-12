@@ -180,6 +180,8 @@
 		{/each}
 	</section>
 
+	<AdUnit placement="homeFooter" />
+
 	<AffiliateBox
 		heading="Sharpen your security and dev skills"
 		intro="Every TxtWizard tool runs entirely in your browser. To go deeper on the security and encoding topics these tools touch, start here:"

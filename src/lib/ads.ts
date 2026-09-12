@@ -20,8 +20,17 @@ export const AD_SLOTS = {
 	// Shown directly below a tool's result area (highest viewability: users
 	// look here right after clicking generate/convert). Reused across tools.
 	toolResult: '8839886302',
-	// Inline unit on the home page.
+	// Inline unit on the home page, between the hero and the tool grid.
+	// GA4 (30d) shows only ~16% fill rate here because most home visitors
+	// scroll past quickly on their way to a tool. Kept for the impressions
+	// it does earn; see `homeFooter` for a higher-viewability alternative.
 	homeInline: '7526804635',
+	// Footer unit on the home page, placed below the full tool grid and
+	// above the affiliate box. Users who reach this slot have scrolled past
+	// every tool card, which gives much higher viewability than homeInline.
+	// TODO: create a responsive Display unit in AdSense and paste its slot id.
+	// Until then this renders nothing in production.
+	homeFooter: '',
 	// Placed inside the long-form explainer copy further down a tool page.
 	// Worth having only where visitors actually read: BigQuery shows
 	// /compression at ~64s per user and /decryption, /key-generation,
