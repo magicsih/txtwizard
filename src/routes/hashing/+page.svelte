@@ -96,6 +96,37 @@
 					}
 				}
 			]
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'HowTo',
+			name: 'How to generate a SHA-256 hash from text',
+			step: [
+				{
+					'@type': 'HowToStep',
+					position: 1,
+					name: 'Pick an algorithm',
+					text: 'Select SHA-256, SHA-512, SHA-1, MD5, Keccak, RIPEMD160, or a BLAKE variant from the dropdown.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 2,
+					name: 'Enter your text',
+					text: 'Paste or type the text you want to hash into the input field.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 3,
+					name: 'Hash',
+					text: 'Click the Hash button. The digest appears as Base64 and Hex.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 4,
+					name: 'Copy the digest',
+					text: 'Use the Copy buttons to copy the Base64 or Hex output for verification or storage.'
+				}
+			]
 		}
 	];
 </script>

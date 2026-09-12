@@ -114,36 +114,69 @@
 	const pageTitle = 'TxtWizard | Free Online Text Decryption Tool - AES/GCM, AES/CBC';
 	const pageDescription =
 		'Decrypt AES-GCM and AES-CBC ciphertext in your browser using Base64 or Hex encoded keys, IVs, and encrypted text.';
-	const faqStructuredData = {
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: [
-			{
-				'@type': 'Question',
-				name: 'Which AES modes are supported?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'This page supports AES-GCM and AES-CBC.'
+	const faqStructuredData = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: [
+				{
+					'@type': 'Question',
+					name: 'Which AES modes are supported?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'This page supports AES-GCM and AES-CBC.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Do I need the same encoding used during encryption?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Yes. The key, IV, and ciphertext encoding must match the original Base64 or Hex format.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Is the decrypted text sent anywhere?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'No. Decryption runs locally in the browser.'
+					}
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'Do I need the same encoding used during encryption?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'Yes. The key, IV, and ciphertext encoding must match the original Base64 or Hex format.'
+			]
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'HowTo',
+			name: 'How to decrypt AES ciphertext online',
+			step: [
+				{
+					'@type': 'HowToStep',
+					position: 1,
+					name: 'Pick the AES mode that was used to encrypt',
+					text: 'Select AES-GCM or AES-CBC. The mode must match the encryption side.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 2,
+					name: 'Provide the key and IV',
+					text: 'Paste the key (and IV for CBC) in the same encoding (Hex or Base64) used to encrypt.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 3,
+					name: 'Paste the ciphertext',
+					text: 'Paste the Base64 or Hex ciphertext produced by the encryption step.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 4,
+					name: 'Decrypt',
+					text: 'Click Decrypt. The plaintext appears in the output field — copy it for downstream use.'
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'Is the decrypted text sent anywhere?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'No. Decryption runs locally in the browser.'
-				}
-			}
-		]
-	};
+			]
+		}
+	];
 </script>
 
 <SeoHead

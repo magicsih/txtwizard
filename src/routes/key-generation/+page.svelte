@@ -53,36 +53,69 @@
 	const pageTitle = 'Bitcoin & Ethereum Private Key Generator | TxtWizard';
 	const pageDescription =
 		'Generate Bitcoin and Ethereum private keys, public keys, and addresses locally in your browser for learning and testing.';
-	const faqStructuredData = {
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: [
-			{
-				'@type': 'Question',
-				name: 'Are the keys generated on a server?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'No. Key generation runs locally in your browser.'
+	const faqStructuredData = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: [
+				{
+					'@type': 'Question',
+					name: 'Are the keys generated on a server?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'No. Key generation runs locally in your browser.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Can I enter my own private key?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Yes. You can paste a numeric private key to derive the matching public keys and addresses.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Should I use generated keys for real funds?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Only if you fully trust your device and environment. For production wallets, hardware-backed flows are safer.'
+					}
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'Can I enter my own private key?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'Yes. You can paste a numeric private key to derive the matching public keys and addresses.'
+			]
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'HowTo',
+			name: 'How to generate a Bitcoin or Ethereum key pair in your browser',
+			step: [
+				{
+					'@type': 'HowToStep',
+					position: 1,
+					name: 'Pick a chain',
+					text: 'Choose Bitcoin (WIF) or Ethereum (hex) as the key format.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 2,
+					name: 'Generate or paste a private key',
+					text: 'Click Generate for a fresh random key, or paste your own numeric private key to derive its addresses.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 3,
+					name: 'Inspect the derived addresses',
+					text: 'The compressed and uncompressed public keys and matching addresses appear below the key field.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 4,
+					name: 'Copy or verify',
+					text: 'Copy the key or address you need, or paste an address into a blockchain explorer to verify it matches the derived key.'
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'Should I use generated keys for real funds?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'Only if you fully trust your device and environment. For production wallets, hardware-backed flows are safer.'
-				}
-			}
-		]
-	};
+			]
+		}
+	];
 </script>
 
 <SeoHead

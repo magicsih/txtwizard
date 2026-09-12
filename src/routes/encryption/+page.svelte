@@ -137,36 +137,69 @@
 	const pageTitle = 'TxtWizard | Free Online Text Encryption Tool - AES/GCM, AES/CBC';
 	const pageDescription =
 		'Encrypt text with AES-GCM or AES-CBC in the browser and work with Base64 or Hex encoded keys, IVs, and ciphertext.';
-	const faqStructuredData = {
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: [
-			{
-				'@type': 'Question',
-				name: 'Which AES modes are supported?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'This page supports AES-GCM and AES-CBC.'
+	const faqStructuredData = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: [
+				{
+					'@type': 'Question',
+					name: 'Which AES modes are supported?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'This page supports AES-GCM and AES-CBC.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Can I generate a random key and IV here?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Yes. You can generate random AES keys and IVs directly in the browser.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Is the plaintext uploaded anywhere?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'No. Encryption runs locally in the browser.'
+					}
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'Can I generate a random key and IV here?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'Yes. You can generate random AES keys and IVs directly in the browser.'
+			]
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'HowTo',
+			name: 'How to encrypt text with AES-GCM or AES-CBC online',
+			step: [
+				{
+					'@type': 'HowToStep',
+					position: 1,
+					name: 'Pick an AES mode',
+					text: 'Select AES-GCM (authenticated) or AES-CBC from the algorithm dropdown.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 2,
+					name: 'Provide a key and IV',
+					text: 'Paste a key (and IV for CBC) in Hex or Base64, or generate random values in the browser.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 3,
+					name: 'Enter your text',
+					text: 'Paste or type the plaintext you want to encrypt into the input field.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 4,
+					name: 'Encrypt and copy',
+					text: 'Click Encrypt. The ciphertext appears as Base64 or Hex — copy it with the Copy button.'
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'Is the plaintext uploaded anywhere?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'No. Encryption runs locally in the browser.'
-				}
-			}
-		]
-	};
+			]
+		}
+	];
 </script>
 
 <SeoHead

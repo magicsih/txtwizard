@@ -48,36 +48,69 @@
 	const pageTitle = 'Online GZIP Text Compression Tool - Deflate, ZIP | TxtWizard';
 	const pageDescription =
 		'Compress plain text with GZIP, Deflate, and ZIP in the browser and get Base64, Hex, and compression ratio details.';
-	const faqStructuredData = {
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: [
-			{
-				'@type': 'Question',
-				name: 'Does this tool upload my text?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'No. Compression runs in your browser, so the input stays on your device.'
+	const faqStructuredData = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: [
+				{
+					'@type': 'Question',
+					name: 'Does this tool upload my text?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'No. Compression runs in your browser, so the input stays on your device.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'What is the difference between ZIP and ZIP (Max Compression)?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Both create ZIP output, but the max mode uses stronger compression settings and may be slower.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Why are both Base64 and Hex shown?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'They make binary compressed output easier to inspect, copy, and reuse in other tools.'
+					}
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'What is the difference between ZIP and ZIP (Max Compression)?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'Both create ZIP output, but the max mode uses stronger compression settings and may be slower.'
+			]
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'HowTo',
+			name: 'How to compress text online with GZIP or Deflate',
+			step: [
+				{
+					'@type': 'HowToStep',
+					position: 1,
+					name: 'Pick an algorithm',
+					text: 'Select GZIP, Deflate, BZIP2, or Zstandard from the algorithm dropdown.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 2,
+					name: 'Enter your text',
+					text: 'Paste or type the UTF-8 text you want to compress into the input field.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 3,
+					name: 'Compress',
+					text: 'Click the Compress button. The compressed output appears in Base64 and Hex.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 4,
+					name: 'Copy the result',
+					text: 'Use the Copy buttons to copy the Base64 or Hex output for use in other tools or scripts.'
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'Why are both Base64 and Hex shown?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'They make binary compressed output easier to inspect, copy, and reuse in other tools.'
-				}
-			}
-		]
-	};
+			]
+		}
+	];
 </script>
 
 <SeoHead
