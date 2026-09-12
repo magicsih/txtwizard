@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { Buffer } from 'buffer';
 	import { t } from 'svelte-i18n';
@@ -757,6 +758,8 @@
 </div>
 
 <RelatedTools tool="jwt" />
+
+<AdUnit placement="toolResult" />
 
 <div class="description">
 	<h3>What this JWT tool does</h3>

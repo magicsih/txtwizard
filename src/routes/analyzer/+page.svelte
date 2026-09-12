@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import RelatedTools from '$lib/components/RelatedTools.svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageDebounced } from '$lib/utils/analytics';
@@ -65,6 +66,8 @@
 </div>
 
 <RelatedTools tool="analyzer" />
+
+<AdUnit placement="toolResult" />
 
 <style>
 	.container {

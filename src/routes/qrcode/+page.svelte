@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SeoHead from '$lib/components/SeoHead.svelte';
+	import AdUnit from '$lib/components/AdUnit.svelte';
 	import { t } from 'svelte-i18n';
 	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
 	import RelatedTools from '$lib/components/RelatedTools.svelte';
@@ -77,6 +78,8 @@
 />
 
 <RelatedTools tool="qrcode" />
+
+<AdUnit placement="toolResult" />
 
 <div class="description">
 	<h2>What is a QR Code?</h2>
