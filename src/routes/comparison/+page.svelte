@@ -87,9 +87,9 @@
 	</div>
 </div>
 
-<RelatedTools tool="comparison" />
-
 <AdUnit placement="toolResult" />
+
+<RelatedTools tool="comparison" />
 
 <style>
 	.container {

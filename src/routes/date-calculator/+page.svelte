@@ -101,9 +101,9 @@
 		</div>
 	</section>
 
-	<RelatedTools tool="date-calculator" />
-
 	<AdUnit placement="toolResult" />
+
+	<RelatedTools tool="date-calculator" />
 </main>
 
 <style>

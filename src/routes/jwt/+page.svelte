@@ -757,9 +757,9 @@
 	{/if}
 </div>
 
-<RelatedTools tool="jwt" />
-
 <AdUnit placement="toolResult" />
+
+<RelatedTools tool="jwt" />
 
 <div class="description">
 	<h3>What this JWT tool does</h3>

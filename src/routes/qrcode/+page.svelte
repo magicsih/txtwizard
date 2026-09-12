@@ -77,9 +77,9 @@
 	]}
 />
 
-<RelatedTools tool="qrcode" />
-
 <AdUnit placement="toolResult" />
+
+<RelatedTools tool="qrcode" />
 
 <div class="description">
 	<h2>What is a QR Code?</h2>

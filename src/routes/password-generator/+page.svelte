@@ -140,9 +140,9 @@
 	]}
 />
 
-<RelatedTools tool="password-generator" />
-
 <AdUnit placement="toolResult" />
+
+<RelatedTools tool="password-generator" />
 
 <style>
 	.container {

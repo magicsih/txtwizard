@@ -65,9 +65,9 @@
 	</div>
 </div>
 
-<RelatedTools tool="analyzer" />
-
 <AdUnit placement="toolResult" />
+
+<RelatedTools tool="analyzer" />
 
 <style>
 	.container {

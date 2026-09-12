@@ -187,9 +187,9 @@
 			</li>
 		</ul>
 	</section>
-	<RelatedTools tool="json" />
-
 	<AdUnit placement="toolResult" />
+
+	<RelatedTools tool="json" />
 </main>
 
 <style>

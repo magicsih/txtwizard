@@ -228,9 +228,9 @@
 			<li>Patterns are compiled with the JavaScript engine, so syntax follows ECMAScript regex.</li>
 		</ul>
 	</section>
-	<RelatedTools tool="regex" />
-
 	<AdUnit placement="toolResult" />
+
+	<RelatedTools tool="regex" />
 </main>
 
 <style>
