@@ -21,3 +21,5 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 TODO.md
+# 로컬 전용 분석 자산 (personal GA4/BigQuery 접근용, public repo에 노출 금지)
+docs/analytics/
