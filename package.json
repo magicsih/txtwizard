@@ -13,6 +13,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:unit": "vitest",
+		"copy:wasm": "node -e \"const fs=require('fs');fs.mkdirSync('static',{recursive:true});fs.copyFileSync('node_modules/@bokuweb/zstd-wasm/dist/web/zstd.wasm','static/zstd.wasm')\"",
+		"prebuild:wasm": "npm run copy:wasm",
 		"postbuild": "npx svelte-sitemap --domain https://www.txtwizard.net --change-freq yearly --reset-time -i /naver*"
 	},
 	"devDependencies": {
@@ -42,6 +44,7 @@
 		"node": "^20.19.0 || >=22.12.0"
 	},
 	"dependencies": {
+		"@bokuweb/zstd-wasm": "^0.0.27",
 		"@noble/hashes": "^2.0.1",
 		"bs58": "^6.0.0",
 		"buffer": "^6.0.3",

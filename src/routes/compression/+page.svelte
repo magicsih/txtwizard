@@ -2,6 +2,7 @@
 	import SeoHead from '$lib/components/SeoHead.svelte';
 	import AdUnit from '$lib/components/AdUnit.svelte';
 	import RelatedTools from '$lib/components/RelatedTools.svelte';
+	import { onMount } from 'svelte';
 	import { t } from 'svelte-i18n';
 	import { trackToolsUsageEvent } from '$lib/utils/analytics';
 	import AffiliateBox from '$lib/components/AffiliateBox.svelte';
@@ -9,6 +10,7 @@
 	import {
 		COMPRESSION_ALGORITHMS,
 		compressText,
+		ensureZstdReady,
 		getCompressionLabel,
 		type CompressionAlgorithm
 	} from '$lib/utils/compression';
@@ -22,8 +24,21 @@
 		originalSize: 0,
 		outputSize: 0
 	};
+	let zstdReady = false;
 
 	const algorithms = COMPRESSION_ALGORITHMS;
+
+	// Warm up the WebAssembly module on mount so the first click on
+	// "Compress" with Zstandard selected does not pay the init latency.
+	onMount(() => {
+		ensureZstdReady()
+			.then(() => {
+				zstdReady = true;
+			})
+			.catch((error) => {
+				console.error('zstd-wasm init failed:', error);
+			});
+	});
 
 	function doCompress() {
 		try {
@@ -45,48 +60,84 @@
 		}
 	}
 
-	const pageTitle = 'Online GZIP Text Compression Tool - Deflate, ZIP | TxtWizard';
+	const pageTitle = 'Online GZIP / Zstandard Text Compression Tool - Deflate, ZIP | TxtWizard';
 	const pageDescription =
-		'Compress plain text with GZIP, Deflate, and ZIP in the browser and get Base64, Hex, and compression ratio details.';
-	const faqStructuredData = {
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: [
-			{
-				'@type': 'Question',
-				name: 'Does this tool upload my text?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'No. Compression runs in your browser, so the input stays on your device.'
+		'Compress plain text with GZIP, Deflate, ZIP, and Zstandard in the browser and get Base64, Hex, and compression ratio details.';
+	const structuredData = [
+		{
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: [
+				{
+					'@type': 'Question',
+					name: 'Does this tool upload my text?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'No. Compression runs in your browser, so the input stays on your device.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'What is the difference between ZIP and ZIP (Max Compression)?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Both create ZIP output, but the max mode uses stronger compression settings and may be slower.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'Why are both Base64 and Hex shown?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'They make binary compressed output easier to inspect, copy, and reuse in other tools.'
+					}
+				},
+				{
+					'@type': 'Question',
+					name: 'When should I pick Zstandard over GZIP?',
+					acceptedAnswer: {
+						'@type': 'Answer',
+						text: 'Zstandard (zstd) is usually faster than GZIP at similar compression ratios and is the better default for new systems, log streams, and any hot path where latency matters.'
+					}
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'What is the difference between ZIP and ZIP (Max Compression)?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'Both create ZIP output, but the max mode uses stronger compression settings and may be slower.'
+			]
+		},
+		{
+			'@context': 'https://schema.org',
+			'@type': 'HowTo',
+			name: 'How to compress text online with GZIP, Deflate, ZIP, or Zstandard',
+			step: [
+				{
+					'@type': 'HowToStep',
+					position: 1,
+					name: 'Pick an algorithm',
+					text: 'Select GZIP, Deflate, ZIP, ZIP (Max Compression), or Zstandard from the algorithm dropdown.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 2,
+					name: 'Enter your text',
+					text: 'Paste or type the UTF-8 text you want to compress into the input field.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 3,
+					name: 'Compress',
+					text: 'Click the Compress button. The compressed output appears in Base64 and Hex.'
+				},
+				{
+					'@type': 'HowToStep',
+					position: 4,
+					name: 'Copy the result',
+					text: 'Use the Copy buttons to copy the Base64 or Hex output for use in other tools or scripts.'
 				}
-			},
-			{
-				'@type': 'Question',
-				name: 'Why are both Base64 and Hex shown?',
-				acceptedAnswer: {
-					'@type': 'Answer',
-					text: 'They make binary compressed output easier to inspect, copy, and reuse in other tools.'
-				}
-			}
-		]
-	};
+			]
+		}
+	];
 </script>
 
-<SeoHead
-	title={pageTitle}
-	description={pageDescription}
-	path="/compression"
-	structuredData={faqStructuredData}
-/>
-<h1>Online GZIP Text Compression Tool - Deflate, ZIP</h1>
+<SeoHead title={pageTitle} description={pageDescription} path="/compression" {structuredData} />
+<h1>Online GZIP / Zstandard Text Compression Tool - Deflate, ZIP</h1>
 
 <div class="container">
 	<div class="form-group">
