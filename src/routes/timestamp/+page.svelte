@@ -241,6 +241,7 @@
 	}
 	.copy {
 		background: transparent;
+		color: inherit;
 		border: 1px solid transparent;
 		padding: 4px 8px;
 		border-radius: 4px;
@@ -267,7 +268,7 @@
 		font-size: 0.9em;
 		border: 1px solid #ccc;
 		background: var(--surface-muted);
-		color: var(--surface-muted-text);
+		color: inherit;
 		border-radius: 4px;
 		cursor: pointer;
 	}

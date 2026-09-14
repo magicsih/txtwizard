@@ -268,9 +268,9 @@
 		min-width: 120px;
 	}
 	.tabs button.active {
-		background-color: #e0e0e0;
+		background: var(--link);
+		color: var(--button-text);
 		font-weight: bold;
-		color: #000;
 	}
 	.output-container {
 		position: relative;

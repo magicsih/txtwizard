@@ -289,8 +289,8 @@
 		border-bottom-right-radius: 4px;
 	}
 	.tabs button.active {
-		background-color: var(--surface-muted);
-		color: var(--surface-muted-text);
+		background: var(--link);
+		color: var(--button-text);
 		font-weight: bold;
 	}
 	.pattern-row {
