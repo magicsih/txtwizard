@@ -203,7 +203,8 @@
 	.live {
 		padding: 15px;
 		margin-bottom: 20px;
-		background-color: #fff;
+		background-color: var(--surface-card);
+		color: var(--surface-card-text);
 		border: 1px solid #ddd;
 		border-radius: 4px;
 	}
@@ -247,7 +248,8 @@
 		text-align: left;
 	}
 	.copy:hover {
-		background-color: #f0f0f0;
+		background-color: var(--surface-muted);
+		color: var(--surface-muted-text);
 		border-color: #ccc;
 	}
 	code {
@@ -264,16 +266,19 @@
 		padding: 6px 12px;
 		font-size: 0.9em;
 		border: 1px solid #ccc;
-		background: white;
+		background: var(--surface-muted);
+		color: var(--surface-muted-text);
 		border-radius: 4px;
 		cursor: pointer;
 	}
 	.quick-actions button:hover {
-		background: #f0f0f0;
+		background: var(--surface-muted);
+		color: var(--surface-muted-text);
 	}
 	.result {
 		padding: 15px;
-		background-color: #fff;
+		background-color: var(--surface-card);
+		color: var(--surface-card-text);
 		border: 1px solid #ddd;
 		border-radius: 4px;
 	}
