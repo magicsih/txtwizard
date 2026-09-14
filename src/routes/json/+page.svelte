@@ -231,7 +231,8 @@
 		font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 	}
 	textarea[readonly] {
-		background-color: #f0f0f0;
+		background-color: var(--surface-muted);
+		color: var(--surface-muted-text);
 	}
 	select {
 		width: auto;
@@ -259,16 +260,17 @@
 		flex: 1;
 		padding: 10px;
 		border: 1px solid #ccc;
-		background-color: #f0f0f0;
+		background-color: var(--surface-muted);
+		color: var(--surface-muted-text);
 		cursor: pointer;
 		border-radius: 0;
 		margin-top: 0;
 		min-width: 120px;
 	}
 	.tabs button.active {
-		background-color: #e0e0e0;
+		background: var(--link);
+		color: var(--button-text);
 		font-weight: bold;
-		color: #000;
 	}
 	.output-container {
 		position: relative;

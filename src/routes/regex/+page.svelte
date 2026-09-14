@@ -267,7 +267,8 @@
 	button {
 		padding: 10px;
 		border: 1px solid #ccc;
-		background-color: #f0f0f0;
+		background-color: var(--surface-muted);
+		color: var(--surface-muted-text);
 		cursor: pointer;
 		border-radius: 4px;
 	}
@@ -288,15 +289,16 @@
 		border-bottom-right-radius: 4px;
 	}
 	.tabs button.active {
-		background-color: #e0e0e0;
+		background: var(--link);
+		color: var(--button-text);
 		font-weight: bold;
-		color: #000;
 	}
 	.pattern-row {
 		display: flex;
 		align-items: center;
 		gap: 0.25rem;
-		background: white;
+		background: var(--surface-card);
+		color: var(--surface-card-text);
 		border: 1px solid #ccc;
 		border-radius: 4px;
 		padding: 0 0.5rem;
@@ -334,7 +336,8 @@
 	}
 	.highlight {
 		padding: 10px;
-		background-color: #fff;
+		background-color: var(--surface-card);
+		color: var(--surface-card-text);
 		border: 1px solid #ccc;
 		border-radius: 4px;
 		white-space: pre-wrap;
@@ -342,7 +345,8 @@
 		font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 	}
 	.highlight mark {
-		background-color: #ffe066;
+		background-color: var(--surface-highlight);
+		color: var(--surface-highlight-text);
 		padding: 0 2px;
 		border-radius: 2px;
 	}
@@ -353,7 +357,8 @@
 	}
 	.match-item {
 		padding: 10px;
-		background-color: #fff;
+		background-color: var(--surface-card);
+		color: var(--surface-card-text);
 		border: 1px solid #ccc;
 		border-radius: 4px;
 	}
@@ -364,7 +369,8 @@
 		flex-wrap: wrap;
 	}
 	.match-item code {
-		background: #f4f4f4;
+		background: var(--surface-muted);
+		color: var(--surface-muted-text);
 		padding: 2px 4px;
 		border-radius: 3px;
 	}
